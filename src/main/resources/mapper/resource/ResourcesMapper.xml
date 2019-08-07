@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.by.blcu.resource.dao.IResourcesDao">
+  <resultMap id="BaseResultMap" type="com.by.blcu.resource.dto.Resources">
+    <id column="resources_id" jdbcType="INTEGER" property="resourcesId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="org_id" jdbcType="INTEGER" property="orgId" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="create_user" jdbcType="INTEGER" property="createUser" />
+    <result column="creaye_time" jdbcType="DATE" property="creayeTime" />
+    <result column="update_user" jdbcType="INTEGER" property="updateUser" />
+    <result column="update_time" jdbcType="DATE" property="updateTime" />
+    <result column="bak1" jdbcType="VARCHAR" property="bak1" />
+    <result column="bak2" jdbcType="VARCHAR" property="bak2" />
+    <result column="bak3" jdbcType="VARCHAR" property="bak3" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    resources_id, title, type, org_id, content, create_user, creaye_time, update_user, 
+    update_time, bak1, bak2, bak3
+  </sql>
+  <sql id="BaseWhere">
+    	<if test="!@org.springframework.util.StringUtils@isEmpty(entityKeyValues)">
+			and resources_id in
+			<foreach item="item" index="index" collection="entityKeyValues" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(notEntityKeyValues)">
+			and resources_id not in
+			<foreach item="item" index="index" collection="notEntityKeyValues" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(resourcesId)">
+			and resources_id=#{resourcesId,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(title)">
+			and title=#{title,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(type)">
+			and type=#{type,jdbcType=INTEGER}
+		</if>
+        <if test="!@org.springframework.util.StringUtils@isEmpty(maxType)">
+            and type &lt;=#{maxType,jdbcType=INTEGER}
+        </if>
+        <if test="!@org.springframework.util.StringUtils@isEmpty(minType)">
+            and type &gt;=#{minType,jdbcType=INTEGER}
+        </if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(orgId)">
+			and org_id=#{orgId,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(content)">
+			and content=#{content,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(createUser)">
+			and create_user=#{createUser,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(creayeTime)">
+			and creaye_time=#{creayeTime,jdbcType=DATE}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(updateUser)">
+			and update_user=#{updateUser,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(updateTime)">
+			and update_time=#{updateTime,jdbcType=DATE}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(bak1)">
+			and bak1=#{bak1,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(bak2)">
+			and bak2=#{bak2,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(bak3)">
+			and bak3=#{bak3,jdbcType=VARCHAR}
+		</if>
+
+  </sql>
+  <select id="selectCount" parameterType="java.util.Map" resultType="java.lang.Long">
+    	select count(1) from resources
+		<where>
+			<include refid="BaseWhere" />
+		</where>
+  </select>
+  <select id="selectList" parameterType="java.util.Map" resultMap="BaseResultMap">
+    	select
+		<include refid="Base_Column_List"/> 
+		from resources
+		<where>
+			<include refid="BaseWhere"/>
+		</where>
+		<include refid="com.blcu.common.orderSqlMap" /> 
+		<include refid="com.blcu.common.pageSqlMap" /> 
+  </select>
+  <delete id="deleteByParams" parameterType="java.util.Map">
+    	delete from resources
+		<where>
+			<include refid="BaseWhere"/>
+		</where>
+  </delete>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from resources
+    where resources_id = #{resourcesId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from resources
+    where resources_id = #{resourcesId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.by.blcu.resource.dto.Resources">
+    insert into resources (resources_id, title, type, 
+      org_id, content, create_user, 
+      creaye_time, update_user, update_time, 
+      bak1, bak2, bak3)
+    values (#{resourcesId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 
+      #{orgId,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, #{createUser,jdbcType=INTEGER}, 
+      #{creayeTime,jdbcType=DATE}, #{updateUser,jdbcType=INTEGER}, #{updateTime,jdbcType=DATE}, 
+      #{bak1,jdbcType=VARCHAR}, #{bak2,jdbcType=VARCHAR}, #{bak3,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.by.blcu.resource.dto.Resources">
+    insert into resources
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="resourcesId != null">
+        resources_id,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="creayeTime != null">
+        creaye_time,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="bak1 != null">
+        bak1,
+      </if>
+      <if test="bak2 != null">
+        bak2,
+      </if>
+      <if test="bak3 != null">
+        bak3,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="resourcesId != null">
+        #{resourcesId,jdbcType=INTEGER},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="orgId != null">
+        #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="creayeTime != null">
+        #{creayeTime,jdbcType=DATE},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=DATE},
+      </if>
+      <if test="bak1 != null">
+        #{bak1,jdbcType=VARCHAR},
+      </if>
+      <if test="bak2 != null">
+        #{bak2,jdbcType=VARCHAR},
+      </if>
+      <if test="bak3 != null">
+        #{bak3,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.by.blcu.resource.dto.Resources">
+    update resources
+    <set>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="orgId != null">
+        org_id = #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="creayeTime != null">
+        creaye_time = #{creayeTime,jdbcType=DATE},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=DATE},
+      </if>
+      <if test="bak1 != null">
+        bak1 = #{bak1,jdbcType=VARCHAR},
+      </if>
+      <if test="bak2 != null">
+        bak2 = #{bak2,jdbcType=VARCHAR},
+      </if>
+      <if test="bak3 != null">
+        bak3 = #{bak3,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where resources_id = #{resourcesId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.by.blcu.resource.dto.Resources">
+    update resources
+    set title = #{title,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      org_id = #{orgId,jdbcType=INTEGER},
+      content = #{content,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=INTEGER},
+      creaye_time = #{creayeTime,jdbcType=DATE},
+      update_user = #{updateUser,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=DATE},
+      bak1 = #{bak1,jdbcType=VARCHAR},
+      bak2 = #{bak2,jdbcType=VARCHAR},
+      bak3 = #{bak3,jdbcType=VARCHAR}
+    where resources_id = #{resourcesId,jdbcType=INTEGER}
+  </update>
+</mapper>

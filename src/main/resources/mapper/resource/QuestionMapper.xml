@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.by.blcu.resource.dao.IQuestionDao">
+  <resultMap id="BaseResultMap" type="com.by.blcu.resource.dto.Question">
+    <id column="question_id" jdbcType="INTEGER" property="questionId" />
+    <result column="category_one" jdbcType="INTEGER" property="categoryOne" />
+    <result column="category_two" jdbcType="INTEGER" property="categoryTwo" />
+    <result column="course_id" jdbcType="INTEGER" property="courseId" />
+    <result column="knowledge_points" jdbcType="VARCHAR" property="knowledgePoints" />
+    <result column="difficulty_level" jdbcType="INTEGER" property="difficultyLevel" />
+    <result column="question_type" jdbcType="INTEGER" property="questionType" />
+    <result column="question_body" jdbcType="VARCHAR" property="questionBody" />
+    <result column="question_sound" jdbcType="VARCHAR" property="questionSound" />
+    <result column="question_opt" jdbcType="VARCHAR" property="questionOpt" />
+    <result column="question_answer" jdbcType="VARCHAR" property="questionAnswer" />
+    <result column="question_resolve" jdbcType="VARCHAR" property="questionResolve" />
+    <result column="org_id" jdbcType="INTEGER" property="orgId" />
+    <result column="create_user" jdbcType="INTEGER" property="createUser" />
+    <result column="create_time" jdbcType="DATE" property="createTime" />
+    <result column="update_user" jdbcType="INTEGER" property="updateUser" />
+    <result column="update_time" jdbcType="DATE" property="updateTime" />
+    <result column="parent_question_id" jdbcType="INTEGER" property="parentQuestionId" />
+    <result column="bak1" jdbcType="VARCHAR" property="bak1" />
+    <result column="bak2" jdbcType="VARCHAR" property="bak2" />
+    <result column="bak3" jdbcType="VARCHAR" property="bak3" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    question_id, category_one, category_two, course_id, knowledge_points, difficulty_level, 
+    question_type, question_body, question_sound, question_opt, question_answer, question_resolve, 
+    org_id, create_user, create_time, update_user, update_time, parent_question_id, bak1, 
+    bak2, bak3
+  </sql>
+  <sql id="BaseWhere">
+    	<if test="!@org.springframework.util.StringUtils@isEmpty(entityKeyValues)">
+			and question_id in
+			<foreach item="item" index="index" collection="entityKeyValues" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(notEntityKeyValues)">
+			and question_id not in
+			<foreach item="item" index="index" collection="notEntityKeyValues" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(questionId)">
+			and question_id=#{questionId,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(categoryOne)">
+			and category_one=#{categoryOne,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(categoryTwo)">
+			and category_two=#{categoryTwo,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(courseId)">
+			and course_id=#{courseId,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(knowledgePoints)">
+			and knowledge_points=#{knowledgePoints,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(difficultyLevel)">
+			and difficulty_level=#{difficultyLevel,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(questionType)">
+			and question_type=#{questionType,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(questionBody)">
+			and question_body=#{questionBody,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(questionSound)">
+			and question_sound=#{questionSound,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(questionOpt)">
+			and question_opt=#{questionOpt,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(questionAnswer)">
+			and question_answer=#{questionAnswer,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(questionResolve)">
+			and question_resolve=#{questionResolve,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(orgId)">
+			and org_id=#{orgId,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(createUser)">
+			and create_user=#{createUser,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(createTime)">
+			and create_time=#{createTime,jdbcType=DATE}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(updateUser)">
+			and update_user=#{updateUser,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(updateTime)">
+			and update_time=#{updateTime,jdbcType=DATE}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(parentQuestionId)">
+			and parent_question_id=#{parentQuestionId,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(bak1)">
+			and bak1=#{bak1,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(bak2)">
+			and bak2=#{bak2,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(bak3)">
+			and bak3=#{bak3,jdbcType=VARCHAR}
+		</if>
+
+  </sql>
+  <select id="selectCount" parameterType="java.util.Map" resultType="java.lang.Long">
+    	select count(1) from question
+		<where>
+			<include refid="BaseWhere" />
+		</where>
+  </select>
+  <select id="selectList" parameterType="java.util.Map" resultMap="BaseResultMap">
+    	select
+		<include refid="Base_Column_List"/> 
+		from question
+		<where>
+			<include refid="BaseWhere"/>
+		</where>
+		<include refid="com.blcu.common.orderSqlMap" /> 
+		<include refid="com.blcu.common.pageSqlMap" /> 
+  </select>
+  <delete id="deleteByParams" parameterType="java.util.Map">
+    	delete from question
+		<where>
+			<include refid="BaseWhere"/>
+		</where>
+  </delete>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from question
+    where question_id = #{questionId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from question
+    where question_id = #{questionId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.by.blcu.resource.dto.Question">
+    insert into question (question_id, category_one, category_two, 
+      course_id, knowledge_points, difficulty_level, 
+      question_type, question_body, question_sound, 
+      question_opt, question_answer, question_resolve, 
+      org_id, create_user, create_time, 
+      update_user, update_time, parent_question_id, 
+      bak1, bak2, bak3)
+    values (#{questionId,jdbcType=INTEGER}, #{categoryOne,jdbcType=INTEGER}, #{categoryTwo,jdbcType=INTEGER}, 
+      #{courseId,jdbcType=INTEGER}, #{knowledgePoints,jdbcType=VARCHAR}, #{difficultyLevel,jdbcType=INTEGER}, 
+      #{questionType,jdbcType=INTEGER}, #{questionBody,jdbcType=VARCHAR}, #{questionSound,jdbcType=VARCHAR}, 
+      #{questionOpt,jdbcType=VARCHAR}, #{questionAnswer,jdbcType=VARCHAR}, #{questionResolve,jdbcType=VARCHAR}, 
+      #{orgId,jdbcType=INTEGER}, #{createUser,jdbcType=INTEGER}, #{createTime,jdbcType=DATE}, 
+      #{updateUser,jdbcType=INTEGER}, #{updateTime,jdbcType=DATE}, #{parentQuestionId,jdbcType=INTEGER}, 
+      #{bak1,jdbcType=VARCHAR}, #{bak2,jdbcType=VARCHAR}, #{bak3,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.by.blcu.resource.dto.Question" useGeneratedKeys="true"  keyProperty="questionId">
+    insert into question
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="questionId != null">
+        question_id,
+      </if>
+      <if test="categoryOne != null">
+        category_one,
+      </if>
+      <if test="categoryTwo != null">
+        category_two,
+      </if>
+      <if test="courseId != null">
+        course_id,
+      </if>
+      <if test="knowledgePoints != null">
+        knowledge_points,
+      </if>
+      <if test="difficultyLevel != null">
+        difficulty_level,
+      </if>
+      <if test="questionType != null">
+        question_type,
+      </if>
+      <if test="questionBody != null">
+        question_body,
+      </if>
+      <if test="questionSound != null">
+        question_sound,
+      </if>
+      <if test="questionOpt != null">
+        question_opt,
+      </if>
+      <if test="questionAnswer != null">
+        question_answer,
+      </if>
+      <if test="questionResolve != null">
+        question_resolve,
+      </if>
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="parentQuestionId != null">
+        parent_question_id,
+      </if>
+      <if test="bak1 != null">
+        bak1,
+      </if>
+      <if test="bak2 != null">
+        bak2,
+      </if>
+      <if test="bak3 != null">
+        bak3,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="questionId != null">
+        #{questionId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryOne != null">
+        #{categoryOne,jdbcType=INTEGER},
+      </if>
+      <if test="categoryTwo != null">
+        #{categoryTwo,jdbcType=INTEGER},
+      </if>
+      <if test="courseId != null">
+        #{courseId,jdbcType=INTEGER},
+      </if>
+      <if test="knowledgePoints != null">
+        #{knowledgePoints,jdbcType=VARCHAR},
+      </if>
+      <if test="difficultyLevel != null">
+        #{difficultyLevel,jdbcType=INTEGER},
+      </if>
+      <if test="questionType != null">
+        #{questionType,jdbcType=INTEGER},
+      </if>
+      <if test="questionBody != null">
+        #{questionBody,jdbcType=VARCHAR},
+      </if>
+      <if test="questionSound != null">
+        #{questionSound,jdbcType=VARCHAR},
+      </if>
+      <if test="questionOpt != null">
+        #{questionOpt,jdbcType=VARCHAR},
+      </if>
+      <if test="questionAnswer != null">
+        #{questionAnswer,jdbcType=VARCHAR},
+      </if>
+      <if test="questionResolve != null">
+        #{questionResolve,jdbcType=VARCHAR},
+      </if>
+      <if test="orgId != null">
+        #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=DATE},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=DATE},
+      </if>
+      <if test="parentQuestionId != null">
+        #{parentQuestionId,jdbcType=INTEGER},
+      </if>
+      <if test="bak1 != null">
+        #{bak1,jdbcType=VARCHAR},
+      </if>
+      <if test="bak2 != null">
+        #{bak2,jdbcType=VARCHAR},
+      </if>
+      <if test="bak3 != null">
+        #{bak3,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.by.blcu.resource.dto.Question">
+    update question
+    <set>
+      <if test="categoryOne != null">
+        category_one = #{categoryOne,jdbcType=INTEGER},
+      </if>
+      <if test="categoryTwo != null">
+        category_two = #{categoryTwo,jdbcType=INTEGER},
+      </if>
+      <if test="courseId != null">
+        course_id = #{courseId,jdbcType=INTEGER},
+      </if>
+      <if test="knowledgePoints != null">
+        knowledge_points = #{knowledgePoints,jdbcType=VARCHAR},
+      </if>
+      <if test="difficultyLevel != null">
+        difficulty_level = #{difficultyLevel,jdbcType=INTEGER},
+      </if>
+      <if test="questionType != null">
+        question_type = #{questionType,jdbcType=INTEGER},
+      </if>
+      <if test="questionBody != null">
+        question_body = #{questionBody,jdbcType=VARCHAR},
+      </if>
+      <if test="questionSound != null">
+        question_sound = #{questionSound,jdbcType=VARCHAR},
+      </if>
+      <if test="questionOpt != null">
+        question_opt = #{questionOpt,jdbcType=VARCHAR},
+      </if>
+      <if test="questionAnswer != null">
+        question_answer = #{questionAnswer,jdbcType=VARCHAR},
+      </if>
+      <if test="questionResolve != null">
+        question_resolve = #{questionResolve,jdbcType=VARCHAR},
+      </if>
+      <if test="orgId != null">
+        org_id = #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=DATE},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=DATE},
+      </if>
+      <if test="parentQuestionId != null">
+        parent_question_id = #{parentQuestionId,jdbcType=INTEGER},
+      </if>
+      <if test="bak1 != null">
+        bak1 = #{bak1,jdbcType=VARCHAR},
+      </if>
+      <if test="bak2 != null">
+        bak2 = #{bak2,jdbcType=VARCHAR},
+      </if>
+      <if test="bak3 != null">
+        bak3 = #{bak3,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where question_id = #{questionId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.by.blcu.resource.dto.Question">
+    update question
+    set category_one = #{categoryOne,jdbcType=INTEGER},
+      category_two = #{categoryTwo,jdbcType=INTEGER},
+      course_id = #{courseId,jdbcType=INTEGER},
+      knowledge_points = #{knowledgePoints,jdbcType=VARCHAR},
+      difficulty_level = #{difficultyLevel,jdbcType=INTEGER},
+      question_type = #{questionType,jdbcType=INTEGER},
+      question_body = #{questionBody,jdbcType=VARCHAR},
+      question_sound = #{questionSound,jdbcType=VARCHAR},
+      question_opt = #{questionOpt,jdbcType=VARCHAR},
+      question_answer = #{questionAnswer,jdbcType=VARCHAR},
+      question_resolve = #{questionResolve,jdbcType=VARCHAR},
+      org_id = #{orgId,jdbcType=INTEGER},
+      create_user = #{createUser,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=DATE},
+      update_user = #{updateUser,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=DATE},
+      parent_question_id = #{parentQuestionId,jdbcType=INTEGER},
+      bak1 = #{bak1,jdbcType=VARCHAR},
+      bak2 = #{bak2,jdbcType=VARCHAR},
+      bak3 = #{bak3,jdbcType=VARCHAR}
+    where question_id = #{questionId,jdbcType=INTEGER}
+  </update>
+    <select id="queryQuestionTypeCount"  resultType="com.by.blcu.resource.model.QuestionTypeCountModel">
+        select
+        question_type questionType,
+        count(question_id) countNum
+        from question
+        where 1=1
+        and question_id in
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        GROUP BY question_type;
+    </select>
+
+    <select id="queryQuestionListCount" parameterType="java.util.Map" resultType="java.util.HashMap">
+        SELECT
+        question_type questionType,
+        COUNT(1) countNum
+        FROM
+        question
+        WHERE 1 = 1
+        <if test="!@org.springframework.util.StringUtils@isEmpty(categoryOne)">
+            and category_one=#{categoryOne,jdbcType=INTEGER}
+        </if>
+        <if test="!@org.springframework.util.StringUtils@isEmpty(categoryTwo)">
+            and category_two=#{categoryTwo,jdbcType=INTEGER}
+        </if>
+        <if test="!@org.springframework.util.StringUtils@isEmpty(courseId)">
+            and course_id=#{courseId,jdbcType=INTEGER}
+        </if>
+        <if test="!@org.springframework.util.StringUtils@isEmpty(createUserId)">
+            AND create_user=#{createUserId,jdbcType=INTEGER}
+        </if>
+        AND question_type <![CDATA[ < ]]> 100
+        GROUP BY question_type
+    </select>
+    <select id="selectListByPoints" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from question
+        where 1 = 1
+        <if test="!@org.springframework.util.StringUtils@isEmpty(categoryOne)">
+            and category_one=#{categoryOne,jdbcType=INTEGER}
+        </if>
+        <if test="!@org.springframework.util.StringUtils@isEmpty(categoryTwo)">
+            and category_two=#{categoryTwo,jdbcType=INTEGER}
+        </if>
+        <if test="!@org.springframework.util.StringUtils@isEmpty(courseId)">
+            and course_id=#{courseId,jdbcType=INTEGER}
+        </if>
+        <if test="!@org.springframework.util.StringUtils@isEmpty(knowledgePoints)">
+            and knowledge_points like concat('%',#{knowledgePoints,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="!@org.springframework.util.StringUtils@isEmpty(difficultyLevel)">
+            and difficulty_level=#{difficultyLevel,jdbcType=INTEGER}
+        </if>
+        <if test="!@org.springframework.util.StringUtils@isEmpty(questionType)">
+            and question_type=#{questionType,jdbcType=INTEGER}
+        </if>
+        <if test="!@org.springframework.util.StringUtils@isEmpty(questionBody)">
+            and question_body like concat('%',#{questionBody,jdbcType=VARCHAR},'%')
+        </if>
+        <include refid="com.blcu.common.orderSqlMap" />
+        <include refid="com.blcu.common.pageSqlMap" />
+    </select>
+</mapper>

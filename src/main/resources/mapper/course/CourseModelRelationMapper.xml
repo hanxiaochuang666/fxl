@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.by.blcu.course.dao.ICourseModelRelationDao">
+  <resultMap id="BaseResultMap" type="com.by.blcu.course.dto.CourseModelRelation">
+    <id column="course_model_relation_id" jdbcType="INTEGER" property="courseModelRelationId" />
+    <result column="course_id" jdbcType="INTEGER" property="courseId" />
+    <result column="course_model_type" jdbcType="INTEGER" property="courseModelType" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    course_model_relation_id, course_id, course_model_type
+  </sql>
+  <sql id="BaseWhere">
+    	<if test="!@org.springframework.util.StringUtils@isEmpty(entityKeyValues)">
+			and course_model_relation_id in
+			<foreach item="item" index="index" collection="entityKeyValues" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(notEntityKeyValues)">
+			and course_model_relation_id not in
+			<foreach item="item" index="index" collection="notEntityKeyValues" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(courseModelRelationId)">
+			and course_model_relation_id=#{courseModelRelationId,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(courseId)">
+			and course_id=#{courseId,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(courseModelType)">
+			and course_model_type=#{courseModelType,jdbcType=INTEGER}
+		</if>
+
+  </sql>
+  <select id="selectCount" parameterType="java.util.Map" resultType="java.lang.Long">
+    	select count(1) from course_model_relation
+		<where>
+			<include refid="BaseWhere" />
+		</where>
+  </select>
+  <select id="selectList" parameterType="java.util.Map" resultMap="BaseResultMap">
+    	select
+		<include refid="Base_Column_List"/> 
+		from course_model_relation
+		<where>
+			<include refid="BaseWhere"/>
+		</where>
+		<include refid="com.blcu.common.orderSqlMap" /> 
+		<include refid="com.blcu.common.pageSqlMap" /> 
+  </select>
+  <delete id="deleteByParams" parameterType="java.util.Map">
+    	delete from course_model_relation
+		<where>
+			<include refid="BaseWhere"/>
+		</where>
+  </delete>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from course_model_relation
+    where course_model_relation_id = #{courseModelRelationId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from course_model_relation
+    where course_model_relation_id = #{courseModelRelationId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.by.blcu.course.dto.CourseModelRelation">
+    insert into course_model_relation (course_model_relation_id, course_id, 
+      course_model_type)
+    values (#{courseModelRelationId,jdbcType=INTEGER}, #{courseId,jdbcType=INTEGER}, 
+      #{courseModelType,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.by.blcu.course.dto.CourseModelRelation">
+    insert into course_model_relation
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="courseModelRelationId != null">
+        course_model_relation_id,
+      </if>
+      <if test="courseId != null">
+        course_id,
+      </if>
+      <if test="courseModelType != null">
+        course_model_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="courseModelRelationId != null">
+        #{courseModelRelationId,jdbcType=INTEGER},
+      </if>
+      <if test="courseId != null">
+        #{courseId,jdbcType=INTEGER},
+      </if>
+      <if test="courseModelType != null">
+        #{courseModelType,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.by.blcu.course.dto.CourseModelRelation">
+    update course_model_relation
+    <set>
+      <if test="courseId != null">
+        course_id = #{courseId,jdbcType=INTEGER},
+      </if>
+      <if test="courseModelType != null">
+        course_model_type = #{courseModelType,jdbcType=INTEGER},
+      </if>
+    </set>
+    where course_model_relation_id = #{courseModelRelationId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.by.blcu.course.dto.CourseModelRelation">
+    update course_model_relation
+    set course_id = #{courseId,jdbcType=INTEGER},
+      course_model_type = #{courseModelType,jdbcType=INTEGER}
+    where course_model_relation_id = #{courseModelRelationId,jdbcType=INTEGER}
+  </update>
+</mapper>

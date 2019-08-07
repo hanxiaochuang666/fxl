@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.by.blcu.resource.dao.ILiveTelecastDao">
+  <resultMap id="BaseResultMap" type="com.by.blcu.resource.dto.LiveTelecast">
+    <id column="live_telecas_id" jdbcType="INTEGER" property="liveTelecasId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="start_time" jdbcType="DATE" property="startTime" />
+    <result column="end_time" jdbcType="DATE" property="endTime" />
+    <result column="des" jdbcType="VARCHAR" property="des" />
+    <result column="check_url" jdbcType="VARCHAR" property="checkUrl" />
+    <result column="tec_url" jdbcType="VARCHAR" property="tecUrl" />
+    <result column="ass_url" jdbcType="VARCHAR" property="assUrl" />
+    <result column="stu_url" jdbcType="VARCHAR" property="stuUrl" />
+    <result column="rome_id" jdbcType="VARCHAR" property="romeId" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="playbackUrl" jdbcType="VARCHAR" property="playbackurl" />
+    <result column="create_user" jdbcType="INTEGER" property="createUser" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_user" jdbcType="INTEGER" property="updateUser" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="bak1" jdbcType="VARCHAR" property="bak1" />
+    <result column="bak2" jdbcType="VARCHAR" property="bak2" />
+    <result column="bak3" jdbcType="VARCHAR" property="bak3" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    live_telecas_id, name, start_time, end_time, des, check_url, tec_url, ass_url, stu_url, 
+    rome_id, status, playbackUrl, create_user, create_time, update_user, update_time, 
+    bak1, bak2, bak3
+  </sql>
+  <sql id="BaseWhere">
+    	<if test="!@org.springframework.util.StringUtils@isEmpty(entityKeyValues)">
+			and live_telecas_id in
+			<foreach item="item" index="index" collection="entityKeyValues" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(notEntityKeyValues)">
+			and live_telecas_id not in
+			<foreach item="item" index="index" collection="notEntityKeyValues" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(liveTelecasId)">
+			and live_telecas_id=#{liveTelecasId,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(name)">
+			and name=#{name,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(startTime)">
+			and start_time=#{startTime,jdbcType=DATE}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(endTime)">
+			and end_time=#{endTime,jdbcType=DATE}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(des)">
+			and des=#{des,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(checkUrl)">
+			and check_url=#{checkUrl,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(tecUrl)">
+			and tec_url=#{tecUrl,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(assUrl)">
+			and ass_url=#{assUrl,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(stuUrl)">
+			and stu_url=#{stuUrl,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(romeId)">
+			and rome_id=#{romeId,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(status)">
+			and status=#{status,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(playbackurl)">
+			and playbackUrl=#{playbackurl,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(createUser)">
+			and create_user=#{createUser,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(createTime)">
+			and create_time=#{createTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(updateUser)">
+			and update_user=#{updateUser,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(updateTime)">
+			and update_time=#{updateTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(bak1)">
+			and bak1=#{bak1,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(bak2)">
+			and bak2=#{bak2,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(bak3)">
+			and bak3=#{bak3,jdbcType=VARCHAR}
+		</if>
+
+  </sql>
+  <select id="selectCount" parameterType="java.util.Map" resultType="java.lang.Long">
+    	select count(1) from live_telecast
+		<where>
+			<include refid="BaseWhere" />
+		</where>
+  </select>
+  <select id="selectList" parameterType="java.util.Map" resultMap="BaseResultMap">
+    	select
+		<include refid="Base_Column_List"/> 
+		from live_telecast
+		<where>
+			<include refid="BaseWhere"/>
+		</where>
+		<include refid="com.blcu.common.orderSqlMap" /> 
+		<include refid="com.blcu.common.pageSqlMap" /> 
+  </select>
+  <delete id="deleteByParams" parameterType="java.util.Map">
+    	delete from live_telecast
+		<where>
+			<include refid="BaseWhere"/>
+		</where>
+  </delete>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from live_telecast
+    where live_telecas_id = #{liveTelecasId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from live_telecast
+    where live_telecas_id = #{liveTelecasId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.by.blcu.resource.dto.LiveTelecast">
+    insert into live_telecast (live_telecas_id, name, start_time, 
+      end_time, des, check_url, 
+      tec_url, ass_url, stu_url, 
+      rome_id, status, playbackUrl, 
+      create_user, create_time, update_user, 
+      update_time, bak1, bak2, 
+      bak3)
+    values (#{liveTelecasId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{startTime,jdbcType=DATE}, 
+      #{endTime,jdbcType=DATE}, #{des,jdbcType=VARCHAR}, #{checkUrl,jdbcType=VARCHAR}, 
+      #{tecUrl,jdbcType=VARCHAR}, #{assUrl,jdbcType=VARCHAR}, #{stuUrl,jdbcType=VARCHAR}, 
+      #{romeId,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{playbackurl,jdbcType=VARCHAR}, 
+      #{createUser,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{bak1,jdbcType=VARCHAR}, #{bak2,jdbcType=VARCHAR}, 
+      #{bak3,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.by.blcu.resource.dto.LiveTelecast">
+    insert into live_telecast
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="liveTelecasId != null">
+        live_telecas_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="des != null">
+        des,
+      </if>
+      <if test="checkUrl != null">
+        check_url,
+      </if>
+      <if test="tecUrl != null">
+        tec_url,
+      </if>
+      <if test="assUrl != null">
+        ass_url,
+      </if>
+      <if test="stuUrl != null">
+        stu_url,
+      </if>
+      <if test="romeId != null">
+        rome_id,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="playbackurl != null">
+        playbackUrl,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="bak1 != null">
+        bak1,
+      </if>
+      <if test="bak2 != null">
+        bak2,
+      </if>
+      <if test="bak3 != null">
+        bak3,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="liveTelecasId != null">
+        #{liveTelecasId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=DATE},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=DATE},
+      </if>
+      <if test="des != null">
+        #{des,jdbcType=VARCHAR},
+      </if>
+      <if test="checkUrl != null">
+        #{checkUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="tecUrl != null">
+        #{tecUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="assUrl != null">
+        #{assUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="stuUrl != null">
+        #{stuUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="romeId != null">
+        #{romeId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="playbackurl != null">
+        #{playbackurl,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bak1 != null">
+        #{bak1,jdbcType=VARCHAR},
+      </if>
+      <if test="bak2 != null">
+        #{bak2,jdbcType=VARCHAR},
+      </if>
+      <if test="bak3 != null">
+        #{bak3,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.by.blcu.resource.dto.LiveTelecast">
+    update live_telecast
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=DATE},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=DATE},
+      </if>
+      <if test="des != null">
+        des = #{des,jdbcType=VARCHAR},
+      </if>
+      <if test="checkUrl != null">
+        check_url = #{checkUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="tecUrl != null">
+        tec_url = #{tecUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="assUrl != null">
+        ass_url = #{assUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="stuUrl != null">
+        stu_url = #{stuUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="romeId != null">
+        rome_id = #{romeId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="playbackurl != null">
+        playbackUrl = #{playbackurl,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bak1 != null">
+        bak1 = #{bak1,jdbcType=VARCHAR},
+      </if>
+      <if test="bak2 != null">
+        bak2 = #{bak2,jdbcType=VARCHAR},
+      </if>
+      <if test="bak3 != null">
+        bak3 = #{bak3,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where live_telecas_id = #{liveTelecasId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.by.blcu.resource.dto.LiveTelecast">
+    update live_telecast
+    set name = #{name,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=DATE},
+      end_time = #{endTime,jdbcType=DATE},
+      des = #{des,jdbcType=VARCHAR},
+      check_url = #{checkUrl,jdbcType=VARCHAR},
+      tec_url = #{tecUrl,jdbcType=VARCHAR},
+      ass_url = #{assUrl,jdbcType=VARCHAR},
+      stu_url = #{stuUrl,jdbcType=VARCHAR},
+      rome_id = #{romeId,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      playbackUrl = #{playbackurl,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      bak1 = #{bak1,jdbcType=VARCHAR},
+      bak2 = #{bak2,jdbcType=VARCHAR},
+      bak3 = #{bak3,jdbcType=VARCHAR}
+    where live_telecas_id = #{liveTelecasId,jdbcType=INTEGER}
+  </update>
+</mapper>

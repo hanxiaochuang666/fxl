@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.by.blcu.mall.dao.CourseCategoryInfoMapper">
+  <resultMap id="BaseResultMap" type="com.by.blcu.mall.model.CourseCategoryInfo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="cc_id" jdbcType="VARCHAR" property="ccId" />
+    <result column="cc_name" jdbcType="VARCHAR" property="ccName" />
+    <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+    <result column="cc_status" jdbcType="INTEGER" property="ccStatus" />
+    <result column="cc_sort" jdbcType="INTEGER" property="ccSort" />
+    <result column="cc_create_time" jdbcType="TIMESTAMP" property="ccCreateTime" />
+    <result column="cc_creator" jdbcType="VARCHAR" property="ccCreator" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+  cc_id, cc_name, parent_id, cc_status, cc_sort, cc_create_time, cc_creator
+</sql>
+
+  <select id="selectAllBy" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+     from mall_course_category_info where cc_status = 1 order by cc_sort asc
+  </select>
+
+  <select id="moveUp" resultMap="BaseResultMap">
+    select * from mall_course_category_info f
+    <where>
+      <if test="ccSort!=null">
+        and f.cc_sort &lt; #{ccSort}
+      </if>
+      <if test="parentId!=null">
+        and f.parent_id=#{parentId}
+      </if>
+    </where>
+    order by f.cc_sort desc limit 0,1
+  </select>
+
+  <select id="moveDown" resultMap="BaseResultMap">
+    select * from mall_course_category_info f
+    <where>
+      <if test="ccSort!=null">
+        and f.cc_sort &gt; #{ccSort}
+      </if>
+      <if test="parentId!=null">
+        and f.parent_id=#{parentId}
+      </if>
+    </where>
+    order by f.cc_sort asc limit 0,1
+  </select>
+
+  <select id="selectMaxSortByParentId"  parameterType="java.lang.String" resultType="java.lang.Integer">
+    select f.cc_sort from mall_course_category_info f where f.parent_id = #{parentId}
+          order by f.cc_sort desc limit 0,1
+  </select>
+
+  <select id="selectByParentId" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select * from mall_course_category_info
+    <where>
+      <if test="_parameter!=null">
+        and parent_id=#{_parameter}
+      </if>
+    </where>
+  </select>
+
+  <update id="updateNameByCcId" parameterType="java.lang.String">
+    update mall_course_category_info
+    <set>
+      <if test="ccName!=null">cc_name=#{ccName},</if>
+    </set>
+    <where>
+      <if test="ccId!=null">
+        and cc_id=#{ccId}
+      </if>
+    </where>
+  </update>
+
+  <update id="updateCcStatusByCcId" parameterType="java.lang.String">
+    update mall_course_category_info set cc_status=0
+    <where>
+      <if test="ccId!=null">
+        and cc_id=#{ccId}
+      </if>
+    </where>
+  </update>
+
+</mapper>

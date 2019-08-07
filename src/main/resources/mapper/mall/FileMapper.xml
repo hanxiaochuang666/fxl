@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.by.blcu.mall.dao.FileMapper">
+  <resultMap id="BaseResultMap" type="com.by.blcu.mall.model.File">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="file_id" jdbcType="VARCHAR" property="fileId" />
+    <result column="commodity_id" jdbcType="VARCHAR" property="commodityId" />
+    <result column="file_name" jdbcType="VARCHAR" property="fileName" />
+    <result column="file_path" jdbcType="VARCHAR" property="filePath" />
+    <result column="file_time" jdbcType="TIMESTAMP" property="fileTime" />
+    <result column="isdelete" jdbcType="INTEGER" property="isdelete" />
+    <result column="isvalidity" jdbcType="INTEGER" property="isvalidity" />
+    <result column="save_name" jdbcType="VARCHAR" property="saveName" />
+  </resultMap>
+</mapper>

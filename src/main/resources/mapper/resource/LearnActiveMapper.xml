@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.by.blcu.resource.dao.ILearnActiveDao">
+  <resultMap id="BaseResultMap" type="com.by.blcu.resource.dto.LearnActive">
+    <id column="learn_active_id" jdbcType="INTEGER" property="learnActiveId" />
+    <result column="student_id" jdbcType="INTEGER" property="studentId" />
+    <result column="course_id" jdbcType="INTEGER" property="courseId" />
+    <result column="course_detail_id" jdbcType="INTEGER" property="courseDetailId" />
+    <result column="learn_flag" jdbcType="TINYINT" property="learnFlag" />
+    <result column="learn_time" jdbcType="DATE" property="learnTime" />
+    <result column="bak1" jdbcType="VARCHAR" property="bak1" />
+    <result column="bak2" jdbcType="VARCHAR" property="bak2" />
+    <result column="bak3" jdbcType="VARCHAR" property="bak3" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    learn_active_id, student_id, course_id, course_detail_id, learn_flag, learn_time, 
+    bak1, bak2, bak3
+  </sql>
+  <sql id="BaseWhere">
+    	<if test="!@org.springframework.util.StringUtils@isEmpty(entityKeyValues)">
+			and learn_active_id in
+			<foreach item="item" index="index" collection="entityKeyValues" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(notEntityKeyValues)">
+			and learn_active_id not in
+			<foreach item="item" index="index" collection="notEntityKeyValues" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(learnActiveId)">
+			and learn_active_id=#{learnActiveId,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(studentId)">
+			and student_id=#{studentId,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(courseId)">
+			and course_id=#{courseId,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(courseDetailId)">
+			and course_detail_id=#{courseDetailId,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(learnFlag)">
+			and learn_flag=#{learnFlag,jdbcType=TINYINT}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(learnTime)">
+			and learn_time=#{learnTime,jdbcType=DATE}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(bak1)">
+			and bak1=#{bak1,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(bak2)">
+			and bak2=#{bak2,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(bak3)">
+			and bak3=#{bak3,jdbcType=VARCHAR}
+		</if>
+
+  </sql>
+  <select id="selectCount" parameterType="java.util.Map" resultType="java.lang.Long">
+    	select count(1) from learn_active
+		<where>
+			<include refid="BaseWhere" />
+		</where>
+  </select>
+  <select id="selectList" parameterType="java.util.Map" resultMap="BaseResultMap">
+    	select
+		<include refid="Base_Column_List"/> 
+		from learn_active
+		<where>
+			<include refid="BaseWhere"/>
+		</where>
+		<include refid="com.blcu.common.orderSqlMap" /> 
+		<include refid="com.blcu.common.pageSqlMap" /> 
+  </select>
+  <delete id="deleteByParams" parameterType="java.util.Map">
+    	delete from learn_active
+		<where>
+			<include refid="BaseWhere"/>
+		</where>
+  </delete>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from learn_active
+    where learn_active_id = #{learnActiveId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from learn_active
+    where learn_active_id = #{learnActiveId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.by.blcu.resource.dto.LearnActive">
+    insert into learn_active (learn_active_id, student_id, course_id, 
+      course_detail_id, learn_flag, learn_time, 
+      bak1, bak2, bak3)
+    values (#{learnActiveId,jdbcType=INTEGER}, #{studentId,jdbcType=INTEGER}, #{courseId,jdbcType=INTEGER}, 
+      #{courseDetailId,jdbcType=INTEGER}, #{learnFlag,jdbcType=TINYINT}, #{learnTime,jdbcType=DATE}, 
+      #{bak1,jdbcType=VARCHAR}, #{bak2,jdbcType=VARCHAR}, #{bak3,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.by.blcu.resource.dto.LearnActive">
+    insert into learn_active
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="learnActiveId != null">
+        learn_active_id,
+      </if>
+      <if test="studentId != null">
+        student_id,
+      </if>
+      <if test="courseId != null">
+        course_id,
+      </if>
+      <if test="courseDetailId != null">
+        course_detail_id,
+      </if>
+      <if test="learnFlag != null">
+        learn_flag,
+      </if>
+      <if test="learnTime != null">
+        learn_time,
+      </if>
+      <if test="bak1 != null">
+        bak1,
+      </if>
+      <if test="bak2 != null">
+        bak2,
+      </if>
+      <if test="bak3 != null">
+        bak3,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="learnActiveId != null">
+        #{learnActiveId,jdbcType=INTEGER},
+      </if>
+      <if test="studentId != null">
+        #{studentId,jdbcType=INTEGER},
+      </if>
+      <if test="courseId != null">
+        #{courseId,jdbcType=INTEGER},
+      </if>
+      <if test="courseDetailId != null">
+        #{courseDetailId,jdbcType=INTEGER},
+      </if>
+      <if test="learnFlag != null">
+        #{learnFlag,jdbcType=TINYINT},
+      </if>
+      <if test="learnTime != null">
+        #{learnTime,jdbcType=DATE},
+      </if>
+      <if test="bak1 != null">
+        #{bak1,jdbcType=VARCHAR},
+      </if>
+      <if test="bak2 != null">
+        #{bak2,jdbcType=VARCHAR},
+      </if>
+      <if test="bak3 != null">
+        #{bak3,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.by.blcu.resource.dto.LearnActive">
+    update learn_active
+    <set>
+      <if test="studentId != null">
+        student_id = #{studentId,jdbcType=INTEGER},
+      </if>
+      <if test="courseId != null">
+        course_id = #{courseId,jdbcType=INTEGER},
+      </if>
+      <if test="courseDetailId != null">
+        course_detail_id = #{courseDetailId,jdbcType=INTEGER},
+      </if>
+      <if test="learnFlag != null">
+        learn_flag = #{learnFlag,jdbcType=TINYINT},
+      </if>
+      <if test="learnTime != null">
+        learn_time = #{learnTime,jdbcType=DATE},
+      </if>
+      <if test="bak1 != null">
+        bak1 = #{bak1,jdbcType=VARCHAR},
+      </if>
+      <if test="bak2 != null">
+        bak2 = #{bak2,jdbcType=VARCHAR},
+      </if>
+      <if test="bak3 != null">
+        bak3 = #{bak3,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where learn_active_id = #{learnActiveId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.by.blcu.resource.dto.LearnActive">
+    update learn_active
+    set student_id = #{studentId,jdbcType=INTEGER},
+      course_id = #{courseId,jdbcType=INTEGER},
+      course_detail_id = #{courseDetailId,jdbcType=INTEGER},
+      learn_flag = #{learnFlag,jdbcType=TINYINT},
+      learn_time = #{learnTime,jdbcType=DATE},
+      bak1 = #{bak1,jdbcType=VARCHAR},
+      bak2 = #{bak2,jdbcType=VARCHAR},
+      bak3 = #{bak3,jdbcType=VARCHAR}
+    where learn_active_id = #{learnActiveId,jdbcType=INTEGER}
+  </update>
+</mapper>

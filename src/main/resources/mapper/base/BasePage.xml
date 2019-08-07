@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.blcu.common">
+    <sql id="pageSql">
+        <if test="!@org.springframework.util.StringUtils@isEmpty(pageModel)">
+            <if test="!@org.springframework.util.StringUtils@isEmpty(pageModel.currentIndex)">
+                <if test="!@org.springframework.util.StringUtils@isEmpty(pageModel.pageSize)">
+                    limit #{pageModel.currentIndex} , #{pageModel.pageSize}
+                </if>
+            </if>
+        </if>
+    </sql>
+    <sql id="pageSqlMap">
+        <if test="!@org.springframework.util.StringUtils@isEmpty(__currentIndex__)">
+            <if test="!@org.springframework.util.StringUtils@isEmpty(__pageSize__)">
+                limit ${__currentIndex__} , ${__pageSize__}
+            </if>
+        </if>
+    </sql>
+    <!-- 排序 -->
+    <sql id="orderSql">
+        <if test="!@org.springframework.util.StringUtils@isEmpty(pageModel)">
+            <if test="!@org.springframework.util.StringUtils@isEmpty(pageModel.sortLine)">
+                order by
+                <foreach collection="pageModel.sortLine" item="item" index="index" separator=",">
+                    ${item}
+                </foreach>
+                <if test="!@org.springframework.util.StringUtils@isEmpty(pageModel.order)">
+                    ${pageModel.order}
+                </if>
+                <if test="@org.springframework.util.StringUtils@isEmpty(pageModel.order)">
+                    desc
+                </if>
+            </if>
+        </if>
+    </sql>
+    <sql id="orderSqlMap">
+
+        <if test="!@org.springframework.util.StringUtils@isEmpty(_sort_line)">
+            order by
+            <if test="!@org.springframework.util.StringUtils@isEmpty(_sort_line)">
+                ${_sort_line}
+            </if>
+            <if test="!@org.springframework.util.StringUtils@isEmpty(_order_)">
+                ${_order_}
+            </if>
+            <if test="@org.springframework.util.StringUtils@isEmpty(_order_)">
+                desc
+            </if>
+        </if>
+    </sql>
+</mapper>

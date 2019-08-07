@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.by.blcu.mall.dao.CommodityInfoMapper">
+  <resultMap id="BaseResultMap" type="com.by.blcu.mall.model.CommodityInfo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="commodity_id" jdbcType="VARCHAR" property="commodityId" />
+    <result column="cc_id" jdbcType="VARCHAR" property="ccId" />
+    <result column="course_name" jdbcType="VARCHAR" property="courseName" />
+    <result column="commodity_status" jdbcType="INTEGER" property="commodityStatus" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="validity" jdbcType="INTEGER" property="validity" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="introduce" jdbcType="VARCHAR" property="introduce" />
+    <result column="preferential" jdbcType="DOUBLE" property="preferential" />
+    <result column="persion_num" jdbcType="INTEGER" property="persionNum" />
+    <result column="class_time" jdbcType="INTEGER" property="classTime" />
+    <result column="open_class_time" jdbcType="DATE" property="openClassTime" />
+    <result column="lesson_type" jdbcType="INTEGER" property="lessonType" />
+    <result column="lecturer" jdbcType="VARCHAR" property="lecturer" />
+    <result column="audition_video_path" jdbcType="VARCHAR" property="auditionVideoPath" />
+    <result column="picture_path" jdbcType="VARCHAR" property="picturePath" />
+    <result column="contact_info" jdbcType="VARCHAR" property="contactInfo" />
+    <result column="aoto_mail" jdbcType="INTEGER" property="aotoMail" />
+    <result column="course_introduce" jdbcType="VARCHAR" property="courseIntroduce" />
+    <result column="course_id" jdbcType="VARCHAR" property="courseId" />
+    <result column="course_type" jdbcType="INTEGER" property="courseType" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+  commodity_id, cc_id, course_name, commodity_status, price, status, validity, create_time, creator, introduce, preferential,persion_num,class_time,open_class_time,lesson_type,lecturer,audition_video_path,picture_path,contact_info,aoto_mail,course_introduce,course_id,course_type
+</sql>
+
+  <select id="selectAllByCourseName" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from mall_commodity_info
+    <where>
+      <if test="courseName!=null">
+        and course_name like CONCAT(CONCAT('%','${courseName}'),'%')
+      </if>
+      <if test="commodityStatus!=null">
+        and commodity_status=#{commodityStatus}
+      </if>
+    </where>
+  </select>
+
+  <update id="updateComStatusById" parameterType="java.lang.String">
+    update mall_commodity_info
+    <set>
+      <if test="commodityStatus!=null">commodity_status=#{commodityStatus},</if>
+    </set>
+    <where>
+      <if test="commodityId!=null">
+        and commodity_id=#{commodityId}
+      </if>
+    </where>
+  </update>
+
+</mapper>

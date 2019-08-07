@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.by.blcu.resource.dao.ITestResultDetailDao">
+  <resultMap id="BaseResultMap" type="com.by.blcu.resource.dto.TestResultDetail">
+    <id column="test_result_detail_id" jdbcType="INTEGER" property="testResultDetailId" />
+    <result column="test_result_id" jdbcType="INTEGER" property="testResultId" />
+    <result column="question_id" jdbcType="INTEGER" property="questionId" />
+    <result column="give_answer" jdbcType="VARCHAR" property="giveAnswer" />
+    <result column="score" jdbcType="INTEGER" property="score" />
+    <result column="comment" jdbcType="VARCHAR" property="comment" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    test_result_detail_id, test_result_id, question_id, give_answer, score, comment
+  </sql>
+  <sql id="BaseWhere">
+    	<if test="!@org.springframework.util.StringUtils@isEmpty(entityKeyValues)">
+			and test_result_detail_id in
+			<foreach item="item" index="index" collection="entityKeyValues" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(notEntityKeyValues)">
+			and test_result_detail_id not in
+			<foreach item="item" index="index" collection="notEntityKeyValues" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(testResultDetailId)">
+			and test_result_detail_id=#{testResultDetailId,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(testResultId)">
+			and test_result_id=#{testResultId,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(questionId)">
+			and question_id=#{questionId,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(giveAnswer)">
+			and give_answer=#{giveAnswer,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(score)">
+			and score=#{score,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(comment)">
+			and comment=#{comment,jdbcType=VARCHAR}
+		</if>
+
+  </sql>
+  <select id="selectCount" parameterType="java.util.Map" resultType="java.lang.Long">
+    	select count(1) from test_result_detail
+		<where>
+			<include refid="BaseWhere" />
+		</where>
+  </select>
+  <select id="selectList" parameterType="java.util.Map" resultMap="BaseResultMap">
+    	select
+		<include refid="Base_Column_List"/> 
+		from test_result_detail
+		<where>
+			<include refid="BaseWhere"/>
+		</where>
+		<include refid="com.blcu.common.orderSqlMap" /> 
+		<include refid="com.blcu.common.pageSqlMap" /> 
+  </select>
+  <delete id="deleteByParams" parameterType="java.util.Map">
+    	delete from test_result_detail
+		<where>
+			<include refid="BaseWhere"/>
+		</where>
+  </delete>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from test_result_detail
+    where test_result_detail_id = #{testResultDetailId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from test_result_detail
+    where test_result_detail_id = #{testResultDetailId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.by.blcu.resource.dto.TestResultDetail">
+    insert into test_result_detail (test_result_detail_id, test_result_id, 
+      question_id, give_answer, score, 
+      comment)
+    values (#{testResultDetailId,jdbcType=INTEGER}, #{testResultId,jdbcType=INTEGER}, 
+      #{questionId,jdbcType=INTEGER}, #{giveAnswer,jdbcType=VARCHAR}, #{score,jdbcType=INTEGER}, 
+      #{comment,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.by.blcu.resource.dto.TestResultDetail">
+    insert into test_result_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="testResultDetailId != null">
+        test_result_detail_id,
+      </if>
+      <if test="testResultId != null">
+        test_result_id,
+      </if>
+      <if test="questionId != null">
+        question_id,
+      </if>
+      <if test="giveAnswer != null">
+        give_answer,
+      </if>
+      <if test="score != null">
+        score,
+      </if>
+      <if test="comment != null">
+        comment,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="testResultDetailId != null">
+        #{testResultDetailId,jdbcType=INTEGER},
+      </if>
+      <if test="testResultId != null">
+        #{testResultId,jdbcType=INTEGER},
+      </if>
+      <if test="questionId != null">
+        #{questionId,jdbcType=INTEGER},
+      </if>
+      <if test="giveAnswer != null">
+        #{giveAnswer,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null">
+        #{score,jdbcType=INTEGER},
+      </if>
+      <if test="comment != null">
+        #{comment,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.by.blcu.resource.dto.TestResultDetail">
+    update test_result_detail
+    <set>
+      <if test="testResultId != null">
+        test_result_id = #{testResultId,jdbcType=INTEGER},
+      </if>
+      <if test="questionId != null">
+        question_id = #{questionId,jdbcType=INTEGER},
+      </if>
+      <if test="giveAnswer != null">
+        give_answer = #{giveAnswer,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null">
+        score = #{score,jdbcType=INTEGER},
+      </if>
+      <if test="comment != null">
+        comment = #{comment,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where test_result_detail_id = #{testResultDetailId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.by.blcu.resource.dto.TestResultDetail">
+    update test_result_detail
+    set test_result_id = #{testResultId,jdbcType=INTEGER},
+      question_id = #{questionId,jdbcType=INTEGER},
+      give_answer = #{giveAnswer,jdbcType=VARCHAR},
+      score = #{score,jdbcType=INTEGER},
+      comment = #{comment,jdbcType=VARCHAR}
+    where test_result_detail_id = #{testResultDetailId,jdbcType=INTEGER}
+  </update>
+</mapper>
