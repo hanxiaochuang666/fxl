@@ -2,6 +2,7 @@ package com.by.blcu.core.utils;
 
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;
+import org.springframework.util.DigestUtils;
 
 public class MD5Util {
 
@@ -18,6 +19,7 @@ public class MD5Util {
 	}
 
 	public static String encrypt(String username, String password) {
+		password=getMD5(password);
 		return new SimpleHash(ALGORITH_NAME, password, ByteSource.Util.bytes(username.toLowerCase() + password),
 				HASH_ITERATIONS).toHex();
 	}
@@ -26,4 +28,8 @@ public class MD5Util {
 		System.out.println(encrypt("test0123","admin123"));
 	}
 
+	public static String getMD5(String str) {
+		String md5 = DigestUtils.md5DigestAsHex(str.getBytes());
+		return md5;
+	}
 }

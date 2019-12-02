@@ -1,11 +1,14 @@
 package com.by.blcu.core.authentication;
 
-import com.by.blcu.core.constant.ProjectConstant;
-import com.by.blcu.core.domain.User;
+import com.by.blcu.core.constant.RedisBusinessKeyConst;
 import com.by.blcu.core.utils.ApplicationUtils;
 import com.by.blcu.core.utils.IPUtil;
-import com.by.blcu.core.utils.SystemUtils;
 import com.by.blcu.mall.service.RedisService;
+import com.by.blcu.manager.common.ManagerHelper;
+import com.by.blcu.manager.model.SsoUser;
+import com.by.blcu.manager.model.extend.PermissionOrgExtend;
+import com.by.blcu.manager.model.extend.RoleOrgExtend;
+import com.by.blcu.manager.service.SsoUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -15,11 +18,13 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * shiro
@@ -28,15 +33,26 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class ShiroRealm extends AuthorizingRealm {
 
+    private static Logger log = LoggerFactory.getLogger(ShiroRealm.class);
     @Resource
     RedisService redisService;
+    @Resource
+    SsoUserService ssoUserService;
 
     @Override
     public boolean supports(AuthenticationToken token) {
         return token instanceof JWTToken;
     }
 
-
+    @Override
+    public  boolean isPermitted(PrincipalCollection principals, String permission){
+        String username = JWTUtil.getUserInfo(principals.toString()).get("username").asString();
+        boolean isAdmin=false;
+        if(ManagerHelper.isEnable && ManagerHelper.UserName.equals(username)){
+            isAdmin=true;
+        }
+        return isAdmin||super.isPermitted(principals,permission);
+    }
     /**
      * 用户授权
      *
@@ -46,20 +62,31 @@ public class ShiroRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection token) {
-        String username = JWTUtil.getUsername(token.toString());
-
-//临时方法（根据用户信息获取）可移除，直接根据 username 获取权限资源
-        User user = SystemUtils.getUser(username);
+        String username = JWTUtil.getUserInfo(token.toString()).get("username").asString();
+        Set<String> roleSet = new HashSet<>();
+        Set<String> permissionSet = new HashSet<>();
 
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
 
-// 临时方法（模拟获取用户角色集合）
-        simpleAuthorizationInfo.setRoles(user.getRole());
-        // 待开发  Set<String> roleSet = userManager.getUserRoles(username);
+         //获取角色集合
+        Set<RoleOrgExtend> userRolesInter = ssoUserService.getUserRolesInter(username);
+        if(userRolesInter != null){
+            userRolesInter.forEach(roleOrgs -> {
+                if(roleOrgs.getRoleList() != null)
+                    roleOrgs.getRoleList().forEach(role -> roleSet.add(role));
+            });
+        }
+        simpleAuthorizationInfo.setRoles(roleSet);
 
-// 临时方法（模拟获取用户权限集合）
-        simpleAuthorizationInfo.setStringPermissions(user.getPermission());
-        // 待开发 Set<String> permissionSet = userManager.getUserPermissions(username);
+        //获取权限集合
+        Set<PermissionOrgExtend> userPermissionsInter = ssoUserService.getUserPermissionsInter(username);
+        if(userPermissionsInter != null){
+            userPermissionsInter.forEach(permissionOrgs -> {
+                if(permissionOrgs.getPermissionList() != null)
+                    permissionOrgs.getPermissionList().forEach(permission -> permissionSet.add(permission));
+            });
+        }
+        simpleAuthorizationInfo.setStringPermissions(permissionSet);
 
         return simpleAuthorizationInfo;
     }
@@ -81,7 +108,7 @@ public class ShiroRealm extends AuthorizingRealm {
         String ip = IPUtil.getIpAddr(request);
         String encryptToken = ApplicationUtils.encryptToken(token);
 
-        String key = ProjectConstant.TOKEN_CACHE_PREFIX + encryptToken + "." + ip;
+        String key = RedisBusinessKeyConst.Authentication.TOKEN_CACHE_PREFIX + encryptToken + "." + ip;
         String tokenInRedis = null;
         try {
             tokenInRedis = this.redisService.get(key);
@@ -91,17 +118,28 @@ public class ShiroRealm extends AuthorizingRealm {
         if(StringUtils.isBlank(tokenInRedis))
             throw new AuthenticationException("token已过期");
 
-        String username = JWTUtil.getUsername(token);
+        String username = JWTUtil.getUserInfo(token.toString()).get("username").asString();
         if (StringUtils.isBlank(username))
             throw new AuthenticationException("token校验不通过");
 
         //4.通过用户名查询用户信息
-        User user = SystemUtils.getUser(username);
+        SsoUser user=null;
+        if(username.equals(ManagerHelper.UserName)){
+            user = ManagerHelper.ssoUser;
+            if (user == null)
+                throw new AuthenticationException("用户名或密码错误");
+            if (!JWTUtil.verify(token, username, ManagerHelper.PasswordSecret))
+                throw new AuthenticationException("token校验不通过");
+        }
+        else{
+            user = ssoUserService.getUserByUserNameInter(username);
+            if (user == null)
+                throw new AuthenticationException("用户名或密码错误");
 
-        if (user == null)
-            throw new AuthenticationException("用户名或密码错误");
-        if (!JWTUtil.verify(token, username, user.getPassword()))
-            throw new AuthenticationException("token校验不通过");
+            if (!JWTUtil.verify(token, username, user.getPassword()))
+                throw new AuthenticationException("token校验不通过");
+        }
+
         return new SimpleAuthenticationInfo(token, token, "shiro_realm");
     }
 }

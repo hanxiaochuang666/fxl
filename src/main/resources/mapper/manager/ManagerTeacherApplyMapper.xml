@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.by.blcu.manager.dao.ManagerTeacherApplyMapper">
+  <resultMap id="BaseResultMap" type="com.by.blcu.manager.model.ManagerTeacherApply">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="teacher_apply_id" jdbcType="VARCHAR" property="teacherApplyId" />
+    <result column="real_name" jdbcType="VARCHAR" property="realName" />
+    <result column="head_pic" jdbcType="VARCHAR" property="headPic" />
+    <result column="main_category" jdbcType="INTEGER" property="mainCategory" />
+    <result column="q_q" jdbcType="VARCHAR" property="qQ" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="personal_profile" jdbcType="VARCHAR" property="personalProfile" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="commitment_pic" jdbcType="VARCHAR" property="commitmentPic" />
+    <result column="identification" jdbcType="VARCHAR" property="identification" />
+    <result column="id_front_pic" jdbcType="VARCHAR" property="idFrontPic" />
+    <result column="id_back_pic" jdbcType="VARCHAR" property="idBackPic" />
+    <result column="teacher_certificate" jdbcType="VARCHAR" property="teacherCertificate" />
+    <result column="educationr_certificate" jdbcType="VARCHAR" property="educationrCertificate" />
+    <result column="professionalr_certificate" jdbcType="VARCHAR" property="professionalrCertificate" />
+    <result column="otherr_certificate" jdbcType="VARCHAR" property="otherrCertificate" />
+    <result column="verify_status" jdbcType="INTEGER" property="verifyStatus" />
+    <result column="verify_note" jdbcType="VARCHAR" property="verifyNote" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="modify_by" jdbcType="VARCHAR" property="modifyBy" />
+  </resultMap>
+</mapper>

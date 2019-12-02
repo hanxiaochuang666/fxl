@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.by.blcu.manager.dao.ManagerLogMapper">
+    <resultMap id="BaseResultMap" type="com.by.blcu.manager.model.ManagerLog">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="log_id" jdbcType="VARCHAR" property="logId"/>
+        <result column="opt_name" jdbcType="VARCHAR" property="optName"/>
+        <result column="opt_type" jdbcType="VARCHAR" property="optType"/>
+        <result column="opt_description" jdbcType="VARCHAR" property="optDescription"/>
+        <result column="opt_time" jdbcType="TIMESTAMP" property="optTime"/>
+        <result column="opt_i_p" jdbcType="VARCHAR" property="optIP"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime"/>
+        <result column="modify_by" jdbcType="VARCHAR" property="modifyBy"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+      log_id, opt_name, opt_type, opt_description, opt_time, opt_i_p
+    </sql>
+    <sql id="Base_Model_Like_And">
+        <!-- 字段 -->
+        <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(logId)">
+            and log_id = #{logId,jdbcType=VARCHAR}
+        </if>
+        <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(optName)">
+            and opt_name like CONCAT('%',#{optName,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(optType)">
+            and opt_type like CONCAT('%',#{optType,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(optDescription)">
+            and opt_description like CONCAT('%',#{optDescription,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(optIP)">
+            and opt_i_p like CONCAT('%',#{optIP,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="optTimeBegin!=null">
+            <![CDATA[
+           and opt_time >= #{optTimeBegin}
+       ]]>
+        </if>
+        <if test="optTimeEnd!=null">
+            <![CDATA[
+           and opt_time<= #{optTimeEnd}
+       ]]>
+        </if>
+    </sql>
+    <sql id="Base_Select_Order">
+      order by create_time desc
+    </sql>
+    <!-- 查询 -->
+    <select id="selectLogList" parameterType="com.by.blcu.manager.model.sql.InputLog" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from manager_log
+        <where>
+            <include refid="Base_Model_Like_And"/>
+        </where>
+        <include refid="Base_Select_Order"/>
+    </select>
+    <select id="selectLogListCount" parameterType="com.by.blcu.manager.model.sql.InputLog" resultType="java.lang.Integer">
+        select count(1) from manager_log
+        <where>
+            <include refid="Base_Model_Like_And"/>
+        </where>
+    </select>
+
+</mapper>

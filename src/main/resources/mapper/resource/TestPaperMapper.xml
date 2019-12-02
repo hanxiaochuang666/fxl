@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.by.blcu.resource.dao.ITestPaperDao">
-  <resultMap id="BaseResultMap" type="com.by.blcu.resource.model.TestPaperVo">
+  <resultMap id="BaseResultMap" type="com.by.blcu.resource.dto.TestPaper">
     <id column="test_paper_id" jdbcType="INTEGER" property="testPaperId" />
     <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="category_one" jdbcType="INTEGER" property="categoryOne" />
-    <result column="category_two" jdbcType="INTEGER" property="categoryTwo" />
+      <result column="catalogs" jdbcType="VARCHAR" property="catalogs" />
+    <result column="category_one" jdbcType="VARCHAR" property="categoryOne" />
+    <result column="category_two" jdbcType="VARCHAR" property="categoryTwo" />
     <result column="course_id" jdbcType="INTEGER" property="courseId" />
     <result column="use_type" jdbcType="TINYINT" property="useType" />
+    <result column="status" jdbcType="INTEGER" property="status" />
     <result column="time" jdbcType="INTEGER" property="time" />
     <result column="start_time" jdbcType="DATE" property="startTime" />
     <result column="end_time" jdbcType="DATE" property="endTime" />
@@ -15,17 +17,18 @@
     <result column="total_score" jdbcType="INTEGER" property="totalScore" />
     <result column="form_type" jdbcType="INTEGER" property="formType" />
     <result column="export_path" jdbcType="VARCHAR" property="exportPath" />
-    <result column="export_time" jdbcType="DATE" property="exportTime" />
-    <result column="org_id" jdbcType="INTEGER" property="orgId" />
+    <result column="export_stu_path" jdbcType="VARCHAR" property="exportStuPath" />
+    <result column="export_time" jdbcType="TIMESTAMP" property="exportTime" />
+    <result column="org_code" jdbcType="VARCHAR" property="orgCode" />
     <result column="create_user" jdbcType="INTEGER" property="createUser" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_user" jdbcType="INTEGER" property="updateUser" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    test_paper_id, name, category_one, category_two, course_id, use_type, time, start_time, 
-    end_time, is_score, total_score, form_type, export_path, export_time, org_id, create_user, 
-    create_time, update_user, update_time
+    test_paper_id, name,catalogs, category_one, category_two, course_id, use_type, status, time,
+    start_time, end_time, is_score, total_score, form_type, export_path,export_stu_path, export_time,
+    org_Code, create_user, create_time, update_user, update_time
   </sql>
   <sql id="BaseWhere">
     	<if test="!@org.springframework.util.StringUtils@isEmpty(entityKeyValues)">
@@ -44,19 +47,25 @@
 			and test_paper_id=#{testPaperId,jdbcType=INTEGER}
 		</if>
 		<if test="!@org.springframework.util.StringUtils@isEmpty(name)">
-			and name=#{name,jdbcType=VARCHAR}
+			and name like concat('%',#{name,jdbcType=VARCHAR},'%')
 		</if>
+      <if test="!@org.springframework.util.StringUtils@isEmpty(catalogs)">
+          and catalogs=#{catalogs,jdbcType=VARCHAR}
+      </if>
 		<if test="!@org.springframework.util.StringUtils@isEmpty(categoryOne)">
-			and category_one=#{categoryOne,jdbcType=INTEGER}
+			and category_one=#{categoryOne,jdbcType=VARCHAR}
 		</if>
 		<if test="!@org.springframework.util.StringUtils@isEmpty(categoryTwo)">
-			and category_two=#{categoryTwo,jdbcType=INTEGER}
+			and category_two=#{categoryTwo,jdbcType=VARCHAR}
 		</if>
 		<if test="!@org.springframework.util.StringUtils@isEmpty(courseId)">
 			and course_id=#{courseId,jdbcType=INTEGER}
 		</if>
 		<if test="!@org.springframework.util.StringUtils@isEmpty(useType)">
 			and use_type=#{useType,jdbcType=TINYINT}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(status)">
+			and status=#{status,jdbcType=INTEGER}
 		</if>
 		<if test="!@org.springframework.util.StringUtils@isEmpty(time)">
 			and time=#{time,jdbcType=INTEGER}
@@ -79,11 +88,14 @@
 		<if test="!@org.springframework.util.StringUtils@isEmpty(exportPath)">
 			and export_path=#{exportPath,jdbcType=VARCHAR}
 		</if>
+        <if test="!@org.springframework.util.StringUtils@isEmpty(exportStuPath)">
+            and export_stu_path=#{exportStuPath,jdbcType=VARCHAR}
+        </if>
 		<if test="!@org.springframework.util.StringUtils@isEmpty(exportTime)">
-			and export_time=#{exportTime,jdbcType=DATE}
+			and export_time=#{exportTime,jdbcType=TIMESTAMP}
 		</if>
-		<if test="!@org.springframework.util.StringUtils@isEmpty(orgId)">
-			and org_id=#{orgId,jdbcType=INTEGER}
+		<if test="!@org.springframework.util.StringUtils@isEmpty(orgCode)">
+			and org_code=#{orgCode,jdbcType=VARCHAR}
 		</if>
 		<if test="!@org.springframework.util.StringUtils@isEmpty(createUser)">
 			and create_user=#{createUser,jdbcType=INTEGER}
@@ -132,23 +144,23 @@
     where test_paper_id = #{testPaperId,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.by.blcu.resource.dto.TestPaper">
-    insert into test_paper (test_paper_id, name, category_one, 
+    insert into test_paper (test_paper_id, name,catalogs, category_one,
       category_two, course_id, use_type, 
-      time, start_time, end_time, 
-      is_score, total_score, form_type, 
-      export_path, export_time, org_id, 
-      create_user, create_time, update_user, 
-      update_time)
-    values (#{testPaperId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{categoryOne,jdbcType=INTEGER}, 
-      #{categoryTwo,jdbcType=INTEGER}, #{courseId,jdbcType=INTEGER}, #{useType,jdbcType=TINYINT}, 
-      #{time,jdbcType=INTEGER}, #{startTime,jdbcType=DATE}, #{endTime,jdbcType=DATE}, 
-      #{isScore,jdbcType=TINYINT}, #{totalScore,jdbcType=INTEGER}, #{formType,jdbcType=INTEGER}, 
-      #{exportPath,jdbcType=VARCHAR}, #{exportTime,jdbcType=DATE}, #{orgId,jdbcType=INTEGER}, 
-      #{createUser,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+      status, time, start_time, 
+      end_time, is_score, total_score, 
+      form_type, export_path,export_stu_path, export_time,
+      org_code, create_user, create_time,
+      update_user, update_time)
+    values (#{testPaperId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{catalogs,jdbcType=VARCHAR},#{categoryOne,jdbcType=VARCHAR},
+      #{categoryTwo,jdbcType=VARCHAR}, #{courseId,jdbcType=INTEGER}, #{useType,jdbcType=TINYINT}, 
+      #{status,jdbcType=INTEGER}, #{time,jdbcType=INTEGER}, #{startTime,jdbcType=DATE}, 
+      #{endTime,jdbcType=DATE}, #{isScore,jdbcType=TINYINT}, #{totalScore,jdbcType=INTEGER}, 
+      #{formType,jdbcType=INTEGER}, #{exportPath,jdbcType=VARCHAR},#{exportStuPath,jdbcType=VARCHAR}, #{exportTime,jdbcType=TIMESTAMP},
+      #{orgCode,jdbcType=VARCHAR}, #{createUser,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
+      #{updateUser,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.by.blcu.resource.dto.TestPaper"
-          useGeneratedKeys="true" keyProperty="testPaperId" keyColumn="test_paper_id">
+          useGeneratedKeys="true"  keyProperty="testPaperId" keyColumn="test_paper_id">
     insert into test_paper
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="testPaperId != null">
@@ -157,6 +169,9 @@
       <if test="name != null">
         name,
       </if>
+        <if test="catalogs != null">
+            catalogs,
+        </if>
       <if test="categoryOne != null">
         category_one,
       </if>
@@ -168,6 +183,9 @@
       </if>
       <if test="useType != null">
         use_type,
+      </if>
+      <if test="status != null">
+        status,
       </if>
       <if test="time != null">
         time,
@@ -190,11 +208,14 @@
       <if test="exportPath != null">
         export_path,
       </if>
+      <if test="exportStuPath != null">
+          export_stu_path,
+      </if>
       <if test="exportTime != null">
         export_time,
       </if>
-      <if test="orgId != null">
-        org_id,
+      <if test="orgCode != null">
+        org_code,
       </if>
       <if test="createUser != null">
         create_user,
@@ -216,17 +237,23 @@
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
       </if>
+        <if test="catalogs != null">
+            #{catalogs,jdbcType=VARCHAR},
+        </if>
       <if test="categoryOne != null">
-        #{categoryOne,jdbcType=INTEGER},
+        #{categoryOne,jdbcType=VARCHAR},
       </if>
       <if test="categoryTwo != null">
-        #{categoryTwo,jdbcType=INTEGER},
+        #{categoryTwo,jdbcType=VARCHAR},
       </if>
       <if test="courseId != null">
         #{courseId,jdbcType=INTEGER},
       </if>
       <if test="useType != null">
         #{useType,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
       </if>
       <if test="time != null">
         #{time,jdbcType=INTEGER},
@@ -249,11 +276,14 @@
       <if test="exportPath != null">
         #{exportPath,jdbcType=VARCHAR},
       </if>
-      <if test="exportTime != null">
-        #{exportTime,jdbcType=DATE},
+      <if test="exportStuPath != null">
+        #{exportStuPath,jdbcType=VARCHAR},
       </if>
-      <if test="orgId != null">
-        #{orgId,jdbcType=INTEGER},
+      <if test="exportTime != null">
+        #{exportTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orgCode != null">
+        #{orgCode,jdbcType=VARCHAR},
       </if>
       <if test="createUser != null">
         #{createUser,jdbcType=INTEGER},
@@ -275,17 +305,23 @@
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
       </if>
+        <if test="catalogs != null">
+            catalogs = #{catalogs,jdbcType=VARCHAR},
+        </if>
       <if test="categoryOne != null">
-        category_one = #{categoryOne,jdbcType=INTEGER},
+        category_one = #{categoryOne,jdbcType=VARCHAR},
       </if>
       <if test="categoryTwo != null">
-        category_two = #{categoryTwo,jdbcType=INTEGER},
+        category_two = #{categoryTwo,jdbcType=VARCHAR},
       </if>
       <if test="courseId != null">
         course_id = #{courseId,jdbcType=INTEGER},
       </if>
       <if test="useType != null">
         use_type = #{useType,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
       </if>
       <if test="time != null">
         time = #{time,jdbcType=INTEGER},
@@ -308,11 +344,14 @@
       <if test="exportPath != null">
         export_path = #{exportPath,jdbcType=VARCHAR},
       </if>
-      <if test="exportTime != null">
-        export_time = #{exportTime,jdbcType=DATE},
+      <if test="exportStuPath != null">
+          export_stu_path = #{exportStuPath,jdbcType=VARCHAR},
       </if>
-      <if test="orgId != null">
-        org_id = #{orgId,jdbcType=INTEGER},
+      <if test="exportTime != null">
+        export_time = #{exportTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orgCode != null">
+        org_code = #{orgCode,jdbcType=VARCHAR},
       </if>
       <if test="createUser != null">
         create_user = #{createUser,jdbcType=INTEGER},
@@ -331,11 +370,12 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.by.blcu.resource.dto.TestPaper">
     update test_paper
-    set name = #{name,jdbcType=VARCHAR},
-      category_one = #{categoryOne,jdbcType=INTEGER},
-      category_two = #{categoryTwo,jdbcType=INTEGER},
+    set name = #{name,jdbcType=VARCHAR},catalogs = #{catalogs,jdbcType=VARCHAR},
+      category_one = #{categoryOne,jdbcType=VARCHAR},
+      category_two = #{categoryTwo,jdbcType=VARCHAR},
       course_id = #{courseId,jdbcType=INTEGER},
       use_type = #{useType,jdbcType=TINYINT},
+      status = #{status,jdbcType=INTEGER},
       time = #{time,jdbcType=INTEGER},
       start_time = #{startTime,jdbcType=DATE},
       end_time = #{endTime,jdbcType=DATE},
@@ -343,12 +383,21 @@
       total_score = #{totalScore,jdbcType=INTEGER},
       form_type = #{formType,jdbcType=INTEGER},
       export_path = #{exportPath,jdbcType=VARCHAR},
-      export_time = #{exportTime,jdbcType=DATE},
-      org_id = #{orgId,jdbcType=INTEGER},
+      export_stu_path = #{exportStuPath,jdbcType=VARCHAR},
+      export_time = #{exportTime,jdbcType=TIMESTAMP},
+      org_code = #{orgCode,jdbcType=VARCHAR},
       create_user = #{createUser,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_user = #{updateUser,jdbcType=INTEGER},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where test_paper_id = #{testPaperId,jdbcType=INTEGER}
   </update>
+
+    <select id="selectTestPaperCount" parameterType="java.util.Map" resultType="java.lang.Long">
+        SELECT COUNT(a.course_detail_id)
+        FROM course_detail a ,resources b
+      WHERE a.course_id = #{courseId,jdbcType=INTEGER},
+        AND b.type = #{type,jdbcType=INTEGER},
+        AND a.resources_id = b.resources_id
+    </select>
 </mapper>

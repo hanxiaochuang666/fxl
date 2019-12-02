@@ -11,15 +11,11 @@ public class KnowledgePointsModel implements Serializable {
 
     private static final long serialVersionUID = -6111185596217779710L;
 
-    @Excel(name = "课程分类编码")
-    private Integer classTypeCode;
+    @Excel(name = "序号")
+    private String order;
 
     @Excel(name = "课程名称")
     private String className;
-
-    @Excel(name = "课程编码")
-    @NotEmpty
-    private String classCode;
 
     @Excel(name = "章")
     private String chapter;
@@ -33,10 +29,16 @@ public class KnowledgePointsModel implements Serializable {
     @Excel(name = "节助记码")
     private Integer sectionMnemonicCode;
 
-    @Excel(name = "知识点")
+    @Excel(name = "课时")
     private String knowledgePoints;
 
-    @Excel(name = "知识点助记码")
+    @Excel(name = "课时助记码")
     private Integer pointsMnemonicCode;
+
+    @Excel(name = "资源名称")
+    private String resourceName;
+
+    @Excel(name = "资源类型")
+    private String resourceType;
 
 }

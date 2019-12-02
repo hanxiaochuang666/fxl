@@ -5,6 +5,8 @@ import javax.crypto.Cipher;
 import java.security.Key;
 import java.security.Security;
 
+import com.sun.crypto.provider.SunJCE;
+
 public class EncryptUtil {
 
     //设置默认密匙

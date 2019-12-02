@@ -1,34 +1,33 @@
 package com.by.blcu.resource.dto;
 
-public class QuestionType {
-    /**
-	 *INTEGER
-	 *试题类型id
-	 */
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+import java.io.Serializable;
+
+@ApiModel(value = "QuestionType",description = "试题类型实体")
+public class QuestionType implements Serializable {
+
+    private static final long serialVersionUID = -4764627332720144457L;
+
+    /*试题类型id*/
+    @ApiModelProperty(value = "试题类型")
     private Integer questionTypeId;
 
-    /**
-	 *VARCHAR
-	 *类型名称
-	 */
+    /*类型名称*/
+    @ApiModelProperty(value = "类型名称")
     private String name;
 
-    /**
-	 *TINYINT
-	 *是否是客观题（0:是;1:非）
-	 */
+    /*是否是客观题（0:是;1:非）*/
+    @ApiModelProperty(value = "是否是客观题（0:是;1:非）")
     private Integer isObjective;
 
-    /**
-	 *VARCHAR
-	 *编码
-	 */
+    /*编码*/
+    @ApiModelProperty(value = "编码")
     private String code;
 
-    /**
-	 *TINYINT
-	 *状态：0：启用；1：禁用
-	 */
+    /*状态：0：启用；1：禁用*/
+    @ApiModelProperty(value = "状态：0：启用；1：禁用")
     private Byte status;
 
     public Integer getQuestionTypeId() {

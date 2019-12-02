@@ -7,13 +7,24 @@
     <result column="parent_id" jdbcType="INTEGER" property="parentId" />
     <result column="sort" jdbcType="INTEGER" property="sort" />
     <result column="course_id" jdbcType="INTEGER" property="courseId" />
+    <result column="create_user" jdbcType="INTEGER" property="createUser" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_user" jdbcType="INTEGER" property="updateUser" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="check_status" jdbcType="INTEGER" property="checkStatus" />
+    <result column="check_time" jdbcType="TIMESTAMP" property="checkTime" />
+    <result column="check_user" jdbcType="INTEGER" property="checkUser" />
+    <result column="check_msg" jdbcType="VARCHAR" property="checkMsg" />
+    <result column="check_id" jdbcType="VARCHAR" property="checkId" />
     <result column="bak1" jdbcType="VARCHAR" property="bak1" />
     <result column="bak2" jdbcType="VARCHAR" property="bak2" />
     <result column="bak3" jdbcType="VARCHAR" property="bak3" />
   </resultMap>
   <sql id="Base_Column_List">
-    catalog_id, name, parent_id, sort, course_id, status, bak1, bak2, bak3
+    catalog_id, name, parent_id, sort, course_id, create_user, create_time, update_user, 
+    update_time, status, check_status, check_time, check_user, check_msg, check_id, bak1, 
+    bak2, bak3
   </sql>
   <sql id="BaseWhere">
     	<if test="!@org.springframework.util.StringUtils@isEmpty(entityKeyValues)">
@@ -43,8 +54,35 @@
 		<if test="!@org.springframework.util.StringUtils@isEmpty(courseId)">
 			and course_id=#{courseId,jdbcType=INTEGER}
 		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(createUser)">
+			and create_user=#{createUser,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(createTime)">
+			and create_time=#{createTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(updateUser)">
+			and update_user=#{updateUser,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(updateTime)">
+			and update_time=#{updateTime,jdbcType=TIMESTAMP}
+		</if>
 		<if test="!@org.springframework.util.StringUtils@isEmpty(status)">
 			and status=#{status,jdbcType=TINYINT}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(checkStatus)">
+			and check_status=#{checkStatus,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(checkTime)">
+			and check_time=#{checkTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(checkUser)">
+			and check_user=#{checkUser,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(checkMsg)">
+			and check_msg=#{checkMsg,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(checkId)">
+			and check_id=#{checkId,jdbcType=VARCHAR}
 		</if>
 		<if test="!@org.springframework.util.StringUtils@isEmpty(bak1)">
 			and bak1=#{bak1,jdbcType=VARCHAR}
@@ -91,13 +129,20 @@
   </delete>
   <insert id="insert" parameterType="com.by.blcu.course.dto.Catalog">
     insert into catalog (catalog_id, name, parent_id, 
-      sort, course_id, status, 
+      sort, course_id, create_user, 
+      create_time, update_user, update_time, 
+      status, check_status, check_time, 
+      check_user, check_msg, check_id, 
       bak1, bak2, bak3)
     values (#{catalogId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{parentId,jdbcType=INTEGER}, 
-      #{sort,jdbcType=INTEGER}, #{courseId,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, 
+      #{sort,jdbcType=INTEGER}, #{courseId,jdbcType=INTEGER}, #{createUser,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=TINYINT}, #{checkStatus,jdbcType=INTEGER}, #{checkTime,jdbcType=TIMESTAMP}, 
+      #{checkUser,jdbcType=INTEGER}, #{checkMsg,jdbcType=VARCHAR}, #{checkId,jdbcType=VARCHAR}, 
       #{bak1,jdbcType=VARCHAR}, #{bak2,jdbcType=VARCHAR}, #{bak3,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.by.blcu.course.dto.Catalog" useGeneratedKeys="true"  keyProperty="catalogId">
+  <insert id="insertSelective" parameterType="com.by.blcu.course.dto.Catalog"
+          useGeneratedKeys="true"  keyProperty="catalogId">
     insert into catalog
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="catalogId != null">
@@ -115,8 +160,35 @@
       <if test="courseId != null">
         course_id,
       </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
       <if test="status != null">
         status,
+      </if>
+      <if test="checkStatus != null">
+        check_status,
+      </if>
+      <if test="checkTime != null">
+        check_time,
+      </if>
+      <if test="checkUser != null">
+        check_user,
+      </if>
+      <if test="checkMsg != null">
+        check_msg,
+      </if>
+      <if test="checkId != null">
+        check_id,
       </if>
       <if test="bak1 != null">
         bak1,
@@ -144,8 +216,35 @@
       <if test="courseId != null">
         #{courseId,jdbcType=INTEGER},
       </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="status != null">
         #{status,jdbcType=TINYINT},
+      </if>
+      <if test="checkStatus != null">
+        #{checkStatus,jdbcType=INTEGER},
+      </if>
+      <if test="checkTime != null">
+        #{checkTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="checkUser != null">
+        #{checkUser,jdbcType=INTEGER},
+      </if>
+      <if test="checkMsg != null">
+        #{checkMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="checkId != null">
+        #{checkId,jdbcType=VARCHAR},
       </if>
       <if test="bak1 != null">
         #{bak1,jdbcType=VARCHAR},
@@ -173,8 +272,35 @@
       <if test="courseId != null">
         course_id = #{courseId,jdbcType=INTEGER},
       </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="status != null">
         status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="checkStatus != null">
+        check_status = #{checkStatus,jdbcType=INTEGER},
+      </if>
+      <if test="checkTime != null">
+        check_time = #{checkTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="checkUser != null">
+        check_user = #{checkUser,jdbcType=INTEGER},
+      </if>
+      <if test="checkMsg != null">
+        check_msg = #{checkMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="checkId != null">
+        check_id = #{checkId,jdbcType=VARCHAR},
       </if>
       <if test="bak1 != null">
         bak1 = #{bak1,jdbcType=VARCHAR},
@@ -194,10 +320,54 @@
       parent_id = #{parentId,jdbcType=INTEGER},
       sort = #{sort,jdbcType=INTEGER},
       course_id = #{courseId,jdbcType=INTEGER},
+      create_user = #{createUser,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=TINYINT},
+      check_status = #{checkStatus,jdbcType=INTEGER},
+      check_time = #{checkTime,jdbcType=TIMESTAMP},
+      check_user = #{checkUser,jdbcType=INTEGER},
+      check_msg = #{checkMsg,jdbcType=VARCHAR},
+      check_id = #{checkId,jdbcType=VARCHAR},
       bak1 = #{bak1,jdbcType=VARCHAR},
       bak2 = #{bak2,jdbcType=VARCHAR},
       bak3 = #{bak3,jdbcType=VARCHAR}
     where catalog_id = #{catalogId,jdbcType=INTEGER}
   </update>
+
+    <select id="selectChildNode" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+          catalog a
+        WHERE NOT EXISTS
+          (SELECT
+            1
+          FROM
+            catalog b
+          WHERE a.catalog_id = b.parent_id)
+          AND course_id = #{courseId,jdbcType=INTEGER}
+    </select>
+
+    <!--<select id="selectResourceAndCheckResult" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+          c.resources_id AS resourceId,
+          c.check_status AS checkStatus,
+          CONCAT(
+            IFNULL(a.antispam_detail, ''),';',
+            IFNULL(a.porn_detail, ''),';',
+            IFNULL(a.terrorism_detail, '')
+          ) AS checkResult,
+          c.content AS content,
+          c.type
+        FROM
+          automatic_check a,
+          course_detail b,
+          resources c
+        WHERE b.catalog_id = #{catalogId,jdbcType=INTEGER}
+          AND b.resources_id = c.resources_id
+          AND c.check_id = a.automatic_check_id
+    </select>-->
+
 </mapper>

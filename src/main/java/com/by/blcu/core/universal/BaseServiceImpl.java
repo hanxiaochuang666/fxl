@@ -34,6 +34,11 @@ public abstract class BaseServiceImpl implements IBaseService {
     }
 
     @Override
+    public <T> T selectByPrimaryKey(String id) {
+        return getDao().selectByPrimaryKey(id);
+    }
+
+    @Override
     public <T> int updateByPrimaryKeySelective(T record) {
         return getDao().updateByPrimaryKeySelective(record);
     }

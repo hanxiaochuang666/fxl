@@ -11,6 +11,8 @@ public interface IBaseDao {
 
     <T> T selectByPrimaryKey(Integer id);
 
+    <T> T selectByPrimaryKey(String id);
+
     <T> int updateByPrimaryKeySelective(T record);
 
     <T> long selectCount(Map<String, Object> map);

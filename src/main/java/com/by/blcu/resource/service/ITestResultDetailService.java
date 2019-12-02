@@ -3,6 +3,7 @@ package com.by.blcu.resource.service;
 import com.by.blcu.core.ret.RetResult;
 import com.by.blcu.core.universal.IBaseService;
 import com.by.blcu.resource.model.TestPaperAnswerViewModel;
+import com.by.blcu.resource.model.TestPaperFormatLstVo;
 import com.by.blcu.resource.model.TestPaperQuestionResModel;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public interface ITestResultDetailService extends IBaseService {
      * @param optType
      * @return
      */
-    List<TestPaperQuestionResModel> selectTestPaperInfo(int studentId, int testPaperId, int optType)throws Exception;
+    List<TestPaperQuestionResModel> selectTestPaperInfo(int studentId, int testPaperId, int optType, TestPaperFormatLstVo testPaperFormatLstVo)throws Exception;
 
     /**
      * 学生提交试卷
@@ -23,5 +24,5 @@ public interface ITestResultDetailService extends IBaseService {
      * @param testPaperAnswerViewModel
      * @return
      */
-    RetResult saveTestResultDetailInfo(int studentId, TestPaperAnswerViewModel testPaperAnswerViewModel);
+    RetResult saveTestResultDetailInfo(int studentId, TestPaperAnswerViewModel testPaperAnswerViewModel)throws Exception;
 }

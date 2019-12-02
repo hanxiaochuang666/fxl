@@ -1,5 +1,6 @@
 package com.by.blcu.course.XWPFFactory.impl;
 
+import com.by.blcu.course.XWPFFactory.CustomXWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 /**
@@ -10,11 +11,11 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
  **/
 public class EssayXwptWriteImpl extends SingleChoiceXwptWriteImpl{
     @Override
-    protected void writeQuestionOpt(XWPFDocument docxDocument, String questionOpt) {
+    protected void writeQuestionOpt(CustomXWPFDocument docxDocument, String questionOpt) {
 
     }
 
     @Override
-    protected void writeQuestionAnswer(XWPFDocument docxDocument, String answer) {
+    protected void writeQuestionAnswer(CustomXWPFDocument docxDocument, String answer) {
     }
 }

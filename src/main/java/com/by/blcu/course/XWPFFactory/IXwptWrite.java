@@ -12,6 +12,6 @@ public interface IXwptWrite {
     /**
      * 写入整个类型
      */
-    void writeObject(XWPFDocument docxDocument, DocModel docModel, boolean isExportAnswer, boolean isExportReslove);
+    void writeObject(CustomXWPFDocument docxDocument, DocModel docModel, boolean isExportAnswer, boolean isExportReslove)throws Exception;
 
 }

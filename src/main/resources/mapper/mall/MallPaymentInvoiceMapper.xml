@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.by.blcu.mall.dao.IMallPaymentInvoiceDao">
+  <resultMap id="BaseResultMap" type="com.by.blcu.mall.model.MallPaymentInvoice">
+    <id column="pi_id" jdbcType="VARCHAR" property="piId" />
+    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="zip_code" jdbcType="VARCHAR" property="zipCode" />
+    <result column="Invoice" jdbcType="INTEGER" property="invoice" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="taxpayer_number" jdbcType="VARCHAR" property="taxpayerNumber" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="registered_address" jdbcType="VARCHAR" property="registeredAddress" />
+    <result column="registered_phone" jdbcType="VARCHAR" property="registeredPhone" />
+    <result column="bank" jdbcType="VARCHAR" property="bank" />
+    <result column="company_account" jdbcType="VARCHAR" property="companyAccount" />
+    <result column="bak" jdbcType="VARCHAR" property="bak" />
+      <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+      <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+      <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+      <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    pi_id, order_id, address, zip_code, Invoice, company_name, taxpayer_number, type, registered_address,
+    registered_phone, bank, company_account, bak
+  </sql>
+  <sql id="BaseWhere">
+    	<if test="!@org.springframework.util.StringUtils@isEmpty(entityKeyValues)">
+			and pi_id in
+			<foreach item="item" index="index" collection="entityKeyValues" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(notEntityKeyValues)">
+			and pi_id not in
+			<foreach item="item" index="index" collection="notEntityKeyValues" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(piId)">
+			and pi_id=#{piId,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(orderId)">
+			and order_id=#{orderId,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(address)">
+			and address=#{address,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(zipCode)">
+			and zip_code=#{zipCode,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(invoice)">
+			and Invoice=#{invoice,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(companyName)">
+			and company_name=#{companyName,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(taxpayerNumber)">
+			and taxpayer_number=#{taxpayerNumber,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(type)">
+			and type=#{type,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(registeredAddress)">
+			and registered_address=#{registeredAddress,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(registeredPhone)">
+			and registered_phone=#{registeredPhone,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(bank)">
+			and bank=#{bank,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(companyAccount)">
+			and company_account=#{companyAccount,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(bak)">
+			and bak=#{bak,jdbcType=VARCHAR}
+		</if>
+
+  </sql>
+  <select id="selectCount" parameterType="java.util.Map" resultType="java.lang.Long">
+    	select count(1) from mall_payment_invoice
+		<where>
+			<include refid="BaseWhere" />
+		</where>
+  </select>
+  <select id="selectList" parameterType="java.util.Map" resultMap="BaseResultMap">
+    	select
+		<include refid="Base_Column_List"/> 
+		from mall_payment_invoice
+		<where>
+			<include refid="BaseWhere"/>
+		</where>
+		<include refid="com.blcu.common.orderSqlMap" /> 
+		<include refid="com.blcu.common.pageSqlMap" /> 
+  </select>
+  <delete id="deleteByParams" parameterType="java.util.Map">
+    	delete from mall_payment_invoice
+		<where>
+			<include refid="BaseWhere"/>
+		</where>
+  </delete>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from mall_payment_invoice
+    where pi_id = #{piId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from mall_payment_invoice
+    where pi_id = #{piId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.by.blcu.mall.model.MallPaymentInvoice">
+    insert into mall_payment_invoice (pi_id, order_id, address,
+      zip_code, Invoice, company_name, 
+      taxpayer_number, type, registered_address, 
+      registered_phone, bank, company_account, 
+      bak,create_time, create_user, update_time,update_User)
+    values (#{piId,jdbcType=VARCHAR}, #{orderId,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR},
+      #{zipCode,jdbcType=VARCHAR}, #{invoice,jdbcType=INTEGER}, #{companyName,jdbcType=VARCHAR}, 
+      #{taxpayerNumber,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{registeredAddress,jdbcType=VARCHAR}, 
+      #{registeredPhone,jdbcType=VARCHAR}, #{bank,jdbcType=VARCHAR}, #{companyAccount,jdbcType=VARCHAR}, 
+      #{bak,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR},
+      #{updateTime,jdbcType=TIMESTAMP},#{updateUser,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.by.blcu.mall.model.MallPaymentInvoice">
+    insert into mall_payment_invoice
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="piId != null">
+          pi_id,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="zipCode != null">
+        zip_code,
+      </if>
+      <if test="invoice != null">
+        Invoice,
+      </if>
+      <if test="companyName != null">
+        company_name,
+      </if>
+      <if test="taxpayerNumber != null">
+        taxpayer_number,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="registeredAddress != null">
+        registered_address,
+      </if>
+      <if test="registeredPhone != null">
+        registered_phone,
+      </if>
+      <if test="bank != null">
+        bank,
+      </if>
+      <if test="companyAccount != null">
+        company_account,
+      </if>
+      <if test="bak != null">
+        bak,
+      </if>
+        <if test="createTime != null">
+            create_time,
+        </if>
+        <if test="createUser != null">
+            create_user,
+        </if>
+        <if test="updateTime != null">
+            update_time,
+        </if>
+        <if test="updateUser != null">
+            update_user,
+        </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="piId != null">
+        #{piId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="zipCode != null">
+        #{zipCode,jdbcType=VARCHAR},
+      </if>
+      <if test="invoice != null">
+        #{invoice,jdbcType=INTEGER},
+      </if>
+      <if test="companyName != null">
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="taxpayerNumber != null">
+        #{taxpayerNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="registeredAddress != null">
+        #{registeredAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="registeredPhone != null">
+        #{registeredPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="bank != null">
+        #{bank,jdbcType=VARCHAR},
+      </if>
+      <if test="companyAccount != null">
+        #{companyAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="bak != null">
+        #{bak,jdbcType=VARCHAR},
+      </if>
+        <if test="createTime != null">
+            #{createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="createUser != null">
+            #{createUser,jdbcType=VARCHAR},
+        </if>
+        <if test="updateTime != null">
+            #{updateTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="updateUser != null">
+            #{updateUser,jdbcType=VARCHAR},
+        </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.by.blcu.mall.model.MallPaymentInvoice">
+    update mall_payment_invoice
+    <set>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="zipCode != null">
+        zip_code = #{zipCode,jdbcType=VARCHAR},
+      </if>
+      <if test="invoice != null">
+        Invoice = #{invoice,jdbcType=INTEGER},
+      </if>
+      <if test="companyName != null">
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="taxpayerNumber != null">
+        taxpayer_number = #{taxpayerNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="registeredAddress != null">
+        registered_address = #{registeredAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="registeredPhone != null">
+        registered_phone = #{registeredPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="bank != null">
+        bank = #{bank,jdbcType=VARCHAR},
+      </if>
+      <if test="companyAccount != null">
+        company_account = #{companyAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="bak != null">
+        bak = #{bak,jdbcType=VARCHAR},
+      </if>
+        <if test="createTime != null">
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="createUser != null">
+            create_user = #{createUser,jdbcType=VARCHAR},
+        </if>
+        <if test="updateTime != null">
+            update_time = #{updateTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="updateUser != null">
+            update_user = #{updateUser,jdbcType=VARCHAR},
+        </if>
+    </set>
+    where pi_id = #{piId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.by.blcu.mall.model.MallPaymentInvoice">
+    update mall_payment_invoice
+    set order_id = #{orderId,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      zip_code = #{zipCode,jdbcType=VARCHAR},
+      Invoice = #{invoice,jdbcType=INTEGER},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      taxpayer_number = #{taxpayerNumber,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      registered_address = #{registeredAddress,jdbcType=VARCHAR},
+      registered_phone = #{registeredPhone,jdbcType=VARCHAR},
+      bank = #{bank,jdbcType=VARCHAR},
+      company_account = #{companyAccount,jdbcType=VARCHAR},
+      bak = #{bak,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR}
+    where pi_id = #{piId,jdbcType=VARCHAR}
+  </update>
+</mapper>

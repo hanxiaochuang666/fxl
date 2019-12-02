@@ -15,6 +15,19 @@
     <result column="bak2" jdbcType="VARCHAR" property="bak2" />
     <result column="bak3" jdbcType="VARCHAR" property="bak3" />
   </resultMap>
+
+    <resultMap id="TaskResultMap" type="com.by.blcu.course.dto.TaskModel">
+        <id column="course_detail_id" jdbcType="INTEGER" property="courseDetailId" />
+        <result column="resources_id" jdbcType="INTEGER" property="resourcesId" />
+        <result column="title" jdbcType="VARCHAR" property="title" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="test_paper_id" jdbcType="VARCHAR" property="testPaperId" />
+
+        <result column="check_status" jdbcType="INTEGER" property="checkStatus" />
+        <result column="start_time" jdbcType="DATE" property="startTime" />
+        <result column="end_time" jdbcType="DATE" property="endTime" />
+    </resultMap>
+
   <sql id="Base_Column_List">
     course_detail_id, course_id, model_type, catalog_id, resources_id, create_user, create_time, 
     update_user, update_time, bak1, bak2, bak3
@@ -245,4 +258,51 @@
       bak3 = #{bak3,jdbcType=VARCHAR}
     where course_detail_id = #{courseDetailId,jdbcType=INTEGER}
   </update>
+    <select id="getTaskList" parameterType="com.by.blcu.course.model.TaskViewModel" resultMap="TaskResultMap">
+        SELECT
+	      d.course_detail_id,r.resources_id,r.title,t.name,t.test_paper_id,r.check_status,
+	      t.start_time,t.end_time
+        FROM
+            course_detail d,
+            resources r,
+            test_paper t
+        WHERE
+            d.resources_id = r.resources_id
+         AND r.content = t.test_paper_id
+         AND d.course_id = #{courseId,jdbcType=INTEGER}
+
+        <if test="!@org.springframework.util.StringUtils@isEmpty(modelTypes)">
+            and d.model_type in
+            <foreach item="item" index="index" collection="modelTypes" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="getIdList" parameterType="java.util.Map" resultType="java.lang.String">
+        SELECT
+          b.content as paperId
+        FROM
+          course_detail a,
+          resources b,
+          test_paper c
+        WHERE a.resources_id = b.resources_id
+          and b.content = c.test_paper_id
+            <if test="!@org.springframework.util.StringUtils@isEmpty(name)">
+                and c.name like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+            </if>
+          AND a.course_id = #{courseId,jdbcType=INTEGER}
+          AND b.type = #{type,jdbcType=INTEGER}
+        order by c.test_paper_id desc
+    </select>
+    <select id="getDetailList" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT
+        a.*
+        FROM
+        course_detail a,
+        resources b
+        WHERE a.resources_id = b.resources_id
+        AND a.course_id = #{courseId,jdbcType=INTEGER}
+        AND b.type = #{type,jdbcType=INTEGER}
+    </select>
 </mapper>

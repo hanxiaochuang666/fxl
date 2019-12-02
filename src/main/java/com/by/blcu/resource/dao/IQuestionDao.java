@@ -14,4 +14,6 @@ public interface IQuestionDao extends IBaseDao {
     List<Question> selectListByPoints(Map<String,Object> map);
 
     List<Map<String,Object>> queryQuestionListCount(Map<String,Object> map);
+
+    List<Question> selectListByCourseAndType(Map<String,Object> map);
 }

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.by.blcu.manager.dao.WebNewsCategoryMapper">
+  <resultMap id="BaseResultMap" type="com.by.blcu.manager.model.WebNewsCategory">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="category_id" jdbcType="VARCHAR" property="categoryId" />
+    <result column="cc_id" jdbcType="VARCHAR" property="ccId" />
+    <result column="org_code" jdbcType="VARCHAR" property="orgCode" />
+    <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+    <result column="class_layer" jdbcType="INTEGER" property="classLayer" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="image_url" jdbcType="VARCHAR" property="imageUrl" />
+    <result column="link_url" jdbcType="VARCHAR" property="linkUrl" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="modify_by" jdbcType="VARCHAR" property="modifyBy" />
+  </resultMap>
+
+  <resultMap id="NewsCategoryAmount" type="com.by.blcu.manager.model.extend.NewsCategoryAmount">
+    <id column="category_id" jdbcType="VARCHAR" property="categoryId" />
+    <result column="cc_id1" jdbcType="VARCHAR" property="ccId1" />
+    <result column="cc_id2" jdbcType="VARCHAR" property="ccId2" />
+    <result column="category_id" jdbcType="VARCHAR" property="categoryId" />
+    <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
+    <result column="amount" jdbcType="INTEGER" property="amount" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+     category_id,cc_id,org_code,category_name,code,parent_id,class_layer,status,image_url,link_url,sort,description,remark,is_deleted,create_time,create_by,modify_time,modify_by
+  </sql>
+  <sql id="Base_Model_Equ_And">
+    is_deleted is not true
+    <!-- 字段 -->
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(categoryId)">
+      and category_id = #{categoryId,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(ccId)">
+      and cc_id = #{ccId,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(orgCode)">
+      and org_code = #{orgCode,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(categoryName)">
+      and category_name = #{categoryName,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(status)">
+      and status = #{status,jdbcType=INTEGER}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(parentId)">
+      and parent_id = #{parentId,jdbcType=VARCHAR}
+    </if>
+    <if test="classLayer!=null">
+      and class_layer = #{classLayer,jdbcType=INTEGER}
+    </if>
+  </sql>
+  <sql id="Base_Model_Check">
+    is_deleted is not true
+    <!-- 字段 -->
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(status)">
+      and status = #{status,jdbcType=INTEGER}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(orgCode)">
+      and (org_code is not null and  org_code = #{orgCode,jdbcType=VARCHAR})
+    </if>
+    <trim prefix=" and (" prefixOverrides="or" suffix=")">
+      <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(parentId)">
+        or parent_id = #{parentId,jdbcType=VARCHAR}
+      </if>
+      <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(categoryId)">
+        or category_id = #{categoryId,jdbcType=VARCHAR}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Select_Order">
+      order by sort asc, create_time desc
+  </sql>
+
+  <!-- 基本操作 -->
+  <select id="findCategoryList" parameterType="com.by.blcu.manager.model.sql.InputNewsCategory" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from web_news_category
+    <where>
+      <include refid="Base_Model_Equ_And"/>
+    </where>
+    <include refid="Base_Select_Order" />
+  </select>
+  <select id="checkCategoryList" parameterType="com.by.blcu.manager.model.sql.InputNewsCategory" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from web_news_category
+    <where>
+      <include refid="Base_Model_Check"/>
+    </where>
+  </select>
+  <select id="findCategoryListPage" parameterType="com.by.blcu.manager.model.sql.InputNewsCategory" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from web_news_category
+    <where>
+      <include refid="Base_Model_Equ_And"/>
+    </where>
+    <include refid="Base_Select_Order" />
+  </select>
+  <select id="findCategoryListCount" parameterType="com.by.blcu.manager.model.sql.InputNewsCategory" resultType="java.lang.Integer">
+    select count(1) from web_news_category
+    <where>
+      <include refid="Base_Model_Equ_And"/>
+    </where>
+  </select>
+  <update id="deleteCategoryByIdList" parameterType="com.by.blcu.manager.model.sql.InputNewsCategory">
+    update web_news_category
+    set is_deleted=1, modify_time=#{modifyTime}, modify_by=#{modifyBy}
+    where category_id in
+    <foreach collection="categoryIdList" open="(" close=")" separator="," item="item">
+      #{item,jdbcType=INTEGER}
+    </foreach>
+  </update>
+
+  <select id="getCategoryAmount" parameterType="com.by.blcu.manager.model.sql.InputNewsCategory" resultMap="NewsCategoryAmount">
+    select cc_id1,cc_id2,category_id,category_name, count(1) as amount from(
+			select news.cc_id1,news.cc_id2,news.category_id,category.category_name
+					from web_news news
+            left join web_news_category category on news.category_id = category.category_id
+            where news.is_deleted is not true and category.is_deleted is not true) t
+    group by t.cc_id1,t.cc_id2,t.category_id
+    having count(1) >0
+  </select>
+
+  <select id="getCategoryThisLevel" parameterType="com.by.blcu.manager.model.sql.InputNewsCategory" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from web_news_category
+    where is_deleted is not true and  parent_id = (
+        select parent_id from web_news_category where is_deleted is not true  and category_id=#{categoryId,jdbcType=VARCHAR})
+    order by sort asc
+  </select>
+
+  <!-- 检查分类是否已使用 -->
+  <select id="checkNewsR" parameterType="com.by.blcu.manager.model.sql.InputNewsCategory"  resultType="java.lang.Integer">
+    select count(1) from web_news_category category
+        left join web_news news on category.category_id=news.category_id
+    where (category.is_deleted is not true)  and (news.is_deleted is not true)
+    <trim prefix=" and (" prefixOverrides="or" suffix=")">
+      <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(categoryId)">
+        or category.category_id = #{categoryId,jdbcType=VARCHAR}
+      </if>
+      <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(categoryIdList)">
+        or category.category_id in
+        <foreach collection="categoryIdList" index="index" item="item" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </if>
+    </trim>
+  </select>
+
+</mapper>

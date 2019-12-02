@@ -73,7 +73,7 @@ public class LiveTelecast {
 	 *VARCHAR
 	 *直播回放地址
 	 */
-    private String playbackurl;
+    private String playbackUrl;
 
     /**
 	 *INTEGER
@@ -205,12 +205,12 @@ public class LiveTelecast {
         this.status = status;
     }
 
-    public String getPlaybackurl() {
-        return playbackurl;
+    public String getPlaybackUrl() {
+        return playbackUrl;
     }
 
-    public void setPlaybackurl(String playbackurl) {
-        this.playbackurl = playbackurl == null ? null : playbackurl.trim();
+    public void setPlaybackUrl(String playbackUrl) {
+        this.playbackUrl = playbackUrl == null ? null : playbackUrl.trim();
     }
 
     public Integer getCreateUser() {
@@ -286,7 +286,7 @@ public class LiveTelecast {
         sb.append(", stuUrl=").append(stuUrl);
         sb.append(", romeId=").append(romeId);
         sb.append(", status=").append(status);
-        sb.append(", playbackurl=").append(playbackurl);
+        sb.append(", playbackUrl=").append(playbackUrl);
         sb.append(", createUser=").append(createUser);
         sb.append(", createTime=").append(createTime);
         sb.append(", updateUser=").append(updateUser);

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.by.blcu.mall.dao.MallPayLogInfoMapper">
+  <resultMap id="BaseResultMap" type="com.by.blcu.mall.model.MallPayLogInfo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="pay_respon_id" jdbcType="VARCHAR" property="payResponId" />
+    <result column="merchant_id" jdbcType="VARCHAR" property="merchantId" />
+    <result column="network_id" jdbcType="VARCHAR" property="networkId" />
+    <result column="terminal_id" jdbcType="VARCHAR" property="terminalId" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="yibaoorder" jdbcType="VARCHAR" property="yibaoorder" />
+    <result column="amount" jdbcType="VARCHAR" property="amount" />
+    <result column="return_code" jdbcType="VARCHAR" property="returnCode" />
+    <result column="card_no" jdbcType="VARCHAR" property="cardNo" />
+    <result column="pay_date" jdbcType="VARCHAR" property="payDate" />
+    <result column="pay_time" jdbcType="VARCHAR" property="payTime" />
+    <result column="trace" jdbcType="VARCHAR" property="trace" />
+    <result column="reference_no" jdbcType="VARCHAR" property="referenceNo" />
+    <result column="pay_way" jdbcType="VARCHAR" property="payWay" />
+    <result column="send_data" jdbcType="VARCHAR" property="sendData" />
+    <result column="add_data" jdbcType="VARCHAR" property="addData" />
+    <result column="message" jdbcType="VARCHAR" property="message" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="bak1" jdbcType="VARCHAR" property="bak1" />
+    <result column="bak2" jdbcType="VARCHAR" property="bak2" />
+    <result column="bak3" jdbcType="VARCHAR" property="bak3" />
+    <result column="bak4" jdbcType="VARCHAR" property="bak4" />
+    <result column="bak5" jdbcType="VARCHAR" property="bak5" />
+    <result column="refundinf" jdbcType="LONGVARCHAR" property="refundinf" />
+    <result column="mac" jdbcType="LONGVARCHAR" property="mac" />
+  </resultMap>
+</mapper>

@@ -1,5 +1,6 @@
 package com.by.blcu.core.universal;
 
+import com.by.blcu.core.ret.RetResult;
 import com.by.blcu.core.ret.ServiceException;
 import org.apache.ibatis.exceptions.TooManyResultsException;
 import org.springframework.beans.factory.annotation.Autowired;

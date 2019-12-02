@@ -2,31 +2,31 @@ package com.by.blcu.core.constant;
 
 public class ProjectConstant {
 
-   // 项目基础包名称
-   public static final String BASE_PACKAGE = "com.by.blcu.mall";
+    public static class Mall {
 
-   // Model所在包
-   public static final String MODEL_PACKAGE = BASE_PACKAGE + ".model";
+        // 项目基础包名称
+        public static final String BASE_PACKAGE = "com.by.blcu.manager";
 
-   // Mapper所在包
-   public static final String MAPPER_PACKAGE = BASE_PACKAGE + ".dao";
+        // Model所在包
+        public static final String MODEL_PACKAGE = BASE_PACKAGE + ".model";
 
-   // Service所在包
-   public static final String SERVICE_PACKAGE = BASE_PACKAGE + ".service";
+        // Mapper所在包
+        public static final String MAPPER_PACKAGE = BASE_PACKAGE + ".dao";
 
-   // ServiceImpl所在包
-   public static final String SERVICE_IMPL_PACKAGE = SERVICE_PACKAGE + ".impl";
+        // Service所在包
+        public static final String SERVICE_PACKAGE = BASE_PACKAGE + ".service";
 
-   // Controller所在包
-   public static final String CONTROLLER_PACKAGE = BASE_PACKAGE + ".controller";
+        // ServiceImpl所在包
+        public static final String SERVICE_IMPL_PACKAGE = SERVICE_PACKAGE + ".impl";
 
-   // Mapper插件基础接口的完全限定名
-   public static final String MAPPER_INTERFACE_REFERENCE = BASE_PACKAGE + ".core.universal.Dao";
-   
- //文件上传储存的地址
-   public static final String SAVEFILEPATH = "D://file";
+        // Controller所在包
+        public static final String CONTROLLER_PACKAGE = BASE_PACKAGE + ".controller";
 
-   //token 二次加密
-   public static final String TOKEN_CACHE_PREFIX = "blcu.cache.token.";
+        // Mapper插件基础接口的完全限定名
+        public static final String MAPPER_INTERFACE_REFERENCE = BASE_PACKAGE + ".core.universal.Dao";
+
+        //文件上传储存的地址
+        public static final String SAVEFILEPATH = "D://file";
+    }
 
 }

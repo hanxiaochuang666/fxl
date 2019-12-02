@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.by.blcu.manager.dao.WebMessageConsumMapper">
+  <resultMap id="BaseResultMap" type="com.by.blcu.manager.model.WebMessageConsum">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="consum_id" jdbcType="VARCHAR" property="consumId" />
+    <result column="message_id" jdbcType="VARCHAR" property="messageId" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="is_read" jdbcType="VARCHAR" property="isRead" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    consum_id,message_id,user_id,user_name,is_read,create_time
+  </sql>
+  <sql id="Base_Model_Like_And">
+    <!-- 字段 -->
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(consumId)">
+      and consum_id = #{consumId,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(messageId)">
+      and message_id = #{messageId,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(userId)">
+      and user_id = #{userId,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(userName)">
+      and user_name = #{userName,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNull(isRead)">
+      and is_read = #{isRead,jdbcType=BIT}
+    </if>
+  </sql>
+  <sql id="Base_Select_Order">
+      order by create_time desc
+  </sql>
+
+  <!-- 基本操作 -->
+  <select id="findConsumList" parameterType="com.by.blcu.manager.model.sql.InputMessageConsum" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from web_message_consum
+    <where>
+      <include refid="Base_Model_Like_And"/>
+    </where>
+    <include refid="Base_Select_Order" />
+  </select>
+  <select id="findConsumListCount" parameterType="com.by.blcu.manager.model.sql.InputMessageConsum" resultType="java.lang.Integer">
+    select count(1) from web_message_consum
+    <where>
+      <include refid="Base_Model_Like_And"/>
+    </where>
+    <include refid="Base_Select_Order" />
+  </select>
+
+  <!-- 批量插入 -->
+  <insert id="insertConsumList">
+    insert into web_message_consum (consum_id,message_id,user_id,user_name,is_read,create_time)
+    VALUES
+    <foreach collection ="list" item="item" separator =",">
+      (#{item.consumId,jdbcType=VARCHAR}, #{item.messageId,jdbcType=VARCHAR}, #{item.userId,jdbcType=VARCHAR},
+      #{item.userName,jdbcType=VARCHAR}, #{item.isRead,jdbcType=BIT}, #{item.createTime,jdbcType=TIMESTAMP})
+    </foreach >;
+  </insert>
+
+  <update id="readConsum" parameterType="com.by.blcu.manager.model.sql.InputMessageConsum">
+    update web_message_consum
+      set is_read =1
+    where message_id =#{messageId,jdbcType=VARCHAR} and user_name = #{userName,jdbcType=VARCHAR}
+  </update>
+
+  <delete id="deleteConsum" parameterType="com.by.blcu.manager.model.sql.InputMessageConsum">
+    delete from web_message_consum
+      where consum_id in
+      <foreach collection="consumIdList" open="(" close=")" separator="," item="item">
+        #{item,jdbcType=INTEGER}
+      </foreach>
+  </delete>
+</mapper>

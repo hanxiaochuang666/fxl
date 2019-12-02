@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.by.blcu.mall.dao.MallMealInfoMapper">
+  <resultMap id="BaseResultMap" type="com.by.blcu.mall.model.MallMealInfo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="com_commodity_id" jdbcType="VARCHAR" property="comCommodityId" />
+    <result column="commodity_id" jdbcType="VARCHAR" property="commodityId" />
+    <result column="child_commodity_sort" jdbcType="INTEGER" property="childCommoditySort" />
+  </resultMap>
+
+  <delete id="deleteBycomCommodityId" parameterType="java.lang.String">
+ DELETE FROM mall_meal_info WHERE com_commodity_id = #{comCommodityId}
+</delete>
+
+  <select id="selectByComCommodityId" resultMap="BaseResultMap">
+    select
+    id,com_commodity_id,commodity_id,child_commodity_sort
+    from mall_meal_info where com_commodity_id = #{comCommodityId} order by child_commodity_sort asc
+  </select>
+
+  <select id="moveUpChildCommodity" resultMap="BaseResultMap">
+    select
+    id,com_commodity_id,commodity_id,child_commodity_sort
+    from mall_meal_info where child_commodity_sort &lt; #{childCommoditySort} and com_commodity_id=#{comCommodityId}
+    order by child_commodity_sort desc limit 0,1
+  </select>
+
+  <select id="moveDownChildCommodity" resultMap="BaseResultMap">
+    select
+    id,com_commodity_id,commodity_id,child_commodity_sort
+    from mall_meal_info where child_commodity_sort > #{childCommoditySort} and com_commodity_id=#{comCommodityId}
+    order by child_commodity_sort asc limit 0,1
+  </select>
+
+  <delete id="deleteChildCommodity">
+ DELETE FROM mall_meal_info
+ WHERE com_commodity_id = #{comCommodityId} and commodity_id = #{commodityId}
+</delete>
+</mapper>

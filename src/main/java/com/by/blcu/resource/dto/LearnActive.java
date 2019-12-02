@@ -28,10 +28,10 @@ public class LearnActive {
     private Integer courseDetailId;
 
     /**
-	 *TINYINT
+	 *int
 	 *学习标志（0：未学习；1：学习）
 	 */
-    private Byte learnFlag;
+    private int learnFlag;
 
     /**
 	 *DATE
@@ -56,6 +56,12 @@ public class LearnActive {
 	 *备用3
 	 */
     private String bak3;
+
+    /**
+	 *INTEGER
+	 *排序
+	 */
+    private Integer sort;
 
     public Integer getLearnActiveId() {
         return learnActiveId;
@@ -89,11 +95,11 @@ public class LearnActive {
         this.courseDetailId = courseDetailId;
     }
 
-    public Byte getLearnFlag() {
+    public int getLearnFlag() {
         return learnFlag;
     }
 
-    public void setLearnFlag(Byte learnFlag) {
+    public void setLearnFlag(int learnFlag) {
         this.learnFlag = learnFlag;
     }
 
@@ -129,6 +135,14 @@ public class LearnActive {
         this.bak3 = bak3 == null ? null : bak3.trim();
     }
 
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -144,6 +158,7 @@ public class LearnActive {
         sb.append(", bak1=").append(bak1);
         sb.append(", bak2=").append(bak2);
         sb.append(", bak3=").append(bak3);
+        sb.append(", sort=").append(sort);
         sb.append("]");
         return sb.toString();
     }

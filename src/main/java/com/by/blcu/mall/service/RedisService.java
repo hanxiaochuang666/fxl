@@ -1,6 +1,7 @@
 package com.by.blcu.mall.service;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author 
@@ -89,4 +90,39 @@ public interface RedisService {
      * @return
      */
     long del(final String key);
+
+
+    /**
+     * 删除匹配所有键值对
+     * @param key
+     * @return
+     */
+    Boolean delete(String key);
+    /**
+     * 存放有序集合
+     * @param key
+     * @param value
+     * @param score 排序号
+     */
+    Boolean zAdd(String key, String value, double score);
+
+    /**
+     * 获取集合元素 从小到大
+     * @param key
+     * @param min
+     * @param max
+     */
+    Set<String> zRange(String key, long min, long max);
+
+    /**
+     * 删除特定元素
+     */
+    Long zRemove(String key, Object... values);
+
+    /**
+     * 判断key是否存在
+     * @param key
+     * @return
+     */
+    Boolean hasKey(String key);
 }

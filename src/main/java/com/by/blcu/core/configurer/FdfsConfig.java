@@ -22,4 +22,7 @@ public class FdfsConfig {
     @Value("${fdfs.part}")
     private String part;
 
+    @Value("${fdfs.head}")
+    private String head;
+
 }

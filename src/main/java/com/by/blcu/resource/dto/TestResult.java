@@ -40,6 +40,11 @@ public class TestResult {
     private Date endTime;
 
     /**
+     * 答题时长
+     */
+    private Integer  useTime;
+
+    /**
 	 *INTEGER
 	 *批改人
 	 */
@@ -169,6 +174,7 @@ public class TestResult {
         sb.append(", status=").append(status);
         sb.append(", startTime=").append(startTime);
         sb.append(", endTime=").append(endTime);
+        sb.append(", useTime=").append(useTime);
         sb.append(", makingUser=").append(makingUser);
         sb.append(", markingTime=").append(markingTime);
         sb.append(", objectiveScore=").append(objectiveScore);
@@ -176,5 +182,13 @@ public class TestResult {
         sb.append(", totalScore=").append(totalScore);
         sb.append("]");
         return sb.toString();
+    }
+
+    public Integer getUseTime() {
+        return useTime;
+    }
+
+    public void setUseTime(Integer useTime) {
+        this.useTime = useTime;
     }
 }

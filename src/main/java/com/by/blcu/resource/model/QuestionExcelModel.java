@@ -10,11 +10,17 @@ public class QuestionExcelModel implements Serializable {
 
     private static final long serialVersionUID = 1181899837188066072L;
 
+    @Excel(name = "序号")
+    private String order;
+
     @Excel(name = "题型")
     private String questionType;
 
     @Excel(name = "子题型")
     private String childQuestionType;
+
+    @Excel(name = "试题序列")
+    private String questionSec;
 
     @Excel(name = "题干")
     private String questionBody;

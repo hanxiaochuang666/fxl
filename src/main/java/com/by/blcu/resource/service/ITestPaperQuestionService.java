@@ -2,6 +2,7 @@ package com.by.blcu.resource.service;
 
 import com.by.blcu.core.ret.RetResult;
 import com.by.blcu.core.universal.IBaseService;
+import com.by.blcu.course.service.courseCheck.CourseCheckModel;
 import com.by.blcu.resource.dto.TestPaperQuestion;
 import com.by.blcu.resource.model.TestPaperQuestionResModel;
 
@@ -21,7 +22,7 @@ public interface ITestPaperQuestionService extends IBaseService {
      * @param testPaperQuestionLst
      * @return
      */
-    RetResult saveTestPaperQuestion(List<TestPaperQuestion> testPaperQuestionLst)throws Exception;
+    RetResult saveTestPaperQuestion(List<TestPaperQuestion> testPaperQuestionLst, int userId, CourseCheckModel courseCheckModel)throws Exception;
 
     /**
      * 智能组卷
@@ -35,5 +36,5 @@ public interface ITestPaperQuestionService extends IBaseService {
      * @param testPaperId
      * @return String
      */
-    String createNewWord(int testPaperId)throws Exception;
+    String createNewWord(int testPaperId,boolean isExportAnswer,boolean isExportReslove)throws Exception;
 }

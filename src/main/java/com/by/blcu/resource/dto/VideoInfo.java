@@ -13,25 +13,31 @@ public class VideoInfo {
 	 *VARCHAR
 	 *
 	 */
-    private String storedatetime;
+    private String storeDatetime;
 
     /**
 	 *VARCHAR
 	 *
 	 */
-    private String bucketname;
+    private String bucketName;
 
     /**
 	 *VARCHAR
 	 *
 	 */
-    private String extensionname;
+    private String extensionName;
 
     /**
 	 *VARCHAR
 	 *
 	 */
     private String endpoint;
+
+    /**
+	 *TINYINT
+	 *
+	 */
+    private Byte success;
 
     /**
 	 *VARCHAR
@@ -49,7 +55,7 @@ public class VideoInfo {
 	 *VARCHAR
 	 *
 	 */
-    private String storagetype;
+    private String storageType;
 
     /**
 	 *VARCHAR
@@ -73,7 +79,13 @@ public class VideoInfo {
 	 *VARCHAR
 	 *
 	 */
-    private String fileid;
+    private String fileId;
+
+    /**
+	 *BIGINT
+	 *播放时长(秒)
+	 */
+    private Long duration;
 
     /**
 	 *VARCHAR
@@ -137,28 +149,28 @@ public class VideoInfo {
         this.videoInfoId = videoInfoId;
     }
 
-    public String getStoredatetime() {
-        return storedatetime;
+    public String getStoreDatetime() {
+        return storeDatetime;
     }
 
-    public void setStoredatetime(String storedatetime) {
-        this.storedatetime = storedatetime == null ? null : storedatetime.trim();
+    public void setStoreDatetime(String storeDatetime) {
+        this.storeDatetime = storeDatetime == null ? null : storeDatetime.trim();
     }
 
-    public String getBucketname() {
-        return bucketname;
+    public String getBucketName() {
+        return bucketName;
     }
 
-    public void setBucketname(String bucketname) {
-        this.bucketname = bucketname == null ? null : bucketname.trim();
+    public void setBucketName(String bucketName) {
+        this.bucketName = bucketName == null ? null : bucketName.trim();
     }
 
-    public String getExtensionname() {
-        return extensionname;
+    public String getExtensionName() {
+        return extensionName;
     }
 
-    public void setExtensionname(String extensionname) {
-        this.extensionname = extensionname == null ? null : extensionname.trim();
+    public void setExtensionName(String extensionName) {
+        this.extensionName = extensionName == null ? null : extensionName.trim();
     }
 
     public String getEndpoint() {
@@ -167,6 +179,14 @@ public class VideoInfo {
 
     public void setEndpoint(String endpoint) {
         this.endpoint = endpoint == null ? null : endpoint.trim();
+    }
+
+    public Byte getSuccess() {
+        return success;
+    }
+
+    public void setSuccess(Byte success) {
+        this.success = success;
     }
 
     public String getSecuritytoken() {
@@ -185,12 +205,12 @@ public class VideoInfo {
         this.accesskeysecret = accesskeysecret == null ? null : accesskeysecret.trim();
     }
 
-    public String getStoragetype() {
-        return storagetype;
+    public String getStorageType() {
+        return storageType;
     }
 
-    public void setStoragetype(String storagetype) {
-        this.storagetype = storagetype == null ? null : storagetype.trim();
+    public void setStorageType(String storageType) {
+        this.storageType = storageType == null ? null : storageType.trim();
     }
 
     public String getExpiration() {
@@ -217,12 +237,20 @@ public class VideoInfo {
         this.accesskeyid = accesskeyid == null ? null : accesskeyid.trim();
     }
 
-    public String getFileid() {
-        return fileid;
+    public String getFileId() {
+        return fileId;
     }
 
-    public void setFileid(String fileid) {
-        this.fileid = fileid == null ? null : fileid.trim();
+    public void setFileId(String fileId) {
+        this.fileId = fileId == null ? null : fileId.trim();
+    }
+
+    public Long getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Long duration) {
+        this.duration = duration;
     }
 
     public String getUrl() {
@@ -304,17 +332,19 @@ public class VideoInfo {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", videoInfoId=").append(videoInfoId);
-        sb.append(", storedatetime=").append(storedatetime);
-        sb.append(", bucketname=").append(bucketname);
-        sb.append(", extensionname=").append(extensionname);
+        sb.append(", storeDatetime=").append(storeDatetime);
+        sb.append(", bucketName=").append(bucketName);
+        sb.append(", extensionName=").append(extensionName);
         sb.append(", endpoint=").append(endpoint);
+        sb.append(", success=").append(success);
         sb.append(", securitytoken=").append(securitytoken);
         sb.append(", accesskeysecret=").append(accesskeysecret);
-        sb.append(", storagetype=").append(storagetype);
+        sb.append(", storageType=").append(storageType);
         sb.append(", expiration=").append(expiration);
         sb.append(", keyWord=").append(keyWord);
         sb.append(", accesskeyid=").append(accesskeyid);
-        sb.append(", fileid=").append(fileid);
+        sb.append(", fileId=").append(fileId);
+        sb.append(", duration=").append(duration);
         sb.append(", url=").append(url);
         sb.append(", createUser=").append(createUser);
         sb.append(", createTime=").append(createTime);

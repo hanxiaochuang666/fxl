@@ -1,22 +1,27 @@
 package com.by.blcu.core.aop;
 
 import com.alibaba.fastjson.JSON;
+import com.by.blcu.core.authentication.JWTUtil;
 import com.by.blcu.core.ret.ServiceException;
 import com.by.blcu.core.systemlog.SystemLogQueue;
 import com.by.blcu.core.utils.ApplicationUtils;
+import com.by.blcu.core.utils.IPUtil;
 import com.by.blcu.mall.model.SystemLog;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.javassist.*;
 import org.apache.ibatis.javassist.bytecode.CodeAttribute;
 import org.apache.ibatis.javassist.bytecode.LocalVariableAttribute;
 import org.apache.ibatis.javassist.bytecode.MethodInfo;
-//import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.SecurityUtils;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +30,7 @@ import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
 
 /**
  * @Description: aop记录操作日志
@@ -65,6 +71,13 @@ public class AspectLog {
         if(!(e instanceof ServiceException)) {
             try {
                 SystemLog systemLog =getSystemLogInit(p);
+                //获取操作人
+                String token = (String) SecurityUtils.getSubject().getPrincipal();
+                String username = "";
+                if (StringUtils.isNotBlank(token)) {
+                    username = JWTUtil.getUserInfo(token).get("username").asString();
+                }
+                systemLog.setUserId(username);
                 systemLog.setLogType(SystemLog.LOGERROR);
                 systemLog.setExceptionCode(e.getClass().getName());
                 systemLog.setExceptionDetail(e.getMessage());
@@ -79,6 +92,14 @@ public class AspectLog {
     private SystemLog getSystemLogInit(JoinPoint p){
         SystemLog systemLog = new SystemLog();
         try{
+            //获取操作人
+            String token = (String) SecurityUtils.getSubject().getPrincipal();
+            String username = "";
+            if (StringUtils.isNotBlank(token)) {
+                username = JWTUtil.getUserInfo(token).get("username").asString();
+            }
+            systemLog.setUserId(username);
+
             //类名
             String targetClass = p.getTarget().getClass().toString();
             //请求的方法名
@@ -92,9 +113,9 @@ public class AspectLog {
             systemLog.setId(ApplicationUtils.getUUID());
             systemLog.setDescription(getMthodRemark(p));
             systemLog.setMethod(targetClass+"."+tartgetMethod);
-            //大家可自行百度获取ip的方法
-            HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest(); 
-            systemLog.setRequestIp(getIp(request));
+            //获取 IP
+            HttpServletRequest request = IPUtil.getHttpServletRequest();
+            systemLog.setRequestIp(IPUtil.getIpAddr(request));
             systemLog.setParams(JSON.toJSONString(nameAndArgs));
             //systemLog.setUserId(getUserId());
             systemLog.setCreateTime(new Date());
@@ -105,34 +126,7 @@ public class AspectLog {
         return systemLog;
     }
     
-	// 获取请求主机IP地址,如果通过代理进来，则透过防火墙获取真实IP地址，如果没有代理，则获取真实ip
 
-	public static String getIp(HttpServletRequest request) {
-		// 代理进来，则透过防火墙获取真实IP地址
-		String ip = request.getHeader("X-Forwarded-For");
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("Proxy-Client-IP");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("WL-Proxy-Client-IP");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("HTTP_CLIENT_IP");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("X-Real-IP");
-		}
-		// 如果没有代理，则获取真实ip
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getRemoteAddr();
-		}
-
-		return ip.equals("0:0:0:0:0:0:0:1") ? "127.0.0.1" : ip;
-
-	}
 
     /**
      * 通过反射机制 获取被切参数名以及参数值
@@ -172,36 +166,15 @@ public class AspectLog {
      * @throws Exception
      */
     private static String getMthodRemark(JoinPoint joinPoint) throws Exception {
-        String targetName = joinPoint.getTarget().getClass().getName();
-        String methodName = joinPoint.getSignature().getName();
-        Object[] arguments = joinPoint.getArgs();
-        Class targetClass = Class.forName(targetName);
-        Method[] method = targetClass.getMethods();
-        String methode = "";
-        for (Method m : method) {
-            if (m.getName().equals(methodName)) {
-                Class[] tmpCs = m.getParameterTypes();
-                if (tmpCs.length == arguments.length) {
-                    AnnotationLog methodCache = m.getAnnotation(AnnotationLog.class);
-                    if (methodCache != null) {
-                        methode = methodCache.remark();
-                    }
-                    break;
-                }
-            }
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        Method method = signature.getMethod();
+        AnnotationLog log = method.getAnnotation(AnnotationLog.class);
+        if(log != null){
+            return log.remark();
         }
-        return methode;
+
+        return "";
     }
-
-//    private static String getUserId() {
-//        String userId = "";
-//        UserInfo userInfo = (UserInfo) SecurityUtils.getSubject().getPrincipal();
-//        if(userInfo != null){
-//            userId = userInfo.getId();
-//        }
-//        return userId;
-//    }
-
 
 
 }

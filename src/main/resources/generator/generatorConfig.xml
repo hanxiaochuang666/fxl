@@ -51,8 +51,8 @@
         </commentGenerator>
         <!--数据库链接URL，用户名、密码 -->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://10.98.89.100:3306/beiyuda_course?useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=UTC"
-                        userId="hanchuang" password="hanchuang123456">
+                        connectionURL="jdbc:mysql://192.168.15.150:3306/beiyuda_course?useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=UTC"
+                        userId="development" password="development123456">
         </jdbcConnection>
         <!--不应强制使用BigDecimal字段-->
         <javaTypeResolver>
@@ -72,7 +72,7 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table tableName="discuss"
+        <table tableName="learn_active"
                enableSelectByExample="false"
                enableDeleteByExample="false"
                enableCountByExample="false"

@@ -12,10 +12,16 @@
     <result column="cc_sort" jdbcType="INTEGER" property="ccSort" />
     <result column="cc_create_time" jdbcType="TIMESTAMP" property="ccCreateTime" />
     <result column="cc_creator" jdbcType="VARCHAR" property="ccCreator" />
+    <result column="level" jdbcType="INTEGER" property="level" />
   </resultMap>
 
+
   <sql id="Base_Column_List">
-  cc_id, cc_name, parent_id, cc_status, cc_sort, cc_create_time, cc_creator
+  cc_id, cc_name, parent_id, cc_status, cc_sort, cc_create_time, cc_creator, level
+</sql>
+
+  <sql id="Base_Column_List1">
+  a.cc_id, a.cc_name, a.parent_id, a.cc_status, a.cc_sort, a.cc_create_time, a.cc_creator, a.level
 </sql>
 
   <select id="selectAllBy" resultMap="BaseResultMap">
@@ -24,9 +30,41 @@
      from mall_course_category_info where cc_status = 1 order by cc_sort asc
   </select>
 
+  <select id="selectAllByCommodityStatus" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List1"/>
+    from mall_course_category_info a,mall_commodity_info b
+    where a.cc_id=b.cc_id
+    and a.cc_status = 1
+    and b.commodity_status="1"
+    and b.is_view="1"
+    order by a.cc_sort asc
+  </select>
+
+  <select id="selectListRecursionByOrgCode" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List1"/>
+    from mall_course_category_info a,mall_commodity_info b
+    where a.cc_id=b.cc_id
+    and a.cc_status = 1
+    and b.org_code=#{orgCode}
+    and b.commodity_status="1"
+    and b.is_view="1"
+    order by a.cc_sort asc
+  </select>
+
+  <select id="selectCcNameByCcId" resultType="java.lang.String" parameterType="java.lang.String">
+    select
+    cc_name
+    from mall_course_category_info where cc_id=#{ccId}
+  </select>
+
   <select id="moveUp" resultMap="BaseResultMap">
-    select * from mall_course_category_info f
+    select
+    <include refid="Base_Column_List"/>
+    from mall_course_category_info f
     <where>
+      cc_status=1
       <if test="ccSort!=null">
         and f.cc_sort &lt; #{ccSort}
       </if>
@@ -38,8 +76,11 @@
   </select>
 
   <select id="moveDown" resultMap="BaseResultMap">
-    select * from mall_course_category_info f
+    select
+    <include refid="Base_Column_List"/>
+    from mall_course_category_info f
     <where>
+      cc_status=1
       <if test="ccSort!=null">
         and f.cc_sort &gt; #{ccSort}
       </if>
@@ -55,13 +96,41 @@
           order by f.cc_sort desc limit 0,1
   </select>
 
+  <select id="selectByCcId"  parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from mall_course_category_info  where cc_id = #{ccId} and cc_status=1
+  </select>
+
+  <select id="selectList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from mall_course_category_info
+  </select>
+
   <select id="selectByParentId" resultMap="BaseResultMap" parameterType="java.lang.String">
-    select * from mall_course_category_info
+    select
+    <include refid="Base_Column_List"/>
+    from mall_course_category_info
     <where>
+      cc_status="1"
       <if test="_parameter!=null">
         and parent_id=#{_parameter}
       </if>
     </where>
+    order by cc_sort asc
+  </select>
+
+  <select id="selectByParentIdAndName" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from mall_course_category_info
+    <where>
+      cc_status="1"
+      and parent_id=#{parentId}
+      and cc_name=#{ccName}
+    </where>
+    order by cc_sort asc
   </select>
 
   <update id="updateNameByCcId" parameterType="java.lang.String">

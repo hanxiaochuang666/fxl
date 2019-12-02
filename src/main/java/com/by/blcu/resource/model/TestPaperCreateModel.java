@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 @Data
-@ApiModel(value = "保存试卷请求参数")
+@ApiModel(value = "TestPaperCreateModel",description = "保存试卷请求参数")
 public class TestPaperCreateModel implements Serializable {
     private static final long serialVersionUID = 3563176697295766191L;
     @ApiModelProperty(value = "试卷id")
@@ -20,17 +20,35 @@ public class TestPaperCreateModel implements Serializable {
     @ApiModelProperty(value = "试卷名称")
     private String name;
 
-    @Min(value = 1,message = "类目1 categoryOne 非法")
-    @ApiModelProperty(value = "类目1主键标识")
-    private int categoryOne;
+    @ApiModelProperty(value = "课程结构字符串")
+    private String catalogs;
 
-    @Min(value = 1,message = "类目2 categoryTwo 非法")
+    @NotBlank(message = "类目1 categoryOne 非法")
     @ApiModelProperty(value = "类目1主键标识")
-    private int categoryTwo;
+    private String categoryOne;
+
+    /**
+     * 类目一名称
+     */
+    private String categoryOneName;
+
+    @NotBlank(message = "类目2 categoryTwo 非法")
+    @ApiModelProperty(value = "类目1主键标识")
+    private String categoryTwo;
+
+    /**
+     * 类目二名称
+     */
+    private String categoryTwoName;
 
     @ApiModelProperty(value = "课程 courseId")
     @Min(value = 1,message = "课程 courseId 非法")
     private int courseId;
+
+    /**
+     * 课程名称
+     */
+    private String courseName;
 
     @Range(min = 0,max=1,message = "使用类型useType非法")
     @ApiModelProperty(value = "使用类型0 测试，1作业")
@@ -55,7 +73,7 @@ public class TestPaperCreateModel implements Serializable {
     @ApiModelProperty(value = "组卷类型0:人工组卷；1:智能组卷")
     private int formType;
 
-    @Min(value = 1,message = "机构Id orgId 非法")
-    @ApiModelProperty(value = "机构Id")
-    private int orgId;
+    @NotBlank(message = "机构Code不能为空")
+    @ApiModelProperty(value = "机构Code")
+    private String orgCode;
 }

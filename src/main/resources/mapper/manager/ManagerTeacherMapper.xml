@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.by.blcu.manager.dao.ManagerTeacherMapper">
+  <resultMap id="BaseResultMap" type="com.by.blcu.manager.model.ManagerTeacher">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="teacher_id" jdbcType="VARCHAR" property="teacherId" />
+    <result column="cc_id" jdbcType="VARCHAR" property="ccId" />
+    <result column="teacher_name" jdbcType="VARCHAR" property="teacherName" />
+    <result column="teacher_zili" jdbcType="VARCHAR" property="teacherZili" />
+    <result column="teach_course" jdbcType="VARCHAR" property="teachCourse" />
+    <result column="org_code" jdbcType="VARCHAR" property="orgCode" />
+    <result column="teacher_jianjie" jdbcType="VARCHAR" property="teacherJianjie" />
+    <result column="teacher_header" jdbcType="VARCHAR" property="teacherHeader" />
+    <result column="teach_course_relation" jdbcType="VARCHAR"  property="teachCourseRelation" />
+    <result column="attribute" jdbcType="VARCHAR" property="attribute" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="type_sort" jdbcType="INTEGER" property="typeSort" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="modify_by" jdbcType="VARCHAR" property="modifyBy" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    teacher_id,cc_id, teacher_name, teacher_zili, teach_course, org_code, teacher_jianjie,
+    teacher_header, status, sort, is_deleted, `type`, type_sort, create_time, create_by,
+    modify_time, modify_by
+  </sql>
+  <sql id="Base_Model_Equ_And">
+    (is_deleted is not true)
+    <!-- 字段 -->
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(status)">
+      and status = #{status,jdbcType=INTEGER}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(type)">
+      and `type` = #{type,jdbcType=INTEGER}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(ccId)">
+      and cc_id = #{ccId,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(teacherId)">
+      and teacher_id = #{teacherId,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(teacherName)">
+      and teacher_name = #{teacherName,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(orgCode)">
+      and org_code = #{orgCode,jdbcType=VARCHAR}
+    </if>
+    <!-- 列表 -->
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(teacherIdList)">
+      and teacher_id in
+      <foreach collection="teacherIdList" index="index" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+  </sql>
+  <sql id="Base_Model_Like_And">
+    (is_deleted is not true)
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(status)">
+      and status = #{status,jdbcType=INTEGER}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(type)">
+      and `type` = #{type,jdbcType=INTEGER}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(ccId)">
+      and cc_id = #{ccId,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(teacherId)">
+      and teacher_id like CONCAT('%',#{teacherId,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(teacherName)">
+      and teacher_name like CONCAT('%',#{teacherName,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(orgCode)">
+      and org_code like CONCAT('%',#{orgCode,jdbcType=VARCHAR},'%')
+    </if>
+    <!-- 列表 -->
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(teacherIdList)">
+      and teacher_id in
+      <foreach collection="teacherIdList" index="index" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+  </sql>
+
+  <sql id="Teacher_Like_And">
+    (t.is_deleted is not true)
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(status)">
+      and t.status = #{status,jdbcType=INTEGER}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(type)">
+      and t.`type` = #{type,jdbcType=INTEGER}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(ccId)">
+      and t.cc_id = #{ccId,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(teacherId)">
+      and t.teacher_id like CONCAT('%',#{teacherId,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(teacherName)">
+      and t.teacher_name like CONCAT('%',#{teacherName,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(orgCode)">
+      and a.org_code = #{orgCode,jdbcType=VARCHAR}
+    </if>
+    <!-- 列表 -->
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(teacherIdList)">
+      and t.teacher_id in
+      <foreach collection="teacherIdList" index="index" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+  </sql>
+
+  <!-- 基本操作 -->
+  <select id="findTeacherEquAnd" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from manager_teacher
+    <where>
+      <include refid="Base_Model_Equ_And"/>
+    </where>
+    <choose>
+      <when test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(type) and type ==2">
+          order by sort asc,create_time desc
+      </when>
+      <otherwise>
+          order by sort asc,create_time desc
+      </otherwise>
+    </choose>
+  </select>
+  <select id="findTeacherList" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from manager_teacher
+    <where>
+      <include refid="Base_Model_Like_And"/>
+    </where>
+    <choose>
+      <when test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(type) and type ==2">
+        order by sort asc,create_time desc
+      </when>
+      <otherwise>
+        order by sort asc,create_time desc
+      </otherwise>
+    </choose>
+  </select>
+  <select id="findTeacherListCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+    select count(1) from manager_teacher
+    <where>
+      <include refid="Base_Model_Like_And"/>
+    </where>
+  </select>
+  <update id="deleteTeacherById" parameterType="java.util.Map">
+    update manager_teacher
+    set is_deleted=1, modify_time=#{modifyTime}, modify_by=#{modifyBy}
+    where teacher_id in
+    <foreach collection="teacherIdList" open="(" close=")" separator="," item="item">
+      #{item}
+    </foreach>
+  </update>
+
+
+  <update id="insertRecommendTeacherList" parameterType="com.by.blcu.manager.umodel.ManagerTeacherModel">
+    update manager_teacher
+    set `type`=2, modify_time=#{modifyTime}, modify_by=#{modifyBy}
+    where teacher_id in
+    <foreach collection="teacherIdList" open="(" close=")" separator="," item="item">
+      #{item}
+    </foreach>
+  </update>
+  <update id="deleteRecommendTeacherList" parameterType="com.by.blcu.manager.umodel.ManagerTeacherModel">
+    update manager_teacher
+    set `type`=1, modify_time=#{modifyTime}, modify_by=#{modifyBy}
+    <where>
+      <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(orgCode)">
+        and (org_code is not null and  org_code = #{orgCode,jdbcType=VARCHAR})
+      </if>
+      <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(teacherIdList)">
+        and teacher_id in
+        <foreach collection="teacherIdList" open="(" close=")" separator="," item="item">
+          #{item}
+        </foreach>
+      </if>
+    </where>
+  </update>
+
+  <select id="findTeacherListWithOrg" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+      t.teacher_id, t.cc_id, t.teacher_name, t.teacher_zili, t.teach_course, a.organization_name as org_code,
+      t.teacher_jianjie, t.teacher_header, t.status, t.sort, t.is_deleted, t.`type`, t.type_sort, t.create_time, t.create_by,
+      t.modify_time, t.modify_by
+    from manager_teacher t left join manager_organization a on t.org_code = a.org_code
+    <where>
+      <include refid="Teacher_Like_And"/>
+    </where>
+    <choose>
+      <when test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(type) and type ==2">
+        order by sort asc,create_time desc
+      </when>
+      <otherwise>
+        order by sort asc,create_time desc
+      </otherwise>
+    </choose>
+  </select>
+
+</mapper>

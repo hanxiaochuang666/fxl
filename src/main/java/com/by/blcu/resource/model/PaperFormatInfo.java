@@ -4,10 +4,12 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.Min;
+import java.io.Serializable;
 
 
 @Data
-public class PaperFormatInfo {
+public class PaperFormatInfo implements Serializable {
+    private static final long serialVersionUID = -4863899546470091392L;
     @ApiModelProperty(value = "testPaperFormatId")
     private Integer testPaperFormatId;
 

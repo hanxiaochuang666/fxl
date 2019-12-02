@@ -14,6 +14,7 @@ public interface IBaseService {
     <T>  int insertSelective(T record);
 
     <T> T selectByPrimaryKey(Integer id);
+    <T> T selectByPrimaryKey(String id);
 
     <T> int updateByPrimaryKeySelective(T obj);
 

@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.by.blcu.manager.dao.SsoUserMapper">
+  <resultMap id="BaseResultMap" type="com.by.blcu.manager.model.SsoUser">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="real_name" jdbcType="VARCHAR" property="realName" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="header_url" jdbcType="VARCHAR" property="headerUrl" />
+    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="q_q_open_id" jdbcType="VARCHAR" property="qQOpenId" />
+    <result column="wechat_open_id" jdbcType="VARCHAR" property="wechatOpenId" />
+    <result column="education" jdbcType="VARCHAR" property="education" />
+    <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="consignee_name" jdbcType="VARCHAR" property="consigneeName" />
+    <result column="consignee_phone" jdbcType="VARCHAR" property="consigneePhone" />
+    <result column="consignee_province" jdbcType="VARCHAR" property="consigneeProvince" />
+    <result column="consignee_city" jdbcType="VARCHAR" property="consigneeCity" />
+    <result column="consignee_district" jdbcType="VARCHAR" property="consigneeDistrict" />
+    <result column="consignee_address" jdbcType="VARCHAR" property="consigneeAddress" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="modify_by" jdbcType="VARCHAR" property="modifyBy" />
+  </resultMap>
+  <resultMap id="RoleMap" type="com.by.blcu.manager.model.ManagerRole">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="role_id" jdbcType="VARCHAR" property="roleId" />
+    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="is_system" jdbcType="BIT" property="isSystem" />
+    <result column="org_code" jdbcType="VARCHAR" property="orgCode" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="modify_by" jdbcType="VARCHAR" property="modifyBy" />
+  </resultMap>
+  <resultMap id="OrgPermissionMap" type="com.by.blcu.manager.model.sql.OrgPermission">
+    <id column="permission_id" jdbcType="VARCHAR" property="permissionId" />
+    <result column="menu_name" jdbcType="VARCHAR" property="menuName" />
+    <result column="menu_code" jdbcType="VARCHAR" property="menuCode" />
+    <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="is_system" jdbcType="BIT" property="isSystem" />
+    <result column="is_display" jdbcType="BIT" property="isDisplay" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="perms" jdbcType="VARCHAR" property="perms" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="modify_by" jdbcType="VARCHAR" property="modifyBy" />
+
+    <result column="org_code" jdbcType="VARCHAR" property="orgCode" />
+  </resultMap>
+
+
+  <sql id="Base_Column_List">
+    id, user_id, user_name, password, real_name, status, header_url, nick_name, sex,
+    phone, email, qq, q_q_open_id, wechat_open_id, education, province, city, consignee_name,
+    consignee_phone, consignee_province, consignee_city, consignee_district, consignee_address,
+    sort, is_deleted, create_time, create_by, modify_time, modify_by
+  </sql>
+  <sql id="Base_Model_Equ_And">
+     (is_deleted is not true)
+    <!-- 字段 -->
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(id)">
+      and id = #{id,jdbcType=INTEGER}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(status)">
+      and status = #{status,jdbcType=INTEGER}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(userId)">
+      and user_id = #{userId,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(userName)">
+      and user_name = #{userName,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(phone)">
+      and phone = #{phone,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(email)">
+      and email = #{email,jdbcType=VARCHAR}
+    </if>
+    <!-- 列表 -->
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(idList)">
+      and id in
+      <foreach collection="idList" index="index" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(userIdList)">
+      and user_id in
+      <foreach collection="userIdList" index="index" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(userNameList)">
+      and user_name in
+      <foreach collection="userNameList" index="index" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(phoneList)">
+      and phone in
+      <foreach collection="phoneList" index="index" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(emailList)">
+      and email in
+      <foreach collection="emailList" index="index" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+  </sql>
+  <sql id="Base_Model_Equ_Or">
+      and (is_deleted is not true)
+    <!-- 字段 -->
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(status)">
+      and status = #{status,jdbcType=INTEGER}
+    </if>
+    <trim prefix=" and (" prefixOverrides="or" suffix=")">
+      <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(id)">
+        or id = #{id,jdbcType=INTEGER}
+      </if>
+      <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(userId)">
+        or user_id = #{userId,jdbcType=VARCHAR}
+      </if>
+      <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(userName)">
+        or user_name = #{userName,jdbcType=VARCHAR}
+      </if>
+      <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(phone)">
+        or phone = #{phone,jdbcType=VARCHAR}
+      </if>
+      <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(email)">
+        or email = #{email,jdbcType=VARCHAR}
+      </if>
+      <!-- 列表 -->
+      <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(idList)">
+        or id in
+        <foreach collection="idList" index="index" item="item" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </if>
+      <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(userIdList)">
+        or user_id in
+        <foreach collection="userIdList" index="index" item="item" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </if>
+      <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(userNameList)">
+        or user_name in
+        <foreach collection="userNameList" index="index" item="item" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </if>
+      <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(phoneList)">
+        or phone in
+        <foreach collection="phoneList" index="index" item="item" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </if>
+      <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(emailList)">
+        or email in
+        <foreach collection="emailList" index="index" item="item" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Model_Equ_Or_Exist">
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(id)">
+      or id = #{id,jdbcType=INTEGER}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(userId)">
+      or user_id = #{userId,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(userName)">
+      or user_name = #{userName,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(phone)">
+      or phone = #{phone,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(email)">
+      or email = #{email,jdbcType=VARCHAR}
+    </if>
+  </sql>
+  <sql id="Base_Model_Like_And">
+     (is_deleted is not true)
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(status)">
+      and status = #{status,jdbcType=INTEGER}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(id)">
+      and id like CONCAT('%',#{id,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(userId)">
+      and user_id like CONCAT('%',#{userId,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(userName)">
+      and user_name like CONCAT('%',#{userName,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(realName)">
+      and real_name like CONCAT('%',#{realName,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(phone)">
+      and phone like CONCAT('%',#{phone,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(email)">
+      and email like CONCAT('%',#{email,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="createTimeBegin!=null">
+      <![CDATA[
+           and create_time >= #{createTimeBegin}
+       ]]>
+    </if>
+    <if test="createTimeEnd!=null">
+      <![CDATA[
+           and create_time<= #{createTimeEnd}
+       ]]>
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(userIdList)">
+      and user_id in
+      <foreach collection="userIdList" index="index" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+  </sql>
+  <sql id="Base_Model_Like_Or">
+    (is_deleted is not true)
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(status)">
+      and status = #{status,jdbcType=INTEGER}
+    </if>
+    <trim prefix=" and (" prefixOverrides="or" suffix=")">
+      <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(userId)">
+        or id like CONCAT('%',#{id,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(userId)">
+        or user_id like CONCAT('%',#{userId,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(userName)">
+        or user_name like CONCAT('%',#{userName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(phone)">
+        or phone like CONCAT('%',#{phone,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(email)">
+        or email like CONCAT('%',#{email,jdbcType=VARCHAR},'%')
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Select_CreateTime">
+    order by create_time desc
+  </sql>
+  <sql id="Base_Select_Order">
+    order by create_time desc
+  </sql>
+  <!-- 基本操作 -->
+  <select id="findUserEquAnd" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sso_user
+    <where>
+      <include refid="Base_Model_Equ_And"/>
+    </where>
+    <include refid="Base_Select_Order" />
+  </select>
+  <select id="findUserEquOr" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sso_user
+    <where>
+      <include refid="Base_Model_Equ_Or"/>
+    </where>
+    <include refid="Base_Select_Order" />
+  </select>
+  <select id="findUserEquOrExist" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sso_user
+    <where>
+      <include refid="Base_Model_Equ_Or_Exist"/>
+    </where>
+    <include refid="Base_Select_Order" />
+  </select>
+  <select id="findUserList" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sso_user
+    <where>
+      <include refid="Base_Model_Like_And"/>
+    </where>
+    <include refid="Base_Select_Order" />
+  </select>
+  <select id="findUserListCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+    select count(1) from sso_user
+    <where>
+      <include refid="Base_Model_Like_And"/>
+    </where>
+  </select>
+  <select id="findUserListOr" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sso_user
+    <where>
+      <include refid="Base_Model_Like_Or"/>
+    </where>
+    <include refid="Base_Select_Order" />
+  </select>
+
+  <!--删除 user_name  in userNameList-->
+  <update id="deleteUserByUserIdList" parameterType="com.by.blcu.manager.modelextend.UserDeleteMapperModel">
+    update sso_user
+    set is_deleted=1, modify_time=#{dalModel.modifyTime}, modify_by=#{dalModel.modifyBy}
+    where user_id in
+    <foreach collection="dalModel.userIdList" open="(" close=")" separator="," item="item">
+      #{item,jdbcType=INTEGER}
+    </foreach>
+  </update>
+
+  <!-- 获取用户角色 -->
+  <select id="getMyRole"  parameterType="java.lang.String" resultMap="RoleMap" >
+    <choose>
+      <when test="@com.by.blcu.manager.common.MapperHelper@IsNullOrFalse(isAdmin)">
+        select  r.* from manager_account a
+        left join manager_account_role_r  a_r on a.account_id = a_r.account_id
+        left join manager_role r on a_r.role_id = r.role_id
+        where a.status=1 and a.is_deleted is not true and r.is_deleted is not true
+        <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(userName)">
+          and a.user_name =#{userName}
+        </if>
+      </when>
+      <otherwise>
+        select * from manager_role r
+        where r.is_deleted is not true
+        <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(orgCode)">
+          and r.org_code =#{orgCode}
+        </if>
+      </otherwise>
+    </choose>
+    </select>
+  <!-- 获取用户的权限 -->
+  <select id="getMyPermision"  parameterType="java.lang.String" resultMap="OrgPermissionMap" >
+    <choose>
+      <when test="@com.by.blcu.manager.common.MapperHelper@IsNullOrFalse(isAdmin)">
+        select a.org_code, m.*  from manager_account a
+        left join manager_account_role_r  a_r on a.account_id = a_r.account_id
+        left join manager_role r on a_r.role_id = r.role_id
+        left join manager_role_permission_r r_m on r.role_id = r_m.role_id
+        left join manager_permission m on r_m.permission_id = m.permission_id
+        where  a.status=1  and a.is_deleted is not true and r.is_deleted is not true and m.is_deleted is not true
+        <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(userName)">
+          and a.user_name =#{userName}
+        </if>
+        <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(orgCode)">
+          and a.org_code =#{orgCode}
+        </if>
+      </when>
+      <otherwise>
+        select m.*, #{orgCode} as org_code  from manager_permission m
+        where m.is_deleted is not true
+      </otherwise>
+    </choose>
+</select>
+
+</mapper>

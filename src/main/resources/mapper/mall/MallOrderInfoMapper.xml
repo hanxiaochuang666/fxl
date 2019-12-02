@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.by.blcu.mall.dao.MallOrderInfoMapper">
+  <resultMap id="BaseResultMap" type="com.by.blcu.mall.model.MallOrderInfo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="org" jdbcType="VARCHAR" property="org" />
+    <result column="order_status" jdbcType="INTEGER" property="orderStatus" />
+    <result column="is_bill" jdbcType="INTEGER" property="isBill" />
+    <result column="isdraw_bill" jdbcType="INTEGER" property="isdrawBill" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="payment_status" jdbcType="INTEGER" property="paymentStatus" />
+    <result column="amount" jdbcType="DOUBLE" property="amount" />
+    <result column="receiver" jdbcType="VARCHAR" property="receiver" />
+    <result column="tel_num" jdbcType="INTEGER" property="telNum" />
+    <result column="pay_type" jdbcType="VARCHAR" property="payType" />
+    <result column="cost_price" jdbcType="DOUBLE" property="costPrice" />
+    <result column="remittance" jdbcType="VARCHAR" property="remittance" />
+    <result column="screenshot" jdbcType="VARCHAR" property="screenshot" />
+
+  </resultMap>
+
+  <resultMap id="BaseResultExcelMap" type="com.by.blcu.mall.vo.MallCommodityOrderPayVo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="org" jdbcType="VARCHAR" property="org" />
+    <result column="cc_name" jdbcType="VARCHAR" property="ccName" />
+    <result column="order_status" jdbcType="INTEGER" property="orderStatus" />
+    <result column="is_bill" jdbcType="INTEGER" property="isBill" />
+    <result column="isdraw_bill" jdbcType="INTEGER" property="isdrawBill" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="course_name" jdbcType="VARCHAR" property="courseName" />
+    <result column="lesson_type" jdbcType="INTEGER" property="lessonType" />
+    <result column="class_time" jdbcType="INTEGER" property="classTime" />
+    <result column="standard" jdbcType="DOUBLE" property="standard" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="preferential" jdbcType="DOUBLE" property="preferential" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="invoice" jdbcType="INTEGER" property="invoice" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="taxpayer_number" jdbcType="VARCHAR" property="taxpayerNumber" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="zip_code" jdbcType="VARCHAR" property="zipCode" />
+    <result column="remittance" jdbcType="VARCHAR" property="remittance" />
+    <result column="payment_status" jdbcType="INTEGER" property="paymentStatus" />
+    <result column="amount" jdbcType="DOUBLE" property="amount" />
+    <result column="receiver" jdbcType="VARCHAR" property="receiver" />
+    <result column="tel_num" jdbcType="INTEGER" property="telNum" />
+    <result column="pay_type" jdbcType="VARCHAR" property="payType" />
+    <result column="cost_price" jdbcType="DOUBLE" property="costPrice" />
+    <result column="registered_address" jdbcType="VARCHAR" property="registeredAddress" />
+    <result column="registered_phone" jdbcType="VARCHAR" property="registeredPhone" />
+    <result column="bank" jdbcType="VARCHAR" property="bank" />
+    <result column="company_account" jdbcType="VARCHAR" property="companyAccount" />
+
+  </resultMap>
+
+  <resultMap id="BaseResultVoMap" type="com.by.blcu.mall.vo.MallOrderInfoVo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="org" jdbcType="VARCHAR" property="org" />
+    <result column="order_status" jdbcType="INTEGER" property="orderStatus" />
+    <result column="is_bill" jdbcType="INTEGER" property="isBill" />
+    <result column="isdraw_bill" jdbcType="INTEGER" property="isdrawBill" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="payment_status" jdbcType="INTEGER" property="paymentStatus" />
+    <result column="amount" jdbcType="DOUBLE" property="amount" />
+    <result column="receiver" jdbcType="VARCHAR" property="receiver" />
+    <result column="tel_num" jdbcType="INTEGER" property="telNum" />
+    <result column="pay_type" jdbcType="VARCHAR" property="payType" />
+    <result column="cost_price" jdbcType="DOUBLE" property="costPrice" />
+    <result column="remittance" jdbcType="VARCHAR" property="remittance" />
+    <result column="screenshot" jdbcType="VARCHAR" property="screenshot" />
+    <association property="mallPaymentInvoice" javaType="com.by.blcu.mall.model.MallPaymentInvoice">
+      <id column="pi_id" jdbcType="VARCHAR" property="piId" />
+      <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+      <result column="address" jdbcType="VARCHAR" property="address" />
+      <result column="zip_code" jdbcType="VARCHAR" property="zipCode" />
+      <result column="invoice" jdbcType="INTEGER" property="invoice" />
+      <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+      <result column="taxpayer_number" jdbcType="VARCHAR" property="taxpayerNumber" />
+      <result column="type" jdbcType="VARCHAR" property="type" />
+      <result column="registered_address" jdbcType="VARCHAR" property="registeredAddress" />
+      <result column="registered_phone" jdbcType="VARCHAR" property="registeredPhone" />
+      <result column="bank" jdbcType="VARCHAR" property="bank" />
+      <result column="company_account" jdbcType="VARCHAR" property="companyAccount" />
+      <result column="bak" jdbcType="VARCHAR" property="bak" />
+      <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+      <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+      <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+      <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+    </association>
+    <collection property="MallCommodityOrderVoList" ofType="com.by.blcu.mall.vo.MallCommodityOrderVo">
+      <id column="co_id" jdbcType="VARCHAR" property="coId"/>
+      <result column="order_id" jdbcType="VARCHAR" property="orderId"/>
+      <result column="commodity_id" jdbcType="VARCHAR" property="commodityId"/>
+    </collection>
+  </resultMap>
+
+  <sql id="Base_Column_List">
+  a.order_id,a.user_name,a.create_time,a.org,a.order_status,a.is_bill,a.isdraw_bill,a.order_no,a.payment_status,a.amount,a.receiver,a.tel_num,a.pay_type,a.cost_price,a.remittance,a.screenshot,b.co_id,b.commodity_id,b.order_id,c.pi_id,c.order_id,c.address,c.zip_code,c.invoice,c.company_name,c.taxpayer_number,c.type,c.registered_address,c.registered_phone,c.bank,c.company_account,c.bak
+</sql>
+
+  <sql id="Base_Column_List1">
+  a.order_id,a.user_name,a.create_time,a.org,a.order_status,a.is_bill,a.isdraw_bill,a.order_no,a.payment_status,a.amount,a.receiver,a.tel_num,a.pay_type,a.cost_price,a.remittance,a.screenshot,b.co_id,b.commodity_id,b.order_id
+</sql>
+
+  <sql id="Base_Column_ListExcel">
+  a.order_id,a.user_name,a.create_time,a.org,a.order_status,a.is_bill,a.isdraw_bill,a.order_no,b.price,b.course_name,b.lesson_type,b.class_time,b.standard,b.preferential,a.payment_status,a.amount,a.receiver,a.tel_num,a.pay_type,a.cost_price,f.co_id,f.commodity_id,f.order_id,c.type,c.invoice,c.company_name,c.taxpayer_number,c.address,c.zip_code,a.remittance,e.cc_name,c.registered_address,c.registered_phone,c.bank,c.company_account
+</sql>
+
+  <insert id="creatMallOrderInfo">
+    insert into mall_order_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderId != null and orderId != ''">
+        order_id,
+      </if>
+      <if test="userName != null and userName != ''">
+        user_name,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="org != null and org != ''">
+        org,
+      </if>
+      <if test="orderStatus != null">
+        order_status,
+      </if>
+      <if test="isBill != null">
+        is_bill,
+      </if>
+      <if test="isdrawBill != null">
+        isdraw_bill,
+      </if>
+      <if test="orderNo != null and orderNo != ''">
+        order_no,
+      </if>
+      <if test="paymentStatus != null">
+        payment_status,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="receiver != null and receiver != ''">
+        receiver,
+      </if>
+      <if test="telNum != null">
+        tel_num,
+      </if>
+      <if test="payType != null">
+        pay_type,
+      </if>
+      <if test="costPrice != null">
+        cost_price,
+      </if>
+      <if test="remittance != null">
+        remittance,
+      </if>
+      <if test="screenshot != null">
+        screenshot,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="org != null">
+        #{org,jdbcType=VARCHAR},
+      </if>
+      <if test="orderStatus != null">
+        #{orderStatus,jdbcType=INTEGER},
+      </if>
+      <if test="isBill != null">
+        #{isBill,jdbcType=INTEGER},
+      </if>
+      <if test="isdrawBill != null">
+        #{isdrawBill,jdbcType=INTEGER},
+      </if>
+      <if test="orderNo != null">
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentStatus != null">
+        #{paymentStatus,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DOUBLE},
+      </if>
+      <if test="receiver != null">
+        #{receiver,jdbcType=VARCHAR},
+      </if>
+      <if test="telNum != null">
+        #{telNum,jdbcType=INTEGER},
+      </if>
+      <if test="payType != null">
+        #{payType,jdbcType=INTEGER},
+      </if>
+      <if test="costPrice != null">
+        #{costPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="remittance != null">
+        #{remittance,jdbcType=VARCHAR},
+      </if>
+      <if test="screenshot != null">
+        #{screenshot,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="selectMallOrderInfoVoByMallOrderInfo" resultMap="BaseResultVoMap">
+    select
+    <include refid="Base_Column_List"/>
+    from mall_order_info a
+    LEFT JOIN mall_commodity_order b ON a.order_id = b.order_id
+    LEFT JOIN mall_payment_invoice c ON a.order_id = c.order_id
+    <where>
+      a.order_status="1"
+      <if test="orderId!=null and orderId!=''">
+        and a.order_id=#{orderId}
+      </if>
+      <if test="orderNo!=null and orderNo!=''">
+        and a.order_no like CONCAT(CONCAT('%','${orderNo}'),'%')
+      </if>
+      <if test="userName!=null and userName!=''">
+        and a.user_name=#{userName}
+      </if>
+      <if test="paymentStatus!=null">
+        and a.payment_status=#{paymentStatus}
+      </if>
+      <if test="createTimeStart!=null">
+        AND a.create_time <![CDATA[>=]]> #{createTimeStart}
+      </if>
+      <if test="createTimeEnd!=null">
+        AND a.create_time <![CDATA[<=]]> #{createTimeEnd}
+      </if>
+      <if test="org!=null and org!=''">
+        and a.org=#{org}
+      </if>
+      <if test="isBill!=null">
+        and a.is_bill=#{isBill}
+      </if>
+      <if test="isdrawBill!=null">
+        and a.isdraw_bill=#{isdrawBill}
+      </if>
+    </where>
+    order by a.create_time desc
+  </select>
+
+  <select id="selectMallOrderInfoVoByUserName" resultMap="BaseResultVoMap">
+    select
+    <include refid="Base_Column_List1"/>
+    from mall_order_info a
+    LEFT JOIN mall_commodity_order b ON a.order_id = b.order_id
+    <where>
+      a.payment_status="1"
+      <if test="userName!=null and userName!=''">
+        and a.user_name=#{userName}
+      </if>
+    </where>
+    order by a.create_time desc
+  </select>
+
+  <select id="selectMallOrderInfoVoList" resultMap="BaseResultVoMap">
+    select
+    <include refid="Base_Column_List1"/>
+    from mall_order_info a
+    LEFT JOIN mall_commodity_order b ON a.order_id = b.order_id
+    where
+    a.payment_status="1"
+    order by a.create_time desc
+  </select>
+
+  <select id="selectMallOrderInfoVoByUserIdAndCourseId" resultMap="BaseResultVoMap">
+    select
+    <include refid="Base_Column_List1"/>
+    from mall_order_info a
+    LEFT JOIN mall_commodity_order b ON a.order_id = b.order_id
+    LEFT JOIN mall_commodity_info c ON b.commodity_id = c.commodity_id
+    <where>
+      a.payment_status="1"
+      <if test="userName!=null and userName!=''">
+        and a.user_name=#{userName}
+      </if>
+      <if test="courseId!=null and courseId!=''">
+        and c.course_id=#{courseId}
+      </if>
+    </where>
+    order by a.create_time desc
+  </select>
+
+  <select id="selectMallOrderInfoVoByCommodityId" resultMap="BaseResultVoMap">
+    select
+    <include refid="Base_Column_List1"/>
+    from mall_order_info a
+    LEFT JOIN mall_commodity_order b ON a.order_id = b.order_id
+    LEFT JOIN mall_commodity_info c ON b.commodity_id = c.commodity_id
+    <where>
+      a.payment_status="1" and c.commodity_id=#{commodityId}
+    </where>
+    order by a.create_time desc
+  </select>
+
+  <update id="updateMallOrderInfoVoByOrderId">
+    update mall_order_info
+    <trim prefix="set" suffixOverrides=",">
+      <if test="isBill!=null">is_bill=#{isBill},</if>
+      <if test="isdrawBill!=null">isdraw_bill=#{isdrawBill},</if>
+      <if test="paymentStatus!=null">payment_status=#{paymentStatus},</if>
+      <if test="orderStatus!=null">order_status=#{orderStatus},</if>
+      <if test="remittance!=null">remittance=#{remittance},</if>
+      <if test="screenshot!=null">screenshot=#{screenshot},</if>
+      <if test="receiver!=null and receiver!=''">receiver=#{receiver},</if>
+      <if test="telNum!=null and telNum!=''">tel_num=#{telNum},</if>
+      <if test="payType!=null">pay_type=#{payType},</if>
+    </trim>
+    <where>
+      order_status="1"
+      <if test="orderId!=null">
+        and order_id=#{orderId}
+      </if>
+    </where>
+  </update>
+
+  <update id="updateMallOrderInfoVoByOrderIdAndPay">
+    update mall_order_info
+    <trim prefix="set" suffixOverrides=",">
+      <if test="orderStatus!=null">order_status=#{orderStatus},</if>
+    </trim>
+    <where>
+      order_status="1" and order_id=#{orderId} and payment_status="0"
+    </where>
+  </update>
+
+  <select id="excelByMallOrderInfo" resultMap="BaseResultExcelMap">
+    select
+    <include refid="Base_Column_ListExcel"/>
+    from mall_order_info a
+    LEFT JOIN mall_commodity_order f ON a.order_id = f.order_id
+    LEFT JOIN mall_commodity_info b ON b.commodity_id = f.commodity_id
+    LEFT JOIN mall_course_category_info e ON b.cc_id = e.cc_id
+    LEFT JOIN mall_payment_invoice c ON a.order_id = c.order_id
+    LEFT JOIN mall_order_payment d ON a.order_no = d.order_no
+    <where>
+      a.order_status="1"
+      and a.payment_status="1"
+      <if test="orderId!=null and orderId!=''">
+        and a.order_id=#{orderId}
+      </if>
+      <if test="orderNo!=null and orderNo!=''">
+        and a.order_no like CONCAT(CONCAT('%','${orderNo}'),'%')
+      </if>
+      <if test="userName!=null and userName!=''">
+        and a.user_name=#{userName}
+      </if>
+      <if test="createTimeStart!=null">
+        AND a.create_time <![CDATA[>=]]> #{createTimeStart}
+      </if>
+      <if test="createTimeEnd!=null">
+        AND a.create_time <![CDATA[<=]]> #{createTimeStart}
+      </if>
+      <if test="org!=null and org!=''">
+        and a.org=#{org}
+      </if>
+      <if test="isBill!=null">
+        and a.is_bill=#{isBill}
+      </if>
+      <if test="isdrawBill!=null">
+        and a.isdraw_bill=#{isdrawBill}
+      </if>
+    </where>
+    order by a.create_time desc
+  </select>
+
+</mapper>

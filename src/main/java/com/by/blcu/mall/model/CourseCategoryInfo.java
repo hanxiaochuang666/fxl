@@ -5,12 +5,14 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
 
 @Table(name = "mall_course_category_info")
 @ApiModel(value = "课程分类对象")
-public class CourseCategoryInfo {
+public class CourseCategoryInfo implements Serializable {
+    private static final long serialVersionUID = 1568604570565196077L;
     /**
      * 课程分类id
      */
@@ -61,6 +63,13 @@ public class CourseCategoryInfo {
     @Column(name = "cc_creator")
     @ApiModelProperty(value = "创建人")
     private String ccCreator;
+
+    /**
+     * 目录级别
+     */
+    @Column(name = "level")
+    @ApiModelProperty(value = "目录级别")
+    private Integer level;
 
     /**
      * 获取课程分类id
@@ -186,5 +195,13 @@ public class CourseCategoryInfo {
      */
     public void setCcCreator(String ccCreator) {
         this.ccCreator = ccCreator == null ? null : ccCreator.trim();
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 }

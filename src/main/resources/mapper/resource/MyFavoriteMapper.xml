@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.by.blcu.resource.dao.IMyFavoriteDao">
+  <resultMap id="BaseResultMap" type="com.by.blcu.resource.dto.MyFavorite">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="commodity_id" jdbcType="VARCHAR" property="commodityId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="back" jdbcType="VARCHAR" property="back" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, user_id, commodity_id, create_time, back
+  </sql>
+  <sql id="BaseWhere">
+    	<if test="!@org.springframework.util.StringUtils@isEmpty(entityKeyValues)">
+			and id in
+			<foreach item="item" index="index" collection="entityKeyValues" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(notEntityKeyValues)">
+			and id not in
+			<foreach item="item" index="index" collection="notEntityKeyValues" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(id)">
+			and id=#{id,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(userId)">
+			and user_id=#{userId,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(commodityId)">
+			and commodity_id=#{commodityId,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(createTime)">
+			and create_time=#{createTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(back)">
+			and back=#{back,jdbcType=VARCHAR}
+		</if>
+
+  </sql>
+  <select id="selectCount" parameterType="java.util.Map" resultType="java.lang.Long">
+    	select count(1) from my_favorite
+		<where>
+			<include refid="BaseWhere" />
+		</where>
+  </select>
+  <select id="selectList" parameterType="java.util.Map" resultMap="BaseResultMap">
+    	select
+		<include refid="Base_Column_List"/> 
+		from my_favorite
+		<where>
+			<include refid="BaseWhere"/>
+		</where>
+		<include refid="com.blcu.common.orderSqlMap" /> 
+		<include refid="com.blcu.common.pageSqlMap" /> 
+  </select>
+  <delete id="deleteByParams" parameterType="java.util.Map">
+    	delete from my_favorite
+		<where>
+			<include refid="BaseWhere"/>
+		</where>
+  </delete>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from my_favorite
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from my_favorite
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.by.blcu.resource.dto.MyFavorite">
+    insert into my_favorite (id, user_id, commodity_id, 
+      create_time, back)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{commodityId,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{back,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.by.blcu.resource.dto.MyFavorite">
+    insert into my_favorite
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="commodityId != null">
+        commodity_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="back != null">
+        back,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="commodityId != null">
+        #{commodityId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="back != null">
+        #{back,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.by.blcu.resource.dto.MyFavorite">
+    update my_favorite
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="commodityId != null">
+        commodity_id = #{commodityId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="back != null">
+        back = #{back,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.by.blcu.resource.dto.MyFavorite">
+    update my_favorite
+    set user_id = #{userId,jdbcType=INTEGER},
+      commodity_id = #{commodityId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      back = #{back,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectCommdityNameListFromMyFavorite" parameterType="java.util.Map" resultType="java.lang.String">
+        select commodity_id from my_favorite
+        <where>
+            <include refid="BaseWhere"/>
+        </where>
+        <include refid="com.blcu.common.orderSqlMap" />
+        <include refid="com.blcu.common.pageSqlMap" />
+  </select>
+</mapper>

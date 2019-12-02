@@ -1,6 +1,6 @@
 package com.by.blcu.core.utils;
 
-import com.by.blcu.core.constant.ProjectConstant;
+import com.by.blcu.core.constant.RedisBusinessKeyConst;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -8,7 +8,7 @@ import java.util.Random;
 import java.util.UUID;
 
 /**
- * @author 
+ * @author licheng
  * @Description: 程序工具类，提供便捷方法
  * @time 2019
  */
@@ -60,6 +60,7 @@ public class ApplicationUtils {
      * @return sha256加密后的值
      */
     public static String sha256Hex(String value) {
+
         return DigestUtils.sha256Hex(value);
     }
 
@@ -76,6 +77,34 @@ public class ApplicationUtils {
             str.append(random.nextInt(10));
         }
         return  str.toString();
+    }
+
+    /**
+     * 生成指定长度字符串，不足位右补随机数
+     * @param str
+     * @param length
+     * @return
+     */
+    public static String formatStr(String str, int length) {
+        int strLen;
+        if (str == null) {
+            strLen = 0;
+        }else{
+            strLen= str.length();
+        }
+
+        if (strLen == length) {
+            return str;
+        } else if (strLen < length) {
+            int temp = length - strLen;
+            String tem = getNumStringRandom(temp);
+//            for (int i = 0; i < temp; i++) {
+//                tem = tem + " ";
+//            }
+            return str + tem;
+        }else{
+            return str.substring(0,length);
+        }
     }
 
     /**
@@ -98,7 +127,7 @@ public class ApplicationUtils {
      */
     public static String encryptToken(String token) {
         try {
-            EncryptUtil encryptUtil = new EncryptUtil(ProjectConstant.TOKEN_CACHE_PREFIX);
+            EncryptUtil encryptUtil = new EncryptUtil(RedisBusinessKeyConst.Authentication.TOKEN_CACHE_PREFIX);
             return encryptUtil.encrypt(token);
         } catch (Exception e) {
             log.info("token加密失败：", e);
@@ -113,11 +142,20 @@ public class ApplicationUtils {
      */
     public static String decryptToken(String encryptToken) {
         try {
-            EncryptUtil encryptUtil = new EncryptUtil(ProjectConstant.TOKEN_CACHE_PREFIX);
+            EncryptUtil encryptUtil = new EncryptUtil(RedisBusinessKeyConst.Authentication.TOKEN_CACHE_PREFIX);
             return encryptUtil.decrypt(encryptToken);
         } catch (Exception e) {
             log.info("token解密失败：", e);
             return null;
         }
+    }
+
+    public static void main(String[] args){
+        String s = "bb";
+        String a = "bbca";
+        String c = formatStr(s,20);
+        String d = formatStr(a,20);
+        System.out.println(c);
+        System.out.println(d);
     }
 }

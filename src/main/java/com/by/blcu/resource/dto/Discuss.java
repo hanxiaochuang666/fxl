@@ -7,13 +7,19 @@ public class Discuss {
 	 *INTEGER
 	 *主键id
 	 */
-    private Integer disscussId;
+    private Integer discussId;
 
     /**
 	 *INTEGER
 	 *学生id
 	 */
     private Integer studentId;
+
+    /**
+     *INTEGER
+     *父级回复创建者的id
+     */
+    private Integer parentUserId;
 
     /**
 	 *INTEGER
@@ -81,12 +87,12 @@ public class Discuss {
 	 */
     private String bak3;
 
-    public Integer getDisscussId() {
-        return disscussId;
+    public Integer getDiscussId() {
+        return discussId;
     }
 
-    public void setDisscussId(Integer disscussId) {
-        this.disscussId = disscussId;
+    public void setDiscussId(Integer discussId) {
+        this.discussId = discussId;
     }
 
     public Integer getStudentId() {
@@ -185,26 +191,31 @@ public class Discuss {
         this.bak3 = bak3 == null ? null : bak3.trim();
     }
 
+    public Integer getParentUserId() {
+        return parentUserId;
+    }
+
+    public void setParentUserId(Integer parentUserId) {
+        this.parentUserId = parentUserId;
+    }
+
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", disscussId=").append(disscussId);
-        sb.append(", studentId=").append(studentId);
-        sb.append(", courseId=").append(courseId);
-        sb.append(", resourceId=").append(resourceId);
-        sb.append(", content=").append(content);
-        sb.append(", parentId=").append(parentId);
-        sb.append(", createUser=").append(createUser);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", updateUser=").append(updateUser);
-        sb.append(", updateTime=").append(updateTime);
-        sb.append(", bak1=").append(bak1);
-        sb.append(", bak2=").append(bak2);
-        sb.append(", bak3=").append(bak3);
-        sb.append("]");
-        return sb.toString();
+        return "Discuss{" +
+                "discussId=" + discussId +
+                ", studentId=" + studentId +
+                ", parentUserId=" + parentUserId +
+                ", courseId=" + courseId +
+                ", resourceId=" + resourceId +
+                ", content='" + content + '\'' +
+                ", parentId=" + parentId +
+                ", createUser=" + createUser +
+                ", createTime=" + createTime +
+                ", updateUser=" + updateUser +
+                ", updateTime=" + updateTime +
+                ", bak1='" + bak1 + '\'' +
+                ", bak2='" + bak2 + '\'' +
+                ", bak3='" + bak3 + '\'' +
+                '}';
     }
 }

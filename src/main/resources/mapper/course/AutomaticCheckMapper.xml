@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.by.blcu.course.dao.IAutomaticCheckDao">
+  <resultMap id="BaseResultMap" type="com.by.blcu.course.dto.AutomaticCheck">
+    <id column="automatic_check_id" jdbcType="VARCHAR" property="automaticCheckId" />
+    <result column="taskId" jdbcType="VARCHAR" property="taskid" />
+    <result column="check_type" jdbcType="INTEGER" property="checkType" />
+    <result column="seed" jdbcType="VARCHAR" property="seed" />
+    <result column="porn" jdbcType="VARCHAR" property="porn" />
+    <result column="porn_detail" jdbcType="VARCHAR" property="pornDetail" />
+    <result column="terrorism" jdbcType="VARCHAR" property="terrorism" />
+    <result column="terrorism_detail" jdbcType="VARCHAR" property="terrorismDetail" />
+    <result column="ad" jdbcType="VARCHAR" property="ad" />
+    <result column="ad_detail" jdbcType="VARCHAR" property="adDetail" />
+    <result column="antispam" jdbcType="VARCHAR" property="antispam" />
+    <result column="antispam_detail" jdbcType="VARCHAR" property="antispamDetail" />
+    <result column="result_str" jdbcType="VARCHAR" property="resultStr" />
+    <result column="bak1" jdbcType="VARCHAR" property="bak1" />
+    <result column="bak2" jdbcType="VARCHAR" property="bak2" />
+    <result column="bak3" jdbcType="VARCHAR" property="bak3" />
+    <result column="bak4" jdbcType="VARCHAR" property="bak4" />
+    <result column="bak5" jdbcType="VARCHAR" property="bak5" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.by.blcu.course.dto.AutomaticCheck">
+    <result column="context" jdbcType="LONGVARCHAR" property="context" />
+  </resultMap>
+  <sql id="BaseWhere">
+    	<if test="!@org.springframework.util.StringUtils@isEmpty(entityKeyValues)">
+			and automatic_check_id in
+			<foreach item="item" index="index" collection="entityKeyValues" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(notEntityKeyValues)">
+			and automatic_check_id not in
+			<foreach item="item" index="index" collection="notEntityKeyValues" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(automaticCheckId)">
+			and automatic_check_id=#{automaticCheckId,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(taskid)">
+			and taskId=#{taskid,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(checkType)">
+			and check_type=#{checkType,jdbcType=INTEGER}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(seed)">
+			and seed=#{seed,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(porn)">
+			and porn=#{porn,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(pornDetail)">
+			and porn_detail=#{pornDetail,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(terrorism)">
+			and terrorism=#{terrorism,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(terrorismDetail)">
+			and terrorism_detail=#{terrorismDetail,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(ad)">
+			and ad=#{ad,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(adDetail)">
+			and ad_detail=#{adDetail,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(antispam)">
+			and antispam=#{antispam,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(antispamDetail)">
+			and antispam_detail=#{antispamDetail,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(resultStr)">
+			and result_str=#{resultStr,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(bak1)">
+			and bak1=#{bak1,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(bak2)">
+			and bak2=#{bak2,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(bak3)">
+			and bak3=#{bak3,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(bak4)">
+			and bak4=#{bak4,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(bak5)">
+			and bak5=#{bak5,jdbcType=VARCHAR}
+		</if>
+
+  </sql>
+  <select id="selectCount" parameterType="java.util.Map" resultType="java.lang.Long">
+    	select count(1) from automatic_check
+		<where>
+			<include refid="BaseWhere" />
+		</where>
+  </select>
+    <select id="selectActiveObj" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from automatic_check a
+        <where>
+            NOT EXISTS ( SELECT 1 FROM automatic_check b WHERE a.automatic_check_id = b.bak1 )
+            <if test="!@org.springframework.util.StringUtils@isEmpty(automaticCheckId)">
+                and a.automatic_check_id=#{automaticCheckId,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+  <select id="selectList" parameterType="java.util.Map" resultMap="BaseResultMap">
+    	select
+		<include refid="Base_Column_List"/> 
+		from automatic_check
+		<where>
+			<include refid="BaseWhere"/>
+		</where>
+		<include refid="com.blcu.common.orderSqlMap" /> 
+		<include refid="com.blcu.common.pageSqlMap" /> 
+  </select>
+  <delete id="deleteByParams" parameterType="java.util.Map">
+    	delete from automatic_check
+		<where>
+			<include refid="BaseWhere"/>
+		</where>
+  </delete>
+  <sql id="Base_Column_List">
+    automatic_check_id, taskId, check_type, seed, porn, porn_detail, terrorism, terrorism_detail, 
+    ad, ad_detail, antispam, antispam_detail, result_str, bak1, bak2, bak3, bak4, bak5
+  </sql>
+  <sql id="Blob_Column_List">
+    context
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from automatic_check
+    where automatic_check_id = #{automaticCheckId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from automatic_check
+    where automatic_check_id = #{automaticCheckId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.by.blcu.course.dto.AutomaticCheck">
+    insert into automatic_check (automatic_check_id, taskId, check_type, 
+      seed, porn, porn_detail, 
+      terrorism, terrorism_detail, ad, 
+      ad_detail, antispam, antispam_detail, 
+      result_str, bak1, bak2, 
+      bak3, bak4, bak5, context
+      )
+    values (#{automaticCheckId,jdbcType=VARCHAR}, #{taskid,jdbcType=VARCHAR}, #{checkType,jdbcType=INTEGER}, 
+      #{seed,jdbcType=VARCHAR}, #{porn,jdbcType=VARCHAR}, #{pornDetail,jdbcType=VARCHAR}, 
+      #{terrorism,jdbcType=VARCHAR}, #{terrorismDetail,jdbcType=VARCHAR}, #{ad,jdbcType=VARCHAR}, 
+      #{adDetail,jdbcType=VARCHAR}, #{antispam,jdbcType=VARCHAR}, #{antispamDetail,jdbcType=VARCHAR}, 
+      #{resultStr,jdbcType=VARCHAR}, #{bak1,jdbcType=VARCHAR}, #{bak2,jdbcType=VARCHAR}, 
+      #{bak3,jdbcType=VARCHAR}, #{bak4,jdbcType=VARCHAR}, #{bak5,jdbcType=VARCHAR}, #{context,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.by.blcu.course.dto.AutomaticCheck">
+    insert into automatic_check
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="automaticCheckId != null">
+        automatic_check_id,
+      </if>
+      <if test="taskid != null">
+        taskId,
+      </if>
+      <if test="checkType != null">
+        check_type,
+      </if>
+      <if test="seed != null">
+        seed,
+      </if>
+      <if test="porn != null">
+        porn,
+      </if>
+      <if test="pornDetail != null">
+        porn_detail,
+      </if>
+      <if test="terrorism != null">
+        terrorism,
+      </if>
+      <if test="terrorismDetail != null">
+        terrorism_detail,
+      </if>
+      <if test="ad != null">
+        ad,
+      </if>
+      <if test="adDetail != null">
+        ad_detail,
+      </if>
+      <if test="antispam != null">
+        antispam,
+      </if>
+      <if test="antispamDetail != null">
+        antispam_detail,
+      </if>
+      <if test="resultStr != null">
+        result_str,
+      </if>
+      <if test="bak1 != null">
+        bak1,
+      </if>
+      <if test="bak2 != null">
+        bak2,
+      </if>
+      <if test="bak3 != null">
+        bak3,
+      </if>
+      <if test="bak4 != null">
+        bak4,
+      </if>
+      <if test="bak5 != null">
+        bak5,
+      </if>
+      <if test="context != null">
+        context,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="automaticCheckId != null">
+        #{automaticCheckId,jdbcType=VARCHAR},
+      </if>
+      <if test="taskid != null">
+        #{taskid,jdbcType=VARCHAR},
+      </if>
+      <if test="checkType != null">
+        #{checkType,jdbcType=INTEGER},
+      </if>
+      <if test="seed != null">
+        #{seed,jdbcType=VARCHAR},
+      </if>
+      <if test="porn != null">
+        #{porn,jdbcType=VARCHAR},
+      </if>
+      <if test="pornDetail != null">
+        #{pornDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="terrorism != null">
+        #{terrorism,jdbcType=VARCHAR},
+      </if>
+      <if test="terrorismDetail != null">
+        #{terrorismDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="ad != null">
+        #{ad,jdbcType=VARCHAR},
+      </if>
+      <if test="adDetail != null">
+        #{adDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="antispam != null">
+        #{antispam,jdbcType=VARCHAR},
+      </if>
+      <if test="antispamDetail != null">
+        #{antispamDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="resultStr != null">
+        #{resultStr,jdbcType=VARCHAR},
+      </if>
+      <if test="bak1 != null">
+        #{bak1,jdbcType=VARCHAR},
+      </if>
+      <if test="bak2 != null">
+        #{bak2,jdbcType=VARCHAR},
+      </if>
+      <if test="bak3 != null">
+        #{bak3,jdbcType=VARCHAR},
+      </if>
+      <if test="bak4 != null">
+        #{bak4,jdbcType=VARCHAR},
+      </if>
+      <if test="bak5 != null">
+        #{bak5,jdbcType=VARCHAR},
+      </if>
+      <if test="context != null">
+        #{context,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.by.blcu.course.dto.AutomaticCheck">
+    update automatic_check
+    <set>
+      <if test="taskid != null">
+        taskId = #{taskid,jdbcType=VARCHAR},
+      </if>
+      <if test="checkType != null">
+        check_type = #{checkType,jdbcType=INTEGER},
+      </if>
+      <if test="seed != null">
+        seed = #{seed,jdbcType=VARCHAR},
+      </if>
+      <if test="porn != null">
+        porn = #{porn,jdbcType=VARCHAR},
+      </if>
+      <if test="pornDetail != null">
+        porn_detail = #{pornDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="terrorism != null">
+        terrorism = #{terrorism,jdbcType=VARCHAR},
+      </if>
+      <if test="terrorismDetail != null">
+        terrorism_detail = #{terrorismDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="ad != null">
+        ad = #{ad,jdbcType=VARCHAR},
+      </if>
+      <if test="adDetail != null">
+        ad_detail = #{adDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="antispam != null">
+        antispam = #{antispam,jdbcType=VARCHAR},
+      </if>
+      <if test="antispamDetail != null">
+        antispam_detail = #{antispamDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="resultStr != null">
+        result_str = #{resultStr,jdbcType=VARCHAR},
+      </if>
+      <if test="bak1 != null">
+        bak1 = #{bak1,jdbcType=VARCHAR},
+      </if>
+      <if test="bak2 != null">
+        bak2 = #{bak2,jdbcType=VARCHAR},
+      </if>
+      <if test="bak3 != null">
+        bak3 = #{bak3,jdbcType=VARCHAR},
+      </if>
+      <if test="bak4 != null">
+        bak4 = #{bak4,jdbcType=VARCHAR},
+      </if>
+      <if test="bak5 != null">
+        bak5 = #{bak5,jdbcType=VARCHAR},
+      </if>
+      <if test="context != null">
+        context = #{context,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where automatic_check_id = #{automaticCheckId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.by.blcu.course.dto.AutomaticCheck">
+    update automatic_check
+    set taskId = #{taskid,jdbcType=VARCHAR},
+      check_type = #{checkType,jdbcType=INTEGER},
+      seed = #{seed,jdbcType=VARCHAR},
+      porn = #{porn,jdbcType=VARCHAR},
+      porn_detail = #{pornDetail,jdbcType=VARCHAR},
+      terrorism = #{terrorism,jdbcType=VARCHAR},
+      terrorism_detail = #{terrorismDetail,jdbcType=VARCHAR},
+      ad = #{ad,jdbcType=VARCHAR},
+      ad_detail = #{adDetail,jdbcType=VARCHAR},
+      antispam = #{antispam,jdbcType=VARCHAR},
+      antispam_detail = #{antispamDetail,jdbcType=VARCHAR},
+      result_str = #{resultStr,jdbcType=VARCHAR},
+      bak1 = #{bak1,jdbcType=VARCHAR},
+      bak2 = #{bak2,jdbcType=VARCHAR},
+      bak3 = #{bak3,jdbcType=VARCHAR},
+      bak4 = #{bak4,jdbcType=VARCHAR},
+      bak5 = #{bak5,jdbcType=VARCHAR},
+      context = #{context,jdbcType=LONGVARCHAR}
+    where automatic_check_id = #{automaticCheckId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.by.blcu.course.dto.AutomaticCheck">
+    update automatic_check
+    set taskId = #{taskid,jdbcType=VARCHAR},
+      check_type = #{checkType,jdbcType=INTEGER},
+      seed = #{seed,jdbcType=VARCHAR},
+      porn = #{porn,jdbcType=VARCHAR},
+      porn_detail = #{pornDetail,jdbcType=VARCHAR},
+      terrorism = #{terrorism,jdbcType=VARCHAR},
+      terrorism_detail = #{terrorismDetail,jdbcType=VARCHAR},
+      ad = #{ad,jdbcType=VARCHAR},
+      ad_detail = #{adDetail,jdbcType=VARCHAR},
+      antispam = #{antispam,jdbcType=VARCHAR},
+      antispam_detail = #{antispamDetail,jdbcType=VARCHAR},
+      result_str = #{resultStr,jdbcType=VARCHAR},
+      bak1 = #{bak1,jdbcType=VARCHAR},
+      bak2 = #{bak2,jdbcType=VARCHAR},
+      bak3 = #{bak3,jdbcType=VARCHAR},
+      bak4 = #{bak4,jdbcType=VARCHAR},
+      bak5 = #{bak5,jdbcType=VARCHAR}
+    where automatic_check_id = #{automaticCheckId,jdbcType=VARCHAR}
+  </update>
+</mapper>

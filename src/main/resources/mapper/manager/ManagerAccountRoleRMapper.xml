@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.by.blcu.manager.dao.ManagerAccountRoleRMapper">
+  <resultMap id="BaseResultMap" type="com.by.blcu.manager.model.ManagerAccountRoleR">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="account_role_r_id" jdbcType="VARCHAR" property="accountRoleRId" />
+    <result column="role_id" jdbcType="VARCHAR" property="roleId" />
+    <result column="account_id" jdbcType="VARCHAR" property="accountId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="modify_by" jdbcType="VARCHAR" property="modifyBy" />
+  </resultMap>
+</mapper>

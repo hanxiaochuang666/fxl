@@ -2,7 +2,7 @@
  
 <configuration debug="false">
     <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径-->
-    <property name="LOG_HOME" value="D:/logs" />
+    <springProperty scope="context" name="LOG_HOME" source="log.path"/>
     <springProperty scope="context" name="SPRING_URL" source="spring.datasource.url"/>
     <springProperty scope="context" name="SPRING_USERNAME" source="spring.datasource.username"/>
     <springProperty scope="context" name="SPRING_PASSWORD" source="spring.datasource.password"/>
@@ -41,7 +41,8 @@
         </rollingPolicy>
         <filter class="com.by.blcu.core.filter.MyLogFilter">
             <!--按class输出的日志路径-->
-            <param name="packageLogerPath" value="D:/logs/detail" />
+            <packageLogerPath>${LOG_HOME}</packageLogerPath>
+            <param name="packageLogerPath" value="${LOG_HOME}" />
             <!--基础扫描包路径-->
             <param name="filterPackagePath" value="com.by.blcu" />
         </filter>
@@ -51,7 +52,7 @@
         </encoder>
         <!--日志文件最大的大小-->
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <MaxFileSize>10MB</MaxFileSize>
+            <MaxFileSize>100MB</MaxFileSize>
         </triggeringPolicy>
     </appender>
  
@@ -75,7 +76,7 @@
         </encoder>
         <!--日志文件最大的大小-->
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <MaxFileSize>10MB</MaxFileSize>
+            <MaxFileSize>100MB</MaxFileSize>
         </triggeringPolicy>
     </appender>
     

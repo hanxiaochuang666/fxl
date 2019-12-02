@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.by.blcu.manager.dao.ManagerOrgApplyMapper">
+  <resultMap id="BaseResultMap" type="com.by.blcu.manager.model.ManagerOrgApply">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="org_apply_id" jdbcType="VARCHAR" property="orgApplyId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="apply_name" jdbcType="VARCHAR" property="applyName" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="organization_pic" jdbcType="VARCHAR" property="organizationPic" />
+    <result column="organization_name" jdbcType="VARCHAR" property="organizationName" />
+    <result column="organization_description" jdbcType="VARCHAR" property="organizationDescription" />
+    <result column="organization_brief" jdbcType="VARCHAR" property="organizationBrief" />
+    <result column="main_category" jdbcType="INTEGER" property="mainCategory" />
+    <result column="commitment_pic" jdbcType="VARCHAR" property="commitmentPic" />
+    <result column="organization_nature" jdbcType="INTEGER" property="organizationNature" />
+    <result column="license" jdbcType="VARCHAR" property="license" />
+    <result column="number" jdbcType="VARCHAR" property="number" />
+    <result column="license_term" jdbcType="INTEGER" property="licenseTerm" />
+    <result column="license_term_time" jdbcType="DATE" property="licenseTermTime" />
+    <result column="legal_front_pic" jdbcType="VARCHAR" property="legalFrontPic" />
+    <result column="legal_back_pic" jdbcType="VARCHAR" property="legalBackPic" />
+    <result column="verify_status" jdbcType="INTEGER" property="verifyStatus" />
+    <result column="verify_time" jdbcType="TIMESTAMP" property="verifyTime" />
+    <result column="verify_note" jdbcType="VARCHAR" property="verifyNote" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="modify_by" jdbcType="VARCHAR" property="modifyBy" />
+  </resultMap>
+</mapper>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.by.blcu.manager.dao.ManagerAreasMapper">
+  <resultMap id="BaseResultMap" type="com.by.blcu.manager.model.ManagerAreas">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="areas_id" jdbcType="INTEGER" property="areasId" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="pid" jdbcType="INTEGER" property="pid" />
+    <result column="sname" jdbcType="VARCHAR" property="sname" />
+    <result column="level" jdbcType="INTEGER" property="level" />
+    <result column="citycode" jdbcType="VARCHAR" property="citycode" />
+    <result column="yzcode" jdbcType="VARCHAR" property="yzcode" />
+    <result column="mername" jdbcType="VARCHAR" property="mername" />
+    <result column="Lng" jdbcType="DECIMAL" property="lng" />
+    <result column="Lat" jdbcType="DECIMAL" property="lat" />
+    <result column="pingyin" jdbcType="VARCHAR" property="pingyin" />
+  </resultMap>
+
+  <resultMap id="SelectMap" type="com.by.blcu.manager.umodel.AreaModel">
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="pingyin" jdbcType="VARCHAR" property="pingyin" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    areas_id, code, `name`, pid, sname, `level`, citycode, yzcode, mername,
+    Lng, Lat, pingyin
+  </sql>
+  <sql id="Select_Column_List">
+    code, `name`,pingyin
+  </sql>
+  <sql id="Base_Model_Like_And">
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(code)">
+      and code like CONCAT('%',#{code,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(name)">
+      and `name` like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(level)">
+      and `level` = #{level,jdbcType=INTEGER}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(pingyin)">
+      and pingyin like CONCAT('%',#{pingyin,jdbcType=VARCHAR},'%')
+    </if>
+  </sql>
+  <sql id="Base_Select_Order">
+    order by areas_id asc
+  </sql>
+  <select id="findAccountList" parameterType="com.by.blcu.manager.umodel.AreaModel" resultMap="SelectMap">
+    select
+      <include refid="Select_Column_List"/>
+    from manager_areas
+    <where>
+      <include refid="Base_Model_Like_And"/>
+    </where>
+    <include refid="Base_Select_Order" />
+  </select>
+
+</mapper>

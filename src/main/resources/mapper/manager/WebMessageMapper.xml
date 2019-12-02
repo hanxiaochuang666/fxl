@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.by.blcu.manager.dao.WebMessageMapper">
+  <resultMap id="BaseResultMap" type="com.by.blcu.manager.model.WebMessage">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="message_id" jdbcType="VARCHAR" property="messageId" />
+    <result column="cc_id" jdbcType="VARCHAR" property="ccId" />
+    <result column="commodity_id" jdbcType="VARCHAR" property="commodityId" />
+    <result column="category_id" jdbcType="VARCHAR" property="categoryId" />
+    <result column="org_code" jdbcType="VARCHAR" property="orgCode" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="scope" jdbcType="INTEGER" property="scope" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="modify_by" jdbcType="VARCHAR" property="modifyBy" />
+  </resultMap>
+
+  <resultMap id="UserMessageMap" type="com.by.blcu.manager.model.extend.UserMessageExtend">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="message_id" jdbcType="VARCHAR" property="messageId" />
+    <result column="cc_id" jdbcType="VARCHAR" property="ccId" />
+    <result column="commodity_id" jdbcType="VARCHAR" property="commodityId" />
+    <result column="category_id" jdbcType="VARCHAR" property="categoryId" />
+    <result column="org_code" jdbcType="VARCHAR" property="orgCode" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="scope" jdbcType="INTEGER" property="scope" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="modify_by" jdbcType="VARCHAR" property="modifyBy" />
+
+    <result column="consum_id" jdbcType="VARCHAR" property="consumId" />
+    <result column="is_read" jdbcType="VARCHAR" property="isRead" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    message_id,cc_id,commodity_id,category_id,org_code,title,scope,content,file_url,description,
+    sort,is_deleted,create_time,create_by,modify_time,modify_by
+  </sql>
+  <sql id="Base_Model_Like_And">
+    is_deleted is not true
+    <!-- 字段 -->
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(messageId)">
+      and message_id = #{messageId,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(ccId)">
+      and cc_id = #{ccId,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(commodityId)">
+      and commodity_id = #{commodityId,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(categoryId)">
+      and category_id = #{categoryId,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(orgCode)">
+      and org_code = #{orgCode,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(scope)">
+      and scope = #{scope,jdbcType=INTEGER}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(content)">
+      and content like CONCAT('%',#{content,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(messageIdList)">
+      or message_id in
+      <foreach collection="messageIdList" index="index" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+  </sql>
+  <sql id="Base_Select_Order">
+      order by create_time desc
+  </sql>
+
+  <!-- 基本操作 -->
+  <select id="findMessageList" parameterType="com.by.blcu.manager.model.sql.InputMessage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from web_message
+    <where>
+      <include refid="Base_Model_Like_And"/>
+    </where>
+    <include refid="Base_Select_Order" />
+  </select>
+  <select id="findMessageListCount" parameterType="com.by.blcu.manager.model.sql.InputMessage" resultType="java.lang.Integer">
+    select count(1) from web_message
+    <where>
+      <include refid="Base_Model_Like_And"/>
+    </where>
+    <include refid="Base_Select_Order" />
+  </select>
+  <update id="deleteMessageByIdList" parameterType="com.by.blcu.manager.model.sql.InputMessage">
+    update web_message
+    set is_deleted=1, modify_time=#{modifyTime}, modify_by=#{modifyBy}
+   where message_id in
+      <foreach collection="messageIdList" open="(" close=")" separator="," item="item">
+        #{item,jdbcType=INTEGER}
+      </foreach>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(orgCode)">
+      and org_code = #{orgCode,jdbcType=VARCHAR}
+    </if>
+  </update>
+
+  <select id="findUserMessageList" parameterType="com.by.blcu.manager.model.sql.InputMessage" resultMap="UserMessageMap">
+      select message.*,consum.consum_id,consum.is_read from web_message_consum consum
+          left join web_message message on message.message_id=consum.message_id
+          left join web_message_category category on message.category_id=category.category_id
+      where message.is_deleted is not true
+          <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(categoryId)">
+            and category.category_id = #{categoryId,jdbcType=VARCHAR}
+          </if>
+          <if test="isRead!=null">
+            and consum.is_read = #{isRead,jdbcType=BIT}
+          </if>
+          <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(orgCode)">
+            and org_code = #{orgCode,jdbcType=VARCHAR}
+          </if>
+           and consum.user_name = #{userName,jdbcType=VARCHAR}
+      order by message.create_time desc
+  </select>
+  <select id="findUserMessageListCount" parameterType="com.by.blcu.manager.model.sql.InputMessage" resultType="java.lang.Integer">
+      select count(1) from web_message_consum consum
+          left join web_message message on message.message_id=consum.message_id
+          left join web_message_category category on message.category_id=category.category_id
+      where message.is_deleted is not true
+          <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(categoryId)">
+            and category.category_id = #{categoryId,jdbcType=VARCHAR}
+          </if>
+          <if test="isRead!=null">
+            and consum.is_read = #{isRead,jdbcType=BIT}
+          </if>
+          <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(orgCode)">
+            and message.org_code = #{orgCode,jdbcType=VARCHAR}
+          </if>
+          and consum.user_name = #{userName,jdbcType=VARCHAR}
+      order by message.create_time desc
+  </select>
+</mapper>

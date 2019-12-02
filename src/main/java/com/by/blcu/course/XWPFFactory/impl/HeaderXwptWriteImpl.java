@@ -1,5 +1,6 @@
 package com.by.blcu.course.XWPFFactory.impl;
 
+import com.by.blcu.course.XWPFFactory.CustomXWPFDocument;
 import com.by.blcu.course.XWPFFactory.IXwptWrite;
 import com.by.blcu.course.XWPFFactory.XwptAbstractWrite;
 import com.by.blcu.course.XWPFFactory.model.DocModel;
@@ -13,12 +14,12 @@ import org.apache.poi.xwpf.usermodel.*;
 public class HeaderXwptWriteImpl extends XwptAbstractWrite implements IXwptWrite {
 
     @Override
-    public void writeObject(XWPFDocument docxDocument, DocModel docModel, boolean isExportAnswer, boolean isExportReslove) {
+    public void writeObject(CustomXWPFDocument docxDocument, DocModel docModel, boolean isExportAnswer, boolean isExportReslove) {
         this.writeTab(docxDocument,docModel);
     }
 
     @Override
-    protected void writeTab(XWPFDocument docxDocument, DocModel docModel) {
+    protected void writeTab(CustomXWPFDocument docxDocument, DocModel docModel) {
         XWPFParagraph p1 = docxDocument.createParagraph();
         XWPFRun run = p1.createRun();
         p1.setAlignment(ParagraphAlignment.CENTER);
@@ -33,35 +34,35 @@ public class HeaderXwptWriteImpl extends XwptAbstractWrite implements IXwptWrite
         p1.setStyle(" 标题 3");
         run.setFontSize(25);
         run.setText(docModel.getQuestionTypeName());
-        if(docModel.getTotalScore()>0){
+        if(docModel.getIsScore()==0 && docModel.getTotalScore()>0){
             XWPFParagraph p2 = docxDocument.createParagraph();
             XWPFRun p2Run = p2.createRun();
             p2.setAlignment(ParagraphAlignment.CENTER);
             p2.setStyle(" 正文 ");
             p2Run.setFontSize(20);
             p2Run.setText("总分:"+docModel.getTotalScore()+"分");
-            p2Run.addBreak();
+            p2Run.addCarriageReturn();
         }
         run.setBold(true);
     }
 
     @Override
-    protected void writeQuestionBody(XWPFDocument docxDocument, int score, int number, String questionBody) {
+    protected void writeQuestionBody(CustomXWPFDocument docxDocument, int score, int number, String questionBody) {
 
     }
 
     @Override
-    protected void writeQuestionOpt(XWPFDocument docxDocument, String questionOpt) {
+    protected void writeQuestionOpt(CustomXWPFDocument docxDocument, String questionOpt) {
 
     }
 
     @Override
-    protected void writeQuestionAnswer(XWPFDocument docxDocument, String answer) {
+    protected void writeQuestionAnswer(CustomXWPFDocument docxDocument, String answer) {
 
     }
 
     @Override
-    protected void writeQuestionReslove(XWPFDocument docxDocument, String reslove) {
+    protected void writeQuestionReslove(CustomXWPFDocument docxDocument, String reslove) {
 
     }
 }

@@ -1,8 +1,11 @@
 package com.by.blcu.mall.model;
 
+import lombok.Data;
+
 import java.util.Date;
 import javax.persistence.*;
 
+@Data
 public class File {
     /**
      * 文件ID
@@ -50,6 +53,55 @@ public class File {
      */
     @Column(name = "file_size")
     private String fileSize;
+
+    /**
+     * 审核状态（0：待审核；1::机审不通过；2：机审通过；3：人审不通过；4：人审通过）
+     */
+    @Column(name = "check_status")
+    private Integer checkStatus;
+
+    /**
+     * 审核时间
+     */
+    @Column(name = "check_time")
+    private Date checkTime;
+
+    /**
+     * 审核人id
+     */
+    @Column(name = "check_user")
+    private Integer checkUser;
+
+    /**
+     * 审核意见
+     */
+    @Column(name = "check_msg")
+    private String checkMsg;
+
+    /**
+     * 审核id
+     */
+    @Column(name = "check_id")
+    private String checkId;
+
+    /**
+     * 文档类型 音频:audio 图片:pic 文档:doc 视频:video
+     */
+    @Column(name = "file_type")
+    private String fileType;
+
+    /**
+     * 备用2
+     */
+    @Column(name = "bak2")
+    private String bak2;
+
+    /**
+     * 备用3
+     */
+    @Column(name = "bak3")
+    private String bak3;
+
 
     /**
      * 获取文件ID
@@ -180,18 +232,144 @@ public class File {
     /**
      * 获取存储文件名
      *
-     * @return _file_size - 文件大小
+     * @return file_size - 存储文件名
      */
     public String getFileSize() {
         return fileSize;
     }
 
     /**
-     * 设置文件大小
+     * 设置存储文件名
      *
-     * @param fileSize 文件大小
+     * @param fileSize 存储文件名
      */
     public void setFileSize(String fileSize) {
         this.fileSize = fileSize == null ? null : fileSize.trim();
+    }
+
+    /**
+     * 获取审核状态（0：待审核；1::机审不通过；2：机审通过；3：人审不通过；4：人审通过）
+     *
+     * @return check_status - 审核状态（0：待审核；1::机审不通过；2：机审通过；3：人审不通过；4：人审通过）
+     */
+    public Integer getCheckStatus() {
+        return checkStatus;
+    }
+
+    /**
+     * 设置审核状态（0：待审核；1::机审不通过；2：机审通过；3：人审不通过；4：人审通过）
+     *
+     * @param checkStatus 审核状态（0：待审核；1::机审不通过；2：机审通过；3：人审不通过；4：人审通过）
+     */
+    public void setCheckStatus(Integer checkStatus) {
+        this.checkStatus = checkStatus;
+    }
+
+    /**
+     * 获取审核时间
+     *
+     * @return check_time - 审核时间
+     */
+    public Date getCheckTime() {
+        return checkTime;
+    }
+
+    /**
+     * 设置审核时间
+     *
+     * @param checkTime 审核时间
+     */
+    public void setCheckTime(Date checkTime) {
+        this.checkTime = checkTime;
+    }
+
+    /**
+     * 获取审核人id
+     *
+     * @return check_user - 审核人id
+     */
+    public Integer getCheckUser() {
+        return checkUser;
+    }
+
+    /**
+     * 设置审核人id
+     *
+     * @param checkUser 审核人id
+     */
+    public void setCheckUser(Integer checkUser) {
+        this.checkUser = checkUser;
+    }
+
+    /**
+     * 获取审核意见
+     *
+     * @return check_msg - 审核意见
+     */
+    public String getCheckMsg() {
+        return checkMsg;
+    }
+
+    /**
+     * 设置审核意见
+     *
+     * @param checkMsg 审核意见
+     */
+    public void setCheckMsg(String checkMsg) {
+        this.checkMsg = checkMsg == null ? null : checkMsg.trim();
+    }
+
+    /**
+     * 获取审核id
+     *
+     * @return check_id - 审核id
+     */
+    public String getCheckId() {
+        return checkId;
+    }
+
+    /**
+     * 设置审核id
+     *
+     * @param checkId 审核id
+     */
+    public void setCheckId(String checkId) {
+        this.checkId = checkId == null ? null : checkId.trim();
+    }
+
+    /**
+     * 获取备用2
+     *
+     * @return bak2 - 备用2
+     */
+    public String getBak2() {
+        return bak2;
+    }
+
+    /**
+     * 设置备用2
+     *
+     * @param bak2 备用2
+     */
+    public void setBak2(String bak2) {
+        this.bak2 = bak2 == null ? null : bak2.trim();
+    }
+
+    /**
+     * 获取备用3
+     *
+     * @return bak3 - 备用3
+     */
+    public String getBak3() {
+        return bak3;
+    }
+
+    /**
+     * 设置备用3
+     *
+     * @param bak3 备用3
+     */
+    public void setBak3(String bak3) {
+        this.bak3 = bak3 == null ? null : bak3.trim();
     }
 }

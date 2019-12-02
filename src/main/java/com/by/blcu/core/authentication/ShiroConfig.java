@@ -14,10 +14,10 @@ import java.util.LinkedHashMap;
  * shiro 配置类
  *
  */
-@Configuration
+//@Configuration
 public class ShiroConfig {
 
-    /*@Bean
+    @Bean
     public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         // 设置 securityManager
@@ -29,9 +29,15 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setFilters(filters);
 
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
+
+        //swagger接口权限临时开放
+        filterChainDefinitionMap.put("/swagger-ui.html", "anon");
+        filterChainDefinitionMap.put("/webjars/**", "anon");
+        filterChainDefinitionMap.put("/v2/**", "anon");
+        filterChainDefinitionMap.put("/swagger-resources/**", "anon");
+
         // 所有请求都要经过 jwt过滤器
         filterChainDefinitionMap.put("/**", "jwt");
-
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }
@@ -55,6 +61,6 @@ public class ShiroConfig {
         AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
         authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
         return authorizationAttributeSourceAdvisor;
-    }*/
+    }
 
 }

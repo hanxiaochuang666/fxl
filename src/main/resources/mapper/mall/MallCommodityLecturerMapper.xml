@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.by.blcu.mall.dao.MallCommodityLecturerMapper">
+  <resultMap id="BaseResultMap" type="com.by.blcu.mall.model.MallCommodityLecturer">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="cl_id" jdbcType="VARCHAR" property="clId" />
+    <result column="commodity_id" jdbcType="VARCHAR" property="commodityId" />
+    <result column="lecturer" jdbcType="VARCHAR" property="lecturer" />
+  </resultMap>
+
+  <update id="updateCommodityLecturer" parameterType="java.lang.String">
+    update mall_commodity_lecturer
+    <set>
+      <if test="lecturer!=null and lecturer!=''">lecturer=#{lecturer},</if>
+    </set>
+    <where>
+      <if test="commodityId!=null and commodityId!=''">
+        and commodity_id=#{commodityId}
+      </if>
+      <if test="clId!=null and clId!=''">
+        and cl_id=#{clId}
+      </if>
+    </where>
+  </update>
+
+  <delete id="deleteByCommodityId" parameterType="java.lang.String">
+    delete from mall_commodity_lecturer
+    where
+    commodity_id=#{commodityId}
+  </delete>
+</mapper>

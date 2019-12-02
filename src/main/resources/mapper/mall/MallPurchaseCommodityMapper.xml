@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.by.blcu.mall.dao.MallPurchaseCommodityMapper">
+  <resultMap id="BaseResultMap" type="com.by.blcu.mall.model.MallPurchaseCommodity">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="oc_id" jdbcType="VARCHAR" property="ocId" />
+    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="commodity_id" jdbcType="VARCHAR" property="commodityId" />
+    <result column="child_commodity_id" jdbcType="VARCHAR" property="childCommodityId" />
+    <result column="child_commodity_sort" jdbcType="INTEGER" property="childCommoditySort" />
+  </resultMap>
+
+  <select id="selectByChildCommoditySort" resultMap="BaseResultMap">
+    select
+    oc_id,order_id,commodity_id,child_commodity_id,child_commodity_sort
+    from mall_purchase_commodity where order_id = #{orderId} and commodity_id = #{commodityId} order by child_commodity_sort asc
+  </select>
+</mapper>

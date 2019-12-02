@@ -142,4 +142,24 @@
       status = #{status,jdbcType=TINYINT}
     where course_model_type_id = #{courseModelTypeId,jdbcType=INTEGER}
   </update>
+
+    <select id="getAllModel" resultMap="BaseResultMap">
+      select
+        <include refid="Base_Column_List"/>
+        from course_model_type where status = 1
+        order by sort
+    </select>
+
+    <select id="getModelByCourseId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        t.course_model_type_id, t.name, t.code, t.sort, t.status
+         from course c,
+              course_model_relation r,
+              course_model_type t
+        where t.status = 1
+          and c.course_id = r.course_id
+          and r.course_model_type = t.course_model_type_id
+          and c.course_id = #{courseId,jdbcType=INTEGER}
+        order by t.sort
+    </select>
 </mapper>

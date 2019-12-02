@@ -1,31 +1,37 @@
 package com.by.blcu.resource.service.impl;
 
+import com.by.blcu.core.aop.CourseCheck;
 import com.by.blcu.core.ret.RetCode;
 import com.by.blcu.core.ret.RetResponse;
 import com.by.blcu.core.ret.RetResult;
 import com.by.blcu.core.ret.ServiceException;
 import com.by.blcu.core.universal.BaseServiceImpl;
 import com.by.blcu.core.universal.IBaseDao;
-import com.by.blcu.core.utils.FastDFSClientWrapper;
-import com.by.blcu.core.utils.MapAndObjectUtils;
-import com.by.blcu.core.utils.MapUtils;
-import com.by.blcu.core.utils.StringUtils;
+import com.by.blcu.core.utils.*;
 import com.by.blcu.course.XWPFFactory.XwptFactory;
 import com.by.blcu.course.XWPFFactory.impl.*;
 import com.by.blcu.course.XWPFFactory.model.DocModel;
 import com.by.blcu.course.XWPFFactory.model.DocQueModel;
+import com.by.blcu.course.dto.Course;
+import com.by.blcu.course.dto.CourseDetail;
+import com.by.blcu.course.service.ICourseDetailService;
+import com.by.blcu.course.service.ICourseService;
+import com.by.blcu.course.service.courseCheck.CourseCheckModel;
 import com.by.blcu.resource.dao.*;
 import com.by.blcu.resource.dto.*;
 import com.by.blcu.resource.model.QuestionTypeCountModel;
 import com.by.blcu.resource.model.TestPaperQuestionResModel;
-import com.by.blcu.resource.service.ITestPaperQuestionService;
+import com.by.blcu.resource.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.io.File;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.*;
 
 @Service("testPaperQuestionService")
@@ -47,7 +53,27 @@ public class TestPaperQuestionServiceImpl extends BaseServiceImpl implements ITe
     private ITestPaperDao testPaperDao;
 
     @Autowired
+    private ITestResultDetailDao testResultDetailDao;
+    @Resource
+    private ICourseService courseService;
+
+    @Autowired
     private FastDFSClientWrapper dfsClient;
+
+    @Resource(name="testPaperService")
+    private ITestPaperService testPaperService;
+
+    @Resource(name="resourcesService")
+    private IResourcesService resourcesService;
+
+    @Resource(name="testResultService")
+    private ITestResultService testResultService;
+
+    @Resource(name = "courseDetailService")
+    private ICourseDetailService courseDetailService;
+
+    @Resource(name="learnActiveService")
+    private ILearnActiveService learnActiveService;
 
     @Value("${testPaperWord.filePath}")
     private  String testPaperWordPath;
@@ -73,7 +99,28 @@ public class TestPaperQuestionServiceImpl extends BaseServiceImpl implements ITe
                 object.setResolve(null);
             Map<String, Object> stringObjectMap = MapAndObjectUtils.ObjectToMap(object);
             Question que = questionDao.selectByPrimaryKey(object.getQuestionId());
+            int questionType1 = que.getQuestionType().intValue();
+            QuestionType questionType= questionTypeDao.selectByPrimaryKey(questionType1);
             if(que!=null) {
+                /*// 对题干进行反编码
+                String questionBody = que.getQuestionBody();
+                que.setQuestionBody(URLDecoder.decode(questionBody, "UTF-8"));
+                // 对答案进行反编码
+                String questionAnswer = que.getQuestionAnswer();
+                if (!StringUtils.isEmpty(questionAnswer)) {
+                    que.setQuestionAnswer(URLDecoder.decode(questionAnswer, "UTF-8"));
+                }
+                // 对解析进行反编码
+                String questionResolve = que.getQuestionResolve();
+                if (!StringUtils.isEmpty(questionResolve)) {
+                    que.setQuestionResolve(URLDecoder.decode(questionResolve, "UTF-8"));
+                }
+                // 对选项进行反编码
+                String opt = que.getQuestionOpt();
+                if (!StringUtils.isEmpty(opt)) {
+                    que.setQuestionOpt(URLDecoder.decode(opt, "UTF-8"));
+                }*/
+                stringObjectMap.put("testPaperQuestionId",object.getTestPaperQuestionId());
                 stringObjectMap.put("questionBody", que.getQuestionBody());
                 stringObjectMap.put("questionSound", que.getQuestionSound());
                 stringObjectMap.put("questionOpt", que.getQuestionOpt());
@@ -81,10 +128,12 @@ public class TestPaperQuestionServiceImpl extends BaseServiceImpl implements ITe
                     stringObjectMap.put("questionAnswer", que.getQuestionAnswer());
                     stringObjectMap.put("questionResolve", que.getQuestionResolve());
                 }
+                if(questionType.getCode().equals("PEIDUI")){
+                    stringObjectMap.put("questionAnswer", que.getQuestionAnswer());
+                }
                 stringObjectMap.put("questionType", que.getQuestionType());
                 if (lastQuestionType != que.getQuestionType()) {
                     lastQuestionType = que.getQuestionType();
-                    QuestionType questionType = questionTypeDao.selectByPrimaryKey(lastQuestionType);
                     Map<String, Object> map = MapUtils.initMap("testPaperId", testPaperId);
                     map.put("questionType", questionType.getQuestionTypeId());
                     List<TestPaperFormat> objects1 = testPaperFormatDao.selectList(map);
@@ -101,10 +150,27 @@ public class TestPaperQuestionServiceImpl extends BaseServiceImpl implements ITe
                     res.add(testPaperQuestionResModel);
                 }
                 stringObjectMap.put("score", perScore);
+                if(CommonUtils.hasChildQuestion(questionType.getCode())){
+                    List<Map<String, Object>> childQuestionByOpt = getChildQuestionByOpt(que.getQuestionOpt(), isNeedAnswer, perScore);
+                    stringObjectMap.put("modelList",childQuestionByOpt);
+                }
                 objLst.add(stringObjectMap);
             }
         }
-        //2.试题信息分组打包
+        //2.试题重新排序
+        int sort=0;
+        for (Map<String, Object> stringObjectMap : objLst) {
+            if(stringObjectMap.containsKey("modelList")){
+                stringObjectMap.remove("sort");
+                List<Map<String, Object>> temp=(List<Map<String, Object>>)stringObjectMap.get("modelList");
+                for (Map<String, Object> objectMap : temp) {
+                    objectMap.put("sort",++sort);
+                }
+            }else{
+                stringObjectMap.put("sort",++sort);
+            }
+        }
+        //3.试题信息分组打包
         for (TestPaperQuestionResModel re : res) {
             List<Map<String, Object>> lst=new ArrayList<>();
             for (Map<String, Object> map : objLst) {
@@ -118,16 +184,92 @@ public class TestPaperQuestionServiceImpl extends BaseServiceImpl implements ITe
         return res;
     }
 
+    /**
+     * 获取题目的子题
+     * @param QuestionOpt
+     * @param isNeedAnswer
+     * @param score
+     * @return
+     * @throws Exception
+     */
+    private List<Map<String, Object>> getChildQuestionByOpt(String QuestionOpt,Integer isNeedAnswer,int score)throws Exception{
+        if(!QuestionOpt.contains(";"))
+            QuestionOpt=QuestionOpt+";";
+        String[] split = QuestionOpt.split(";");
+        List<String> strings = Arrays.asList(split);
+        List<Question> list = questionDao.selectList(MapUtils.initMap("entityKeyValues", strings));
+        List<Map<String, Object>> resList=new ArrayList<>();
+        int size = list.size();
+        if(size<=0)
+            return null;
+        int perScore=score/size;
+        int elseScore=score%size;
+        int i=0;
+        for (Question que : list) {
+            Map<String, Object> resMap = MapUtils.initMap();
+            if(que==null)
+                continue;
+            // 对题干进行反编码
+            String questionBody = que.getQuestionBody();
+            que.setQuestionBody(URLDecoder.decode(questionBody, "UTF-8"));
+            // 对答案进行反编码
+            String questionAnswer = que.getQuestionAnswer();
+            if (!StringUtils.isEmpty(questionAnswer)) {
+                que.setQuestionAnswer(URLDecoder.decode(questionAnswer, "UTF-8"));
+            }
+            // 对解析进行反编码
+            String questionResolve = que.getQuestionResolve();
+            if (!StringUtils.isEmpty(questionResolve)) {
+                que.setQuestionResolve(URLDecoder.decode(questionResolve, "UTF-8"));
+            }
+            // 对选项进行反编码
+            String opt = que.getQuestionOpt();
+            if (!StringUtils.isEmpty(opt)) {
+                que.setQuestionOpt(URLDecoder.decode(opt, "UTF-8"));
+            }
+            resMap.put("questionBody", que.getQuestionBody());
+            resMap.put("questionSound", que.getQuestionSound());
+            resMap.put("questionOpt", que.getQuestionOpt());
+            resMap.put("questionId",que.getQuestionId());
+            if(null!=isNeedAnswer &&isNeedAnswer>0) {
+                resMap.put("questionAnswer", que.getQuestionAnswer());
+                resMap.put("questionResolve", que.getQuestionResolve());
+            }
+            resMap.put("questionType", que.getQuestionType()-100);
+            QuestionType questionType = questionTypeDao.selectByPrimaryKey(que.getQuestionType() - 100);
+            if(null!=questionType){
+                resMap.put("questionTypeName", questionType.getName());
+            }
+            if(++i==size)
+                resMap.put("score",perScore+elseScore);
+            else
+                resMap.put("score",perScore);
+            resList.add(resMap);
+        }
+        return resList;
+    }
+
     @Override
+    @CourseCheck
     @Transactional(rollbackFor=ServiceException.class)
-    public RetResult saveTestPaperQuestion(List<TestPaperQuestion> testPaperQuestionLst) throws Exception {
+    public RetResult saveTestPaperQuestion(List<TestPaperQuestion> testPaperQuestionLst, int userId, CourseCheckModel courseCheckModel) throws Exception {
+
         //1.检测试卷组成是否符合规范
         List<Integer> idLst=new ArrayList<>();
         int testPaperId=-1;
         for (TestPaperQuestion testPaperQuestion : testPaperQuestionLst) {
+            if(idLst.contains(testPaperQuestion.getQuestionId())){
+                log.info("试题id"+testPaperQuestion.getQuestionId()+"重复，请重新选择");
+                return RetResponse.makeRsp(RetCode.SUCCESS.code,"试题id"+testPaperQuestion.getQuestionId()+"重复，请重新选择");
+            }
             idLst.add(testPaperQuestion.getQuestionId());
-            if(null!=testPaperQuestion.getTestPagerId()&&testPaperId<0)
+            if(testPaperId<0&&null!=testPaperQuestion.getTestPagerId())
                 testPaperId=testPaperQuestion.getTestPagerId().intValue();
+        }
+        boolean operation = CommonUtils.isOperation(userId, testPaperId, testPaperService);
+        if(!operation){
+            log.info("只能自己修改自己的试卷");
+            return RetResponse.makeRsp(RetCode.SUCCESS.code,"只能自己修改自己的试卷");
         }
         List<QuestionTypeCountModel> questionTypeCountModels = questionDao.queryQuestionTypeCount(idLst);
         Map<String, Object> initMap = MapUtils.initMap("testPaperId", testPaperId);
@@ -148,35 +290,90 @@ public class TestPaperQuestionServiceImpl extends BaseServiceImpl implements ITe
                 }
             }
             if(!isExistType){
-                QuestionType questionType = questionTypeDao.selectByPrimaryKey(format.getQuestionType());
-                log.info(questionType.getName()+"数量与试卷设置数目不匹配");
-                return RetResponse.makeRsp(RetCode.BUSINESS_ERROR.code,questionType.getName()+"数量与试卷设置数目不匹配");
+                Integer questionNum = format.getQuestionNum();
+                if(questionNum>0) {
+                    QuestionType questionType = questionTypeDao.selectByPrimaryKey(format.getQuestionType());
+                    log.info(questionType.getName() + "数量与试卷设置数目不匹配");
+                    return RetResponse.makeRsp(RetCode.BUSINESS_ERROR.code, questionType.getName() + "数量与试卷设置数目不匹配");
+                }
             }
         }
-        if(commonNum!=list.size()||commonNum!=questionTypeCountModels.size()){
+        if(commonNum!=questionTypeCountModels.size()){
             log.info("试题数量与试卷设置数目不匹配");
             return RetResponse.makeRsp(RetCode.BUSINESS_ERROR.code,"试题数量与试卷设置数目不匹配");
         }
-        //2.删除原来的试题
-        testPaperQuestionDao.deleteByParams(initMap);
-        //3.插入新的试题
+        List<TestPaperQuestion> selectList = testPaperQuestionDao.selectList(MapUtils.initMap("testPagerId", testPaperId));
+        Map<Integer, TestPaperQuestion> integerTestPaperQuestionHashMap = new HashMap<>();
+        boolean isUpdate=false;
+        if(null!=selectList && selectList.size()>0) {
+            isUpdate=true;
+            for (TestPaperQuestion testPaperQuestion : selectList) {
+                integerTestPaperQuestionHashMap.put(testPaperQuestion.getQuestionId(), testPaperQuestion);
+            }
+        }
+        //testPaperQuestionDao.deleteByParams(MapUtils.initMap("testPagerId", testPaperId));
+        //2.插入新的试题
         for (TestPaperQuestion testPaperQuestion : testPaperQuestionLst) {
-            testPaperQuestion.setTestPaperQuestionId(null);
-            testPaperQuestionDao.insertSelective(testPaperQuestion);
-
+            if (!integerTestPaperQuestionHashMap.containsKey(testPaperQuestion.getQuestionId())) {
+                testPaperQuestion.setTestPaperQuestionId(null);
+                testPaperQuestionDao.insertSelective(testPaperQuestion);
+            }else {
+                TestPaperQuestion paperQuestion = integerTestPaperQuestionHashMap.get(testPaperQuestion.getQuestionId());
+                paperQuestion.setSort(testPaperQuestion.getSort());
+                testPaperQuestionDao.updateByPrimaryKeySelective(paperQuestion);
+                integerTestPaperQuestionHashMap.remove(testPaperQuestion.getQuestionId());
+            }
+        }
+        //3.删除原来的试题
+        if(!integerTestPaperQuestionHashMap.isEmpty()) {
+            for (Map.Entry<Integer, TestPaperQuestion> entry : integerTestPaperQuestionHashMap.entrySet()) {
+                TestPaperQuestion value = entry.getValue();
+                testPaperQuestionDao.deleteByPrimaryKey(value.getTestPaperQuestionId());
+            }
+        }
+        TestPaper testPaper = testPaperDao.selectByPrimaryKey(testPaperId);
+        if(isUpdate){
+            //编辑
+            /*boolean usedMall = resourcesService.isUsedMall(testPaperId, null, 0, 1);
+            if (usedMall) {
+                log.info("试卷id为" + testPaperId + "的试卷关联的课程已经上架，不能编辑");
+                throw new ServiceException("试卷id为" + testPaperId + "的试卷关联的课程已经上架，不能编辑");
+            }*/
+            Date date = new Date();
+            Map<String, Object> content = MapUtils.initMap("content", testPaperId + "");
+            //maxType
+            content.put("maxType",1);
+            List<Resources> objects = resourcesService.selectList(content);
+            if(null==objects|| objects.size()<=0){
+                log.info("试卷无资源描述信息，testPaperId:"+testPaperId);
+                throw new ServiceException("试卷无资源描述信息，testPaperId:"+testPaperId);
+            }
+            testPaper.setExportStuPath("");
+            testPaper.setUpdateUser(userId);
+            testPaper.setUpdateTime(date);
+            Resources resources = new Resources();
+            resources.setResourcesId(objects.get(0).getResourcesId());
+            resources.setUpdateTime(date);
+            resources.setUpdateUser(userId);
+            resourcesService.updateByPrimaryKeySelective(resources);
+            Map<String, Object> objectMap = MapUtils.initMap("resourcesId", objects.get(0).getResourcesId());
+            List<CourseDetail> objects1 = courseDetailService.selectList(objectMap);
+            if(null!=objects1&&objects1.size()>0) {
+                if(0==courseCheckModel.getIsUpper()) {
+                    for (CourseDetail courseDetail : objects1) {
+                        Integer courseId = courseDetail.getCourseId();
+                        Course course = new Course();
+                        course.setCourseId(courseId);
+                        course.setStatus(0);
+                        courseService.updateByPrimaryKeySelective(course);
+                    }
+                }
+            }
         }
         log.info("试卷id为"+testPaperId+"的试题保存成功");
-        //4.生成新的试卷word
-        try {
-            String newWord = createNewWord(testPaperId);
-            TestPaper testPaper1=new TestPaper();
-            testPaper1.setExportPath(newWord);
-            testPaper1.setExportTime(new Date());
-            testPaper1.setTestPaperId(testPaperId);
-            testPaperDao.updateByPrimaryKeySelective(testPaper1);
-        } catch (Exception e) {
-            throw new ServiceException("创建试卷word失败");
-        }
+        testPaper.setStatus(0);
+        testPaperDao.updateByPrimaryKeySelective(testPaper);
+
         return RetResponse.makeOKRsp();
     }
 
@@ -207,10 +404,10 @@ public class TestPaperQuestionServiceImpl extends BaseServiceImpl implements ITe
             }
             questionTypeMap.put(testPaperFormat.getQuestionType()+"",questionList);
         }
-        LinkedHashMap<String, Integer> formatPerKonwledgeNum = getFormatPerKonwledgeNum(testPaperFormatLst, knowledges);
-        log.info("试卷试题知识点分配:"+formatPerKonwledgeNum.toString());
         LinkedHashMap<String, Set<Integer>> questionLstByKonwledge = getQuestionLstByKonwledge(questionTypeMap, knowledges);
         log.info("可用试题按照试题类型和知识点分组:"+questionLstByKonwledge.toString());
+        LinkedHashMap<String, Integer> formatPerKonwledgeNum = getFormatPerKonwledgeNum(questionLstByKonwledge,testPaperFormatLst);
+        log.info("试卷试题知识点分配:"+formatPerKonwledgeNum.toString());
         List<Integer> quesRes = getQuesRes(formatPerKonwledgeNum, questionLstByKonwledge);
         log.info("获取随机组卷的试题结果集:"+quesRes.toString());
         int num=0;
@@ -225,23 +422,17 @@ public class TestPaperQuestionServiceImpl extends BaseServiceImpl implements ITe
             testPaperQuestion.setTestPagerId(testPaperId);
             testPaperQuestionDao.insertSelective(testPaperQuestion);
         }
-        //生成对应新的试卷word
-        try {
-            String relPath = this.createNewWord(testPaperId);
-            TestPaper testPaper1=new TestPaper();
-            testPaper1.setExportPath(relPath);
-            testPaper1.setExportTime(new Date());
-            testPaper1.setTestPaperId(testPaper.getTestPaperId());
-            testPaperDao.updateByPrimaryKeySelective(testPaper1);
-        } catch (Exception e) {
-            throw new ServiceException("创建试卷word失败");
-        }
 
+        TestPaper testPaper1=new TestPaper();
+        testPaper1.setTestPaperId(testPaper.getTestPaperId());
+        testPaper1.setIsScore(testPaper.getIsScore());
+        testPaper1.setStatus(0);
+        testPaperDao.updateByPrimaryKeySelective(testPaper1);
         return  RetResponse.makeOKRsp();
     }
 
     @Override
-    public String createNewWord(int testPaperId) throws Exception {
+    public String createNewWord(int testPaperId,boolean isExportAnswer,boolean isExportReslove) throws Exception {
         TestPaper testPaper = testPaperDao.selectByPrimaryKey(testPaperId);
         XwptFactory xwptFactory=new XwptFactory();
         String resPath=testPaperWordPath+testPaper.getName()+".docx";
@@ -252,6 +443,7 @@ public class TestPaperQuestionServiceImpl extends BaseServiceImpl implements ITe
         DocModel docModel = new DocModel();
         docModel.setQuestionTypeName(testPaper.getName());
         docModel.setTotalScore(testPaper.getTotalScore());
+        docModel.setIsScore(testPaper.getIsScore());
         //写入试卷标题
         xwptFactory.addDocModel(docModel);
         xwptFactory.addXwptWrite(new HeaderXwptWriteImpl());
@@ -260,30 +452,78 @@ public class TestPaperQuestionServiceImpl extends BaseServiceImpl implements ITe
         //2.按不同题型分别写入;
         int i=0;
         for (TestPaperQuestionResModel testPaperQuestionResModel : testPaperQuestionResModels) {
+            List<Map<String, Object>> questionLst = testPaperQuestionResModel.getQuestionLst();
+            for (Map<String, Object> stringObjectMap : questionLst) {
+                if(stringObjectMap.containsKey("questionBody")&& null!=stringObjectMap.get("questionBody")) {
+                    stringObjectMap.put("questionBody", URLDecoder.decode(stringObjectMap.get("questionBody").toString(), "UTF-8"));
+                }
+                if(stringObjectMap.containsKey("questionOpt")&& null!=stringObjectMap.get("questionOpt")) {
+                    stringObjectMap.put("questionOpt", URLDecoder.decode(stringObjectMap.get("questionOpt").toString(), "UTF-8"));
+                }
+                if(stringObjectMap.containsKey("questionAnswer")&& null!=stringObjectMap.get("questionAnswer")) {
+                    stringObjectMap.put("questionAnswer", URLDecoder.decode(stringObjectMap.get("questionAnswer").toString(), "UTF-8"));
+                }
+                if(stringObjectMap.containsKey("questionResolve")&& null!=stringObjectMap.get("questionResolve")) {
+                    stringObjectMap.put("questionResolve", URLDecoder.decode(stringObjectMap.get("questionResolve").toString(), "UTF-8"));
+                }
+            }
             switch(testPaperQuestionResModel.getQuestionTypeName().trim()){
                 case "单选题":
                     DocModel danxuanti = danxuanti(testPaperQuestionResModel,"单选题",++i);
+                    danxuanti.setIsScore(testPaper.getIsScore());
                     xwptFactory.addDocModel(danxuanti);
+                    xwptFactory.addXwptWrite(new SingleChoiceXwptWriteImpl());
+                    break;
+                case "选错题":
+                    DocModel xuancuo = danxuanti(testPaperQuestionResModel,"选错题",++i);
+                    xuancuo.setIsScore(testPaper.getIsScore());
+                    xwptFactory.addDocModel(xuancuo);
                     xwptFactory.addXwptWrite(new SingleChoiceXwptWriteImpl());
                     break;
                 case "多选题":
                     DocModel danxuanti1 = danxuanti(testPaperQuestionResModel, "多选题",++i);
+                    danxuanti1.setIsScore(testPaper.getIsScore());
                     xwptFactory.addDocModel(danxuanti1);
                     xwptFactory.addXwptWrite(new CheckBoxXwptWriteImpl());
                     break;
                 case "判断题":
                     DocModel panduan = danxuanti(testPaperQuestionResModel, "判断题", ++i);
+                    panduan.setIsScore(testPaper.getIsScore());
                     xwptFactory.addDocModel(panduan);
                     xwptFactory.addXwptWrite(new SingleChoiceXwptWriteImpl());
                     break;
                 case "填空题":
                     DocModel tiankong = danxuanti(testPaperQuestionResModel, "填空题", ++i);
+                    tiankong.setIsScore(testPaper.getIsScore());
                     xwptFactory.addDocModel(tiankong);
                     xwptFactory.addXwptWrite(new CompletionXwptWriteImpl());
                     break;
+                case "完形填空题":
+                    List<DocModel> wanxing = zonghe(testPaperQuestionResModel, "完形填空题", ++i);
+                    log.info("完形填空题的I"+i);
+                    for (DocModel model : wanxing) {
+                        log.info("完形填空题的题号:"+model.getSort());
+                        model.setIsScore(testPaper.getIsScore());
+                        xwptFactory.addDocModel(model);
+                        xwptFactory.addXwptWrite(new SynthesisXwptWriteImpl());
+                    }
+                    break;
+                case "阅读理解题":
+                    List<DocModel> yuedu = zonghe(testPaperQuestionResModel, "阅读理解题", ++i);
+                    log.info("阅读理解题的I"+i);
+                    for (DocModel model : yuedu) {
+                        log.info("阅读理解题的题号:"+model.getSort());
+                        model.setIsScore(testPaper.getIsScore());
+                        xwptFactory.addDocModel(model);
+                        xwptFactory.addXwptWrite(new SynthesisXwptWriteImpl());
+                    }
+                    break;
                 case "综合题":
                     List<DocModel> zonghe = zonghe(testPaperQuestionResModel, "综合题", ++i);
+                    log.info("综合题的I"+i);
                     for (DocModel model : zonghe) {
+                        log.info("综合题的题号:"+model.getSort());
+                        model.setIsScore(testPaper.getIsScore());
                         xwptFactory.addDocModel(model);
                         xwptFactory.addXwptWrite(new SynthesisXwptWriteImpl());
                     }
@@ -291,36 +531,46 @@ public class TestPaperQuestionServiceImpl extends BaseServiceImpl implements ITe
                 case "配对题":
                     List<DocModel> peidui = peidui(testPaperQuestionResModel, "配对题", ++i);
                     for (DocModel model : peidui) {
+                        model.setIsScore(testPaper.getIsScore());
                         xwptFactory.addDocModel(model);
                         xwptFactory.addXwptWrite(new MatchingXwptWriteImpl());
                     }
                     break;
-                case "选词填空":
+                case "选词填空题":
                     List<DocModel> xuancitiankong = xuancitiankong(testPaperQuestionResModel, "选词填空", ++i);
                     for (DocModel model : xuancitiankong) {
+                        model.setIsScore(testPaper.getIsScore());
                         xwptFactory.addDocModel(model);
                         xwptFactory.addXwptWrite(new CheckWordXwptWriteImpl());
                     }
                     break;
+                case "翻译题":
+                    DocModel fanyi= danxuanti(testPaperQuestionResModel, "翻译题", ++i);
+                    fanyi.setIsScore(testPaper.getIsScore());
+                    xwptFactory.addDocModel(fanyi);
+                    xwptFactory.addXwptWrite(new CompletionXwptWriteImpl());
+                    break;
                 case "计算题":
-                    DocModel tiankong1= danxuanti(testPaperQuestionResModel, "计算题", ++i);
-                    xwptFactory.addDocModel(tiankong1);
+                    DocModel jisuan = danxuanti(testPaperQuestionResModel, "计算题", ++i);
+                    jisuan.setIsScore(testPaper.getIsScore());
+                    xwptFactory.addDocModel(jisuan);
                     xwptFactory.addXwptWrite(new CompletionXwptWriteImpl());
                     break;
                 case "问答题":
                     DocModel weida = danxuanti(testPaperQuestionResModel, "问答题", ++i);
+                    weida.setIsScore(testPaper.getIsScore());
                     xwptFactory.addDocModel(weida);
                     xwptFactory.addXwptWrite(new EssayXwptWriteImpl());
                     break;
             }
         }
         //是否导出答案，默认导出
-        //xwptFactory.setExportAnswer(false);
+        xwptFactory.setExportAnswer(isExportAnswer);
         //是否导出解析，默认导出
-        //xwptFactory.setExportReslove(false);
+        xwptFactory.setExportReslove(isExportReslove);
         xwptFactory.writeObject();
         //将file存储到fastDfs
-        resPath= dfsClient.localUploadFile(file, testPaper.getName() + ".docx");
+        resPath= dfsClient.localUploadFile(file, "docx");
         file.delete();
         return resPath;
     }
@@ -337,15 +587,32 @@ public class TestPaperQuestionServiceImpl extends BaseServiceImpl implements ITe
             else
                 docModel.setQuestionTypeName(null);
             docModel.setTotalScore(testPaperQuestionResModel.getScore());
+            docModel.setPerScore(testPaperQuestionResModel.getScore()/testPaperQuestionResModel.getQuestionLst().size());
             docModel.setSort(sort);
+            docModel.setNumber(Integer.valueOf(stringObjectMap.get("sort").toString()));
             docModel.setSynthesisStr(stringObjectMap.get("questionBody").toString());
             docModel.setMatchOptStr(stringObjectMap.get("questionOpt").toString());
+            docModel.setMatchReslove(stringObjectMap.get("questionResolve").toString());
             List<DocQueModel> questionLst7=new ArrayList<>();
             DocQueModel docQueModel7=new DocQueModel();
-            docQueModel7.setNumber(1);
-            docQueModel7.setQuestionAnswer(stringObjectMap.get("questionAnswer").toString());
+            docQueModel7.setNumber(Integer.valueOf(stringObjectMap.get("sort").toString()));
+            if(!StringUtils.isEmpty(stringObjectMap.get("questionAnswer"))) {
+                String questionAnswer = stringObjectMap.get("questionAnswer").toString();
+                StringBuilder res=new StringBuilder();
+                if(questionAnswer.contains("#&&&#")) {
+                    String[] split1 = questionAnswer.split("#&&&#");
+                    for (String ss : split1) {
+                        res.append(ss);
+                        res.append(";");
+                    }
+                    String sp = res.toString();
+                    docQueModel7.setQuestionAnswer(sp.substring(0,sp.length()-1));
+                }else {
+                    docQueModel7.setQuestionAnswer(questionAnswer);
+                }
+
+            }
             docQueModel7.setScore(testPaperQuestionResModel.getScore());
-            docQueModel7.setQuestionReslove(stringObjectMap.get("questionResolve").toString());
             questionLst7.add(docQueModel7);
             docModel.setQuestionLst(questionLst7);
             docModelList.add(docModel);
@@ -363,9 +630,12 @@ public class TestPaperQuestionServiceImpl extends BaseServiceImpl implements ITe
             else
                 docModel.setQuestionTypeName(null);
             docModel.setTotalScore(testPaperQuestionResModel.getScore());
+            docModel.setPerScore(testPaperQuestionResModel.getScore()/testPaperQuestionResModel.getQuestionLst().size());
             docModel.setSort(sort);
+            docModel.setNumber(Integer.valueOf(stringObjectMap.get("sort").toString()));
             docModel.setSynthesisStr(stringObjectMap.get("questionBody").toString());
             docModel.setMatchOptStr(stringObjectMap.get("questionAnswer").toString());
+            docModel.setMatchReslove(stringObjectMap.get("questionResolve").toString());
             String questionOpt = stringObjectMap.get("questionOpt").toString();
             String[] split = questionOpt.split(";");
             int length=split.length;
@@ -384,7 +654,7 @@ public class TestPaperQuestionServiceImpl extends BaseServiceImpl implements ITe
                     docQueModel.setScore(perScore+yushu);
                 else
                     docQueModel.setScore(perScore);
-                docQueModel.setQuestionReslove(stringObjectMap.get("questionResolve").toString());
+                //docQueModel.setQuestionReslove(stringObjectMap.get("questionResolve").toString());
                 questionLst.add(docQueModel);
             }
             docModel.setQuestionLst(questionLst);
@@ -404,7 +674,9 @@ public class TestPaperQuestionServiceImpl extends BaseServiceImpl implements ITe
             else
                 docModel1.setQuestionTypeName(null);
             docModel1.setTotalScore(testPaperQuestionResModel.getScore());
+            docModel1.setPerScore(testPaperQuestionResModel.getScore()/testPaperQuestionResModel.getQuestionLst().size());
             docModel1.setSort(sort);
+            docModel1.setNumber(Integer.valueOf(stringObjectMap.get("sort").toString()));
             docModel1.setSynthesisStr(stringObjectMap.get("questionBody").toString());
             String questionOpt = stringObjectMap.get("questionOpt").toString();
             String[] split = questionOpt.split(";");
@@ -427,9 +699,10 @@ public class TestPaperQuestionServiceImpl extends BaseServiceImpl implements ITe
                         String[] split1 = questionAnswer.split("#&&&#");
                         for (String ss : split1) {
                             res.append(ss);
-                            res.append(" ");
+                            res.append(";");
                         }
-                        docQueModel5.setQuestionAnswer(res.toString());
+                        String sp = res.toString();
+                        docQueModel5.setQuestionAnswer(sp.substring(0,sp.length()-1));
                     }else {
                         docQueModel5.setQuestionAnswer(questionAnswer);
                     }
@@ -475,9 +748,10 @@ public class TestPaperQuestionServiceImpl extends BaseServiceImpl implements ITe
                     String[] split = questionAnswer.split("#&&&#");
                     for (String s : split) {
                         res.append(s);
-                        res.append(" ");
+                        res.append(";");
                     }
-                    docQueModel.setQuestionAnswer(res.toString());
+                    String s = res.toString();
+                    docQueModel.setQuestionAnswer(s.substring(0,s.length()-1));
                 }else {
                     docQueModel.setQuestionAnswer(questionAnswer);
                 }
@@ -497,17 +771,35 @@ public class TestPaperQuestionServiceImpl extends BaseServiceImpl implements ITe
     /**
      * 分配每种知识点对应的题数
      * @param testPaperFormatLst
-     * @param knowledges
      * @return
      */
-    private LinkedHashMap<String,Integer> getFormatPerKonwledgeNum(List<TestPaperFormat> testPaperFormatLst,String knowledges){
+    private LinkedHashMap<String,Integer> getFormatPerKonwledgeNum(LinkedHashMap<String, Set<Integer>> questionLstByKonwledge,List<TestPaperFormat> testPaperFormatLst){
         LinkedHashMap<String,Integer> resMap =new LinkedHashMap<>();
-        String[] split = knowledges.split(";");
-        int length = split.length;
+        Map<Integer,String> questionTypeMap=new HashMap<>();
+        for (Map.Entry<String, Set<Integer>> entry : questionLstByKonwledge.entrySet()) {
+            String key = entry.getKey();
+            String[] split1 = key.split("###");
+            Set<Integer> value = entry.getValue();
+            if(value.size()>0){
+                Integer integer = Integer.valueOf(split1[0]);
+                if(questionTypeMap.containsKey(integer)){
+                    String s = questionTypeMap.get(integer);
+                    s+=split1[1]+";";
+                    questionTypeMap.put(integer,s);
+                }else {
+                    questionTypeMap.put(integer,split1[1]+";");
+                }
+            }
+        }
         for (TestPaperFormat testPaperFormat : testPaperFormatLst) {
             int questionNum = testPaperFormat.getQuestionNum().intValue();
+            String s = questionTypeMap.get(testPaperFormat.getQuestionType());
+            if(questionNum==0||StringUtils.isEmpty(s))
+                continue;
+            String[] split = s.split(";");
+            int length = split.length;
             if(length==1)
-                resMap.put(testPaperFormat.getQuestionType()+"###"+knowledges,questionNum);
+                resMap.put(testPaperFormat.getQuestionType()+"###"+split[0],questionNum);
             else {
                 if(questionNum==1) {
                     int i = new Random().nextInt(length);
@@ -521,8 +813,15 @@ public class TestPaperQuestionServiceImpl extends BaseServiceImpl implements ITe
                 for (int m=0;m<length;m++) {
                     if(m==length-1)
                         k=questionNum-n;
-                    else
-                        k=j+new Random().nextInt(i);
+                    else {
+                        k = j + new Random().nextInt(i);
+                        Set<Integer> integers = questionLstByKonwledge.get(testPaperFormat.getQuestionType() + "###" + split[m]);
+                        int size = integers.size();
+                        if(size<k){
+                            k=new Random().nextInt(size);
+                        }
+                    }
+
                     resMap.put(testPaperFormat.getQuestionType()+"###"+split[m],k);
                     n+=k;
                 }
@@ -544,25 +843,37 @@ public class TestPaperQuestionServiceImpl extends BaseServiceImpl implements ITe
         for (Map.Entry<String, List<Question>> entry: questionTypeMap.entrySet()) {
             String key = entry.getKey();
             List<Question> questionList = entry.getValue();
+            if(questionList.size()<=0)
+                continue;
             if(length==1){
                 Set<Integer> tempLst=new HashSet<>();
+                List<Question> removeQuesLst=new ArrayList<>();
                 for (Question question : questionList) {
                     String[] split1 = question.getKnowledgePoints().split(";");
                     List<String> stringList = Arrays.asList(split1);
                     if(stringList.contains(split[0])) {
                         tempLst.add(question.getQuestionId());
+                        removeQuesLst.add(question);
                     }
+                }
+                for (Question question : removeQuesLst) {
+                    questionList.remove(question);
                 }
                 resMap.put(key+"###"+knowledges,tempLst);
             }else{
                 for (String s : split) {
                     Set<Integer> oneLst=new HashSet<>();
+                    List<Question> removeQuesLst=new ArrayList<>();
                     for (Question question : questionList) {
                         String[] split1 = question.getKnowledgePoints().split(";");
                         List<String> stringList = Arrays.asList(split1);
                         if(stringList.contains(s)){
                             oneLst.add(question.getQuestionId());
+                            removeQuesLst.add(question);
                         }
+                    }
+                    for (Question question : removeQuesLst) {
+                        questionList.remove(question);
                     }
                     resMap.put(key+"###"+s,oneLst);
                 }

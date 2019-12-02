@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.by.blcu.mall.dao.IMallOrderPaymentDao">
+  <resultMap id="BaseResultMap" type="com.by.blcu.mall.model.MallOrderPayment">
+    <id column="pid" jdbcType="VARCHAR" property="pid" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="bill_no" jdbcType="VARCHAR" property="billNo" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="currency" jdbcType="VARCHAR" property="currency" />
+    <result column="pay_status" jdbcType="VARCHAR" property="payStatus" />
+    <result column="pay_type" jdbcType="VARCHAR" property="payType" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="bak" jdbcType="VARCHAR" property="bak" />
+    <result column="remittance" jdbcType="VARCHAR" property="remittance" />
+    <result column="screenshot" jdbcType="VARCHAR" property="screenshot" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    pid, order_no, bill_no, amount, currency, pay_status, pay_type, create_time, create_user, 
+    update_time, remarks, bak, remittance, screenshot
+  </sql>
+  <sql id="BaseWhere">
+    	<if test="!@org.springframework.util.StringUtils@isEmpty(entityKeyValues)">
+			and pid in
+			<foreach item="item" index="index" collection="entityKeyValues" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(notEntityKeyValues)">
+			and pid not in
+			<foreach item="item" index="index" collection="notEntityKeyValues" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(pid)">
+			and pid=#{pid,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(orderNo)">
+			and order_no=#{orderNo,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(billNo)">
+			and bill_no=#{billNo,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(amount)">
+			and amount=#{amount,jdbcType=DECIMAL}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(currency)">
+			and currency=#{currency,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(payStatus)">
+			and pay_status=#{payStatus,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(payType)">
+			and pay_type=#{payType,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(createTime)">
+			and create_time=#{createTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(createUser)">
+			and create_user=#{createUser,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(updateTime)">
+			and update_time=#{updateTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(remarks)">
+			and remarks=#{remarks,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(bak)">
+			and bak=#{bak,jdbcType=VARCHAR}
+		</if>
+        <if test="!@org.springframework.util.StringUtils@isEmpty(remittance)">
+            and remittance=#{remittance,jdbcType=VARCHAR}
+        </if>
+        <if test="!@org.springframework.util.StringUtils@isEmpty(screenshot)">
+            and screenshot=#{screenshot,jdbcType=VARCHAR}
+        </if>
+
+  </sql>
+  <select id="selectCount" parameterType="java.util.Map" resultType="java.lang.Long">
+    	select count(1) from mall_order_payment
+		<where>
+			<include refid="BaseWhere" />
+		</where>
+  </select>
+  <select id="selectList" parameterType="java.util.Map" resultMap="BaseResultMap">
+    	select
+		<include refid="Base_Column_List"/> 
+		from mall_order_payment
+		<where>
+			<include refid="BaseWhere"/>
+		</where>
+		<include refid="com.blcu.common.orderSqlMap" /> 
+		<include refid="com.blcu.common.pageSqlMap" /> 
+  </select>
+  <delete id="deleteByParams" parameterType="java.util.Map">
+    	delete from mall_order_payment
+		<where>
+			<include refid="BaseWhere"/>
+		</where>
+  </delete>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from mall_order_payment
+    where pid = #{pid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from mall_order_payment
+    where pid = #{pid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.by.blcu.mall.model.MallOrderPayment">
+    insert into mall_order_payment (pid, order_no, bill_no, 
+      amount, currency, pay_status, 
+      pay_type, create_time, create_user, 
+      update_time, remarks, bak, remittance, screenshot
+      )
+    values (#{pid,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, #{billNo,jdbcType=VARCHAR}, 
+      #{amount,jdbcType=DECIMAL}, #{currency,jdbcType=VARCHAR}, #{payStatus,jdbcType=VARCHAR}, 
+      #{payType,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{remarks,jdbcType=VARCHAR}, #{bak,jdbcType=VARCHAR},
+      #{remittance,jdbcType=VARCHAR}, #{screenshot,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.by.blcu.mall.model.MallOrderPayment">
+    insert into mall_order_payment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pid != null">
+        pid,
+      </if>
+      <if test="orderNo != null">
+        order_no,
+      </if>
+      <if test="billNo != null">
+        bill_no,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="currency != null">
+        currency,
+      </if>
+      <if test="payStatus != null">
+        pay_status,
+      </if>
+      <if test="payType != null">
+        pay_type,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="remarks != null">
+        remarks,
+      </if>
+      <if test="bak != null">
+        bak,
+      </if>
+      <if test="remittance != null">
+          remittance,
+      </if>
+      <if test="screenshot != null">
+          screenshot,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pid != null">
+        #{pid,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null">
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="billNo != null">
+        #{billNo,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="currency != null">
+        #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="payStatus != null">
+        #{payStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null">
+        #{payType,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="bak != null">
+        #{bak,jdbcType=VARCHAR},
+      </if>
+      <if test="remittance != null">
+        #{remittance,jdbcType=VARCHAR},
+      </if>
+      <if test="screenshot != null">
+        #{screenshot,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.by.blcu.mall.model.MallOrderPayment">
+    update mall_order_payment
+    <set>
+      <if test="orderNo != null">
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="billNo != null">
+        bill_no = #{billNo,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="currency != null">
+        currency = #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="payStatus != null">
+        pay_status = #{payStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null">
+        pay_type = #{payType,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remarks != null">
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="bak != null">
+        bak = #{bak,jdbcType=VARCHAR},
+      </if>
+      <if test="remittance != null">
+          remittance = #{remittance,jdbcType=VARCHAR},
+      </if>
+      <if test="screenshot != null">
+          screenshot = #{screenshot,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where pid = #{pid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.by.blcu.mall.model.MallOrderPayment">
+    update mall_order_payment
+    set order_no = #{orderNo,jdbcType=VARCHAR},
+      bill_no = #{billNo,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=DECIMAL},
+      currency = #{currency,jdbcType=VARCHAR},
+      pay_status = #{payStatus,jdbcType=VARCHAR},
+      pay_type = #{payType,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      remarks = #{remarks,jdbcType=VARCHAR},
+      bak = #{bak,jdbcType=VARCHAR},
+      remittance = #{remittance,jdbcType=VARCHAR},
+      screenshot = #{screenshot,jdbcType=VARCHAR}
+    where pid = #{pid,jdbcType=VARCHAR}
+  </update>
+</mapper>

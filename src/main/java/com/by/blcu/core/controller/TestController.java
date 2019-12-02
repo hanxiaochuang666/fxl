@@ -22,10 +22,14 @@ public class TestController {
      * 需要登录才能访问
      */
     @GetMapping("/1")
-    public Object test1(HttpServletRequest httpServletRequest) {
+    public Object test1(HttpServletRequest re) {
+        StringBuffer sb = new StringBuffer("登录用户信息：         ");
+        sb.append(" userId:"+re.getAttribute("userId") +"       ");
+        sb.append(" username:"+re.getAttribute("username")+"    ");
+        sb.append(" orgCode:"+re.getAttribute("orgCode")+"      ");
+        sb.append(" orgType:"+re.getAttribute("orgType"));
 
-//        return GetUserInfoUtils.getUserIdByRequest(httpServletRequest);
-        return httpServletRequest.getAttribute("userId");
+        return sb.toString();
     }
 
     /**

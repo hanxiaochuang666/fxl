@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.by.blcu.manager.dao.ManagerAccountMapper">
+  <resultMap id="BaseResultMap" type="com.by.blcu.manager.model.ManagerAccount">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="account_id" jdbcType="VARCHAR" property="accountId" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="org_code" jdbcType="VARCHAR" property="orgCode" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="is_manager" jdbcType="BIT" property="isManager" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="modify_by" jdbcType="VARCHAR" property="modifyBy" />
+  </resultMap>
+
+  <resultMap id="RoleResultMap" type="com.by.blcu.manager.model.ManagerRole">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="role_id" jdbcType="VARCHAR" property="roleId" />
+    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="is_system" jdbcType="BIT" property="isSystem" />
+    <result column="org_code" jdbcType="VARCHAR" property="orgCode" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="modify_by" jdbcType="VARCHAR" property="modifyBy" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    account_id, user_id, user_name, type, org_code, status, is_manager, sort, is_deleted,
+    create_time, create_by, modify_time, modify_by
+  </sql>
+  <sql id="Relation_Column_List">
+    a.account_id, a.user_id, a.user_name, a.type, a.org_code, a.status, a.is_manager, a.sort, a.is_deleted,
+    a.create_time, a.create_by, a.modify_time, a.modify_by
+  </sql>
+
+  <sql id="Base_Model_Equ_And">
+    (a.is_deleted is not true) and (s.is_deleted is not true)
+    <!-- 字段 -->
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(status)">
+      and a.tatus = #{status,jdbcType=INTEGER}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(accountId)">
+      and a.account_id = #{accountId,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(userId)">
+      and a.user_id = #{userId,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(userName)">
+      and a.user_name = #{userName,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(type)">
+      and a.`type` = #{type,jdbcType=INTEGER}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(orgCode)">
+      and a.org_code = #{orgCode,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrFalse(isManager)">
+      and a.is_manager = #{isManager,jdbcType=BIT}
+    </if>
+    <!-- 列表 -->
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(accountIdList)">
+      and a.account_id in
+      <foreach collection="accountIdList" index="index" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(userIdList)">
+      and a.user_id in
+      <foreach collection="userIdList" index="index" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(userNameList)">
+      and a.user_name in
+      <foreach collection="userNameList" index="index" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+  </sql>
+  <sql id="Base_Model_Equ_Or">
+    (a.is_deleted is not true) and (s.is_deleted is not true)
+    <!-- 字段 -->
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(status)">
+      and a.status = #{status,jdbcType=INTEGER}
+    </if>
+    <trim prefix=" and (" prefixOverrides="or" suffix=")">
+      <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(accountId)">
+        or a.account_id = #{accountId,jdbcType=VARCHAR}
+      </if>
+      <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(userId)">
+        or a.user_id = #{userId,jdbcType=VARCHAR}
+      </if>
+      <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(userName)">
+        or a.user_name = #{userName,jdbcType=VARCHAR}
+      </if>
+      <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(type)">
+        or a.`type` = #{type,jdbcType=INTEGER}
+      </if>
+      <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(orgCode)">
+        or a.org_code = #{orgCode,jdbcType=VARCHAR}
+      </if>
+      <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrFalse(isManager)">
+        or a.is_manager = #{isManager,jdbcType=BIT}
+      </if>
+      <!-- 列表 -->
+      <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(accountIdList)">
+        or a.account_id in
+        <foreach collection="accountIdList" index="index" item="item" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </if>
+      <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(userIdList)">
+        or a.user_id in
+        <foreach collection="userIdList" index="index" item="item" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </if>
+      <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(userNameList)">
+        or a.user_name in
+        <foreach collection="userNameList" index="index" item="item" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Model_Like_And">
+    (a.is_deleted is not true) and (s.is_deleted is not true)
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(status)">
+      and a.status = #{status,jdbcType=INTEGER}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(type)">
+      and a.type = #{type,jdbcType=INTEGER}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrFalse(isManager)">
+      and a.is_manager = #{isManager,jdbcType=BIT}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(accountId)">
+      and a.account_id like CONCAT('%',#{accountId,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(userId)">
+      and a.user_id like CONCAT('%',#{userId,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(userName)">
+      and a.user_name like CONCAT('%',#{userName,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(orgCode)">
+      and a.org_code like CONCAT('%',#{orgCode,jdbcType=VARCHAR},'%')
+    </if>
+    <!-- 关联 -->
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(phone)">
+      and s.phone like CONCAT('%',#{phone,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(realName)">
+      and s.real_name like CONCAT('%',#{realName,jdbcType=VARCHAR},'%')
+    </if>
+  </sql>
+  <sql id="Base_Select_Order">
+    order by a.create_time desc
+  </sql>
+  <!-- 基本操作 -->
+  <select id="findAccountEquAnd" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Relation_Column_List" />
+    from manager_account a
+        left join sso_user s on a.user_id=s.user_id
+    <where>
+      <include refid="Base_Model_Equ_And"/>
+    </where>
+    <include refid="Base_Select_Order" />
+  </select>
+  <select id="findAccountEquOr" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Relation_Column_List" />
+    from manager_account a
+      left join sso_user s on a.user_id=s.user_id
+    <where>
+      <include refid="Base_Model_Equ_Or"/>
+    </where>
+    <include refid="Base_Select_Order" />
+  </select>
+  <select id="findAccountList" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    a.account_id, a.user_id, a.user_name, a.type, a.org_code, a.status, a.is_manager, a.sort, a.is_deleted,
+    a.create_time, a.create_by, a.modify_time, a.modify_by
+    from manager_account a
+        left join sso_user s on a.user_id = s.user_id
+    <where>
+      <include refid="Base_Model_Like_And"/>
+    </where>
+    <include refid="Base_Select_Order" />
+  </select>
+  <select id="findAccountListCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+    select count(1)
+    from manager_account a
+        left join sso_user s on a.user_id = s.user_id
+    <where>
+      <include refid="Base_Model_Like_And"/>
+    </where>
+  </select>
+
+  <!--删除 id  in idList-->
+  <update id="deleteAccount" parameterType="java.util.Map" >
+    update manager_account
+    set is_deleted=1, modify_time=#{modifyTime}, modify_by=#{modifyBy}
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(accountIdList)">
+      where account_id in
+      <foreach collection="accountIdList" open="(" close=")" separator="," item="item">
+        #{item,jdbcType=INTEGER}
+      </foreach>
+      <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(orgCode)">
+        and org_code = #{orgCode,jdbcType=VARCHAR}
+      </if>
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(userIdList)">
+      where user_id in
+      <foreach collection="userIdList" open="(" close=")" separator="," item="item">
+        #{item,jdbcType=INTEGER}
+      </foreach>
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(userNameList)">
+      where user_name in
+      <foreach collection="userNameList" open="(" close=")" separator="," item="item">
+        #{item,jdbcType=INTEGER}
+      </foreach>
+    </if>
+  </update>
+
+  <!-- 用户角色 -->
+  <select id="findAccountRole" parameterType="java.util.Map" resultMap="RoleResultMap">
+    select  r.* from manager_account a
+    left join manager_account_role_r  a_r on a.account_id = a_r.account_id
+    left join manager_role r on a_r.role_id = r.role_id
+    where
+      a.is_deleted is not true and r.is_deleted is not true
+    <!-- 字段 -->
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(status)">
+      and a.status = #{status,jdbcType=INTEGER}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(orgCode)">
+      and a.org_code = #{orgCode,jdbcType=VARCHAR}
+      and r.org_code = #{orgCode,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(accountId)">
+      and a.account_id = #{accountId,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(userId)">
+      and a.user_id = #{userId,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(userName)">
+      and a.user_name = #{userName,jdbcType=VARCHAR}
+    </if>
+    <!-- 列表 -->
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(accountIdList)">
+      and a.account_id in
+      <foreach collection="accountIdList" index="index" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(userIdList)">
+      and a.user_id in
+      <foreach collection="userIdList" index="index" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(userNameList)">
+      and a.user_name in
+      <foreach collection="userNameList" index="index" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(roleIdList)">
+      and r.role_id in
+      <foreach collection="roleIdList" index="index" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+     order by r.sort asc,r.create_time desc
+  </select>
+  <select id="findOrgRole" parameterType="java.util.Map" resultMap="RoleResultMap">
+    select  r.* from manager_role r
+    where
+     r.is_deleted is not true
+    <!-- 字段 -->
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(status)">
+      and r.status = #{status,jdbcType=INTEGER}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(orgCode)">
+      and (r.org_code is not null and  r.org_code = #{orgCode,jdbcType=VARCHAR})
+    </if>
+    <!-- 列表 -->
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(roleIdList)">
+      and r.role_id in
+      <foreach collection="roleIdList" index="index" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+    order by r.sort asc,r.create_time desc
+  </select>
+  <select id="findAccountRoleExcept" parameterType="java.util.Map" resultMap="RoleResultMap">
+    select  r.* from manager_account a
+    left join manager_account_role_r  a_r on a.account_id = a_r.account_id
+    left join manager_role r on a_r.role_id = r.role_id
+    where
+    a.is_deleted is not true and r.is_deleted is not true
+    <!-- 字段 -->
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(status)">
+      and a.status = #{status,jdbcType=INTEGER}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(orgCode)">
+      and a.org_code = #{orgCode,jdbcType=VARCHAR}
+      and r.org_code = #{orgCode,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(accountId)">
+      and a.account_id != #{accountId,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(userId)">
+      and a.user_id != #{userId,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(userName)">
+      and a.user_name != #{userName,jdbcType=VARCHAR}
+    </if>
+    <!-- 列表 -->
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(accountIdList)">
+      and a.account_id not in
+      <foreach collection="accountIdList" index="index" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(userIdList)">
+      and a.user_id not in
+      <foreach collection="userIdList" index="index" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(userNameList)">
+      and a.user_name  not in
+      <foreach collection="userNameList" index="index" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(roleIdList)">
+      and r.role_id in
+      <foreach collection="roleIdList" index="index" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+    order by r.sort asc,r.create_time desc
+  </select>
+
+  <insert id="insertAccountRoleList">
+    insert into manager_account_role_r (account_role_r_id, role_id, account_id,
+    create_time, create_by, modify_time,
+    modify_by)
+    VALUES
+    <foreach collection ="list" item="item" separator =",">
+      (#{item.accountRoleRId,jdbcType=VARCHAR}, #{item.roleId,jdbcType=VARCHAR}, #{item.accountId,jdbcType=VARCHAR},
+      #{item.createTime,jdbcType=TIMESTAMP}, #{item.createBy,jdbcType=VARCHAR}, #{item.modifyTime,jdbcType=TIMESTAMP},
+      #{item.modifyBy,jdbcType=VARCHAR})
+    </foreach >
+  </insert>
+  <delete id="deleteAccountRole" parameterType="java.util.Map">
+    delete from manager_account_role_r
+      where  account_id = #{accountId,jdbcType=VARCHAR}
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(roleIdList)">
+      and role_id in
+      <foreach collection="roleIdList" index="index" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+  </delete>
+
+</mapper>

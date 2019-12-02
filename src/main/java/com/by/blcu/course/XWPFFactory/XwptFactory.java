@@ -24,7 +24,7 @@ public class XwptFactory {
 
 
     protected static Logger logger = Logger.getLogger(XwptFactory.class);
-    private XWPFDocument docxDocument;
+    private CustomXWPFDocument docxDocument;
     private List<DocModel> docModelLst;
     private List<IXwptWrite> xwptWriteLst;
     /**
@@ -50,7 +50,7 @@ public class XwptFactory {
      * 创建文档对象
      */
     public  void createDocxDocument(){
-        docxDocument=new XWPFDocument();
+        docxDocument=new CustomXWPFDocument();
         docModelLst=new ArrayList<>();
         xwptWriteLst=new ArrayList<>();
         addCustomHeadingStyle(docxDocument," 标题 3", 3);
@@ -109,7 +109,7 @@ public class XwptFactory {
     /**
      * 写入整个word
      */
-    public  void writeObject(){
+    public  void writeObject()throws Exception{
         for(int i=0;i<xwptWriteLst.size();i++){
             IXwptWrite iXwptWrite = xwptWriteLst.get(i);
             iXwptWrite.writeObject(docxDocument,docModelLst.get(i),isExportAnswer,isExportReslove);

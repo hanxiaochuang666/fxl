@@ -1,6 +1,9 @@
 package com.by.blcu.core.configurer;
 
 import com.by.blcu.core.utils.GetUserInfoUtils;
+import com.by.blcu.core.utils.StringUtils;
+import com.by.blcu.manager.model.SsoUser;
+import com.by.blcu.manager.service.SsoUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -13,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,6 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 @Aspect
 @Slf4j
 public class UserInfoConfigurer {
+
+
     @Pointcut("@within(org.springframework.stereotype.Controller) || @within(org.springframework.web.bind.annotation.RestController)")
     public void pointcut() {
     }
@@ -48,8 +54,23 @@ public class UserInfoConfigurer {
         String url = request.getRequestURL().toString();
 
         //拦截器中获取 userID
-        int userId = GetUserInfoUtils.getUserIdByRequest(request);
-        request.setAttribute("userId",userId);
+        Integer userId = GetUserInfoUtils.getUserIdByRequest(request);
+        String username = GetUserInfoUtils.getUserNameByToken(request);
+        String orgCode = GetUserInfoUtils.getOrgCodeByToken(request);
+        String orgType = GetUserInfoUtils.getOrgTypeByToken(request);
+
+        if(null==userId){
+            request.setAttribute("userId", -1);
+        }else {
+            request.setAttribute("userId", userId);
+        }
+        if(StringUtils.isEmpty(username)) {
+            request.setAttribute("username", "");
+        }else {
+            request.setAttribute("username", username);
+        }
+        request.setAttribute("orgCode", orgCode);
+        request.setAttribute("orgType", orgType);
 
         log.info("请求URL:【{}】,\n请求参数:【{}】", url, args);
         Long befor = System.currentTimeMillis();

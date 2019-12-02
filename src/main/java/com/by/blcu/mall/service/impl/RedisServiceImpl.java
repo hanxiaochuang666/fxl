@@ -11,9 +11,8 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -41,11 +40,6 @@ public class RedisServiceImpl implements RedisService {
             }
         });
         return result;
-    }
-
-    @Override
-    public void setWithExpire(String key, String value, long expire) {
-        stringRedisTemplate.opsForValue().set(key, value, expire, TimeUnit.SECONDS);
     }
 
     @Override
@@ -137,4 +131,33 @@ public class RedisServiceImpl implements RedisService {
     }
 
 
+    @Override
+    public void setWithExpire(String key, String value, long expire) {
+        stringRedisTemplate.opsForValue().set(key, value, expire, TimeUnit.SECONDS);
+    }
+
+    @Override
+    public Boolean delete(String key) {
+       return stringRedisTemplate.delete(key);
+    }
+
+    @Override
+    public Boolean zAdd(String key, String value, double score) {
+        return stringRedisTemplate.opsForZSet().add(key, value, score);
+    }
+
+    @Override
+    public Set<String> zRange(String key, long min, long max) {
+        return stringRedisTemplate.opsForZSet().rangeByScore(key, min, max);
+    }
+
+    @Override
+    public Long zRemove(String key, Object... values) {
+        return stringRedisTemplate.opsForZSet().remove(key, values);
+    }
+
+    @Override
+    public Boolean hasKey(String key) {
+        return stringRedisTemplate.hasKey(key);
+    }
 }

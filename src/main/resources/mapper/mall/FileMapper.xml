@@ -12,6 +12,89 @@
     <result column="file_time" jdbcType="TIMESTAMP" property="fileTime" />
     <result column="isdelete" jdbcType="INTEGER" property="isdelete" />
     <result column="isvalidity" jdbcType="INTEGER" property="isvalidity" />
-    <result column="save_name" jdbcType="VARCHAR" property="saveName" />
+    <result column="file_size" jdbcType="VARCHAR" property="fileSize" />
+    <result column="check_status" jdbcType="INTEGER" property="checkStatus" />
+    <result column="check_time" jdbcType="TIMESTAMP" property="checkTime" />
+    <result column="check_user" jdbcType="INTEGER" property="checkUser" />
+    <result column="check_msg" jdbcType="VARCHAR" property="checkMsg" />
+    <result column="check_id" jdbcType="VARCHAR" property="checkId" />
+    <result column="file_Type" jdbcType="VARCHAR" property="fileType" />
+    <result column="bak2" jdbcType="VARCHAR" property="bak2" />
+    <result column="bak3" jdbcType="VARCHAR" property="bak3" />
   </resultMap>
+
+  <resultMap id="FileResultMap" type="com.by.blcu.mall.model.ResourceFile">
+    <id column="file_id" jdbcType="VARCHAR" property="fileId" />
+    <result column="commodity_id" jdbcType="VARCHAR" property="commodityId" />
+    <result column="file_name" jdbcType="VARCHAR" property="fileName" />
+    <result column="file_path" jdbcType="VARCHAR" property="filePath" />
+    <result column="file_time" jdbcType="TIMESTAMP" property="fileTime" />
+    <result column="isdelete" jdbcType="INTEGER" property="isdelete" />
+    <result column="isvalidity" jdbcType="INTEGER" property="isvalidity" />
+    <result column="file_size" jdbcType="VARCHAR" property="fileSize" />
+    <result column="check_status" jdbcType="INTEGER" property="checkStatus" />
+    <result column="check_time" jdbcType="TIMESTAMP" property="checkTime" />
+    <result column="check_user" jdbcType="INTEGER" property="checkUser" />
+    <result column="check_msg" jdbcType="VARCHAR" property="checkMsg" />
+    <result column="check_id" jdbcType="VARCHAR" property="checkId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="resources_id" jdbcType="VARCHAR" property="resourcesId" />
+  </resultMap>
+
+
+  <sql id="Base_Column_List">
+    f.file_id, f.commodity_id, r.title, f.file_name, f.file_path, f.file_time, f.file_size, r.resources_id,r.check_status,r.check_user
+  </sql>
+
+    <sql id="Base_Column_List1">
+    file_id, commodity_id, file_name, file_path, file_time, file_size, isdelete, isvalidity
+  </sql>
+
+  <sql id="BaseWhere">
+
+    <if test="!@org.springframework.util.StringUtils@isEmpty(courseId)">
+      and f.commodity_id=#{courseId,jdbcType=VARCHAR}
+    </if>
+    <if test="!@org.springframework.util.StringUtils@isEmpty(modelType)">
+      and d.model_type=#{modelType,jdbcType=INTEGER}
+    </if>
+    <if test="!@org.springframework.util.StringUtils@isEmpty(fileName)">
+      and r.title  like CONCAT('%',#{fileName,jdbcType=VARCHAR},'%')
+    </if>
+
+      and d.course_id = f.commodity_id
+      and r.resources_id = d.resources_id
+      and r.content = f.file_id
+      and f.isdelete = 1
+      and f.isvalidity = 1
+
+  </sql>
+
+  <select id="selectResourcesCount" parameterType="java.util.Map" resultType="java.lang.Long">
+    select count(1) from file f,course_detail d, resources r
+    <where>
+      <include refid="BaseWhere" />
+    </where>
+  </select>
+
+    <select id="selectByFileId" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List1"/>
+      from file
+      where
+      file_id=#{fileId}
+    </select>
+
+  <select id="selectResourcesList" parameterType="java.util.Map" resultMap="FileResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from file f, course_detail d, resources r
+    <where>
+      <include refid="BaseWhere"/>
+    </where>
+    <include refid="com.blcu.common.orderSqlMap" />
+    <include refid="com.blcu.common.pageSqlMap" />
+  </select>
+
+
 </mapper>

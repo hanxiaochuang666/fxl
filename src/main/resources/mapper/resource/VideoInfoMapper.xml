@@ -3,17 +3,19 @@
 <mapper namespace="com.by.blcu.resource.dao.IVideoInfoDao">
   <resultMap id="BaseResultMap" type="com.by.blcu.resource.dto.VideoInfo">
     <id column="video_info_id" jdbcType="INTEGER" property="videoInfoId" />
-    <result column="storeDatetime" jdbcType="VARCHAR" property="storedatetime" />
-    <result column="bucketName" jdbcType="VARCHAR" property="bucketname" />
-    <result column="extensionName" jdbcType="VARCHAR" property="extensionname" />
+    <result column="store_datetime" jdbcType="VARCHAR" property="storeDatetime" />
+    <result column="bucket_name" jdbcType="VARCHAR" property="bucketName" />
+    <result column="extension_name" jdbcType="VARCHAR" property="extensionName" />
     <result column="endpoint" jdbcType="VARCHAR" property="endpoint" />
+    <result column="success" jdbcType="TINYINT" property="success" />
     <result column="securitytoken" jdbcType="VARCHAR" property="securitytoken" />
     <result column="accesskeysecret" jdbcType="VARCHAR" property="accesskeysecret" />
-    <result column="storageType" jdbcType="VARCHAR" property="storagetype" />
+    <result column="storage_type" jdbcType="VARCHAR" property="storageType" />
     <result column="expiration" jdbcType="VARCHAR" property="expiration" />
     <result column="key_word" jdbcType="VARCHAR" property="keyWord" />
     <result column="accesskeyid" jdbcType="VARCHAR" property="accesskeyid" />
-    <result column="fileId" jdbcType="VARCHAR" property="fileid" />
+    <result column="file_id" jdbcType="VARCHAR" property="fileId" />
+    <result column="duration" jdbcType="BIGINT" property="duration" />
     <result column="url" jdbcType="VARCHAR" property="url" />
     <result column="create_user" jdbcType="INTEGER" property="createUser" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -25,9 +27,10 @@
     <result column="bak3" jdbcType="VARCHAR" property="bak3" />
   </resultMap>
   <sql id="Base_Column_List">
-    video_info_id, storeDatetime, bucketName, extensionName, endpoint, securitytoken, 
-    accesskeysecret, storageType, expiration, key_word, accesskeyid, fileId, url, create_user, 
-    create_time, update_user, update_time, video_name, bak1, bak2, bak3
+    video_info_id, store_datetime, bucket_name, extension_name, endpoint, success, securitytoken, 
+    accesskeysecret, storage_type, expiration, key_word, accesskeyid, file_id, duration, 
+    url, create_user, create_time, update_user, update_time, video_name, bak1, bak2, 
+    bak3
   </sql>
   <sql id="BaseWhere">
     	<if test="!@org.springframework.util.StringUtils@isEmpty(entityKeyValues)">
@@ -45,17 +48,20 @@
 		<if test="!@org.springframework.util.StringUtils@isEmpty(videoInfoId)">
 			and video_info_id=#{videoInfoId,jdbcType=INTEGER}
 		</if>
-		<if test="!@org.springframework.util.StringUtils@isEmpty(storedatetime)">
-			and storeDatetime=#{storedatetime,jdbcType=VARCHAR}
+		<if test="!@org.springframework.util.StringUtils@isEmpty(storeDatetime)">
+			and store_datetime=#{storeDatetime,jdbcType=VARCHAR}
 		</if>
-		<if test="!@org.springframework.util.StringUtils@isEmpty(bucketname)">
-			and bucketName=#{bucketname,jdbcType=VARCHAR}
+		<if test="!@org.springframework.util.StringUtils@isEmpty(bucketName)">
+			and bucket_name=#{bucketName,jdbcType=VARCHAR}
 		</if>
-		<if test="!@org.springframework.util.StringUtils@isEmpty(extensionname)">
-			and extensionName=#{extensionname,jdbcType=VARCHAR}
+		<if test="!@org.springframework.util.StringUtils@isEmpty(extensionName)">
+			and extension_name=#{extensionName,jdbcType=VARCHAR}
 		</if>
 		<if test="!@org.springframework.util.StringUtils@isEmpty(endpoint)">
 			and endpoint=#{endpoint,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(success)">
+			and success=#{success,jdbcType=TINYINT}
 		</if>
 		<if test="!@org.springframework.util.StringUtils@isEmpty(securitytoken)">
 			and securitytoken=#{securitytoken,jdbcType=VARCHAR}
@@ -63,8 +69,8 @@
 		<if test="!@org.springframework.util.StringUtils@isEmpty(accesskeysecret)">
 			and accesskeysecret=#{accesskeysecret,jdbcType=VARCHAR}
 		</if>
-		<if test="!@org.springframework.util.StringUtils@isEmpty(storagetype)">
-			and storageType=#{storagetype,jdbcType=VARCHAR}
+		<if test="!@org.springframework.util.StringUtils@isEmpty(storageType)">
+			and storage_type=#{storageType,jdbcType=VARCHAR}
 		</if>
 		<if test="!@org.springframework.util.StringUtils@isEmpty(expiration)">
 			and expiration=#{expiration,jdbcType=VARCHAR}
@@ -75,8 +81,11 @@
 		<if test="!@org.springframework.util.StringUtils@isEmpty(accesskeyid)">
 			and accesskeyid=#{accesskeyid,jdbcType=VARCHAR}
 		</if>
-		<if test="!@org.springframework.util.StringUtils@isEmpty(fileid)">
-			and fileId=#{fileid,jdbcType=VARCHAR}
+		<if test="!@org.springframework.util.StringUtils@isEmpty(fileId)">
+			and file_id=#{fileId,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(duration)">
+			and duration=#{duration,jdbcType=BIGINT}
 		</if>
 		<if test="!@org.springframework.util.StringUtils@isEmpty(url)">
 			and url=#{url,jdbcType=VARCHAR}
@@ -96,6 +105,9 @@
 		<if test="!@org.springframework.util.StringUtils@isEmpty(videoName)">
 			and video_name=#{videoName,jdbcType=VARCHAR}
 		</if>
+        <if test="!@org.springframework.util.StringUtils@isEmpty(videoNameLike)">
+            and video_name like concat('%',#{videoNameLike,jdbcType=VARCHAR},'%')
+        </if>
 		<if test="!@org.springframework.util.StringUtils@isEmpty(bak1)">
 			and bak1=#{bak1,jdbcType=VARCHAR}
 		</if>
@@ -140,38 +152,44 @@
     where video_info_id = #{videoInfoId,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.by.blcu.resource.dto.VideoInfo">
-    insert into video_info (video_info_id, storeDatetime, bucketName, 
-      extensionName, endpoint, securitytoken, 
-      accesskeysecret, storageType, expiration, 
-      key_word, accesskeyid, fileId, 
-      url, create_user, create_time, 
-      update_user, update_time, video_name, 
-      bak1, bak2, bak3)
-    values (#{videoInfoId,jdbcType=INTEGER}, #{storedatetime,jdbcType=VARCHAR}, #{bucketname,jdbcType=VARCHAR}, 
-      #{extensionname,jdbcType=VARCHAR}, #{endpoint,jdbcType=VARCHAR}, #{securitytoken,jdbcType=VARCHAR}, 
-      #{accesskeysecret,jdbcType=VARCHAR}, #{storagetype,jdbcType=VARCHAR}, #{expiration,jdbcType=VARCHAR}, 
-      #{keyWord,jdbcType=VARCHAR}, #{accesskeyid,jdbcType=VARCHAR}, #{fileid,jdbcType=VARCHAR}, 
-      #{url,jdbcType=VARCHAR}, #{createUser,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateUser,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{videoName,jdbcType=VARCHAR}, 
-      #{bak1,jdbcType=VARCHAR}, #{bak2,jdbcType=VARCHAR}, #{bak3,jdbcType=VARCHAR})
+    insert into video_info (video_info_id, store_datetime, bucket_name, 
+      extension_name, endpoint, success, 
+      securitytoken, accesskeysecret, storage_type, 
+      expiration, key_word, accesskeyid, 
+      file_id, duration, url, 
+      create_user, create_time, update_user, 
+      update_time, video_name, bak1, 
+      bak2, bak3)
+    values (#{videoInfoId,jdbcType=INTEGER}, #{storeDatetime,jdbcType=VARCHAR}, #{bucketName,jdbcType=VARCHAR}, 
+      #{extensionName,jdbcType=VARCHAR}, #{endpoint,jdbcType=VARCHAR}, #{success,jdbcType=TINYINT}, 
+      #{securitytoken,jdbcType=VARCHAR}, #{accesskeysecret,jdbcType=VARCHAR}, #{storageType,jdbcType=VARCHAR}, 
+      #{expiration,jdbcType=VARCHAR}, #{keyWord,jdbcType=VARCHAR}, #{accesskeyid,jdbcType=VARCHAR}, 
+      #{fileId,jdbcType=VARCHAR}, #{duration,jdbcType=BIGINT}, #{url,jdbcType=VARCHAR}, 
+      #{createUser,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{videoName,jdbcType=VARCHAR}, #{bak1,jdbcType=VARCHAR}, 
+      #{bak2,jdbcType=VARCHAR}, #{bak3,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.by.blcu.resource.dto.VideoInfo">
+  <insert id="insertSelective" parameterType="com.by.blcu.resource.dto.VideoInfo"
+          useGeneratedKeys="true"  keyProperty="videoInfoId" keyColumn="video_info_id">
     insert into video_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="videoInfoId != null">
         video_info_id,
       </if>
-      <if test="storedatetime != null">
-        storeDatetime,
+      <if test="storeDatetime != null">
+        store_datetime,
       </if>
-      <if test="bucketname != null">
-        bucketName,
+      <if test="bucketName != null">
+        bucket_name,
       </if>
-      <if test="extensionname != null">
-        extensionName,
+      <if test="extensionName != null">
+        extension_name,
       </if>
       <if test="endpoint != null">
         endpoint,
+      </if>
+      <if test="success != null">
+        success,
       </if>
       <if test="securitytoken != null">
         securitytoken,
@@ -179,8 +197,8 @@
       <if test="accesskeysecret != null">
         accesskeysecret,
       </if>
-      <if test="storagetype != null">
-        storageType,
+      <if test="storageType != null">
+        storage_type,
       </if>
       <if test="expiration != null">
         expiration,
@@ -191,8 +209,11 @@
       <if test="accesskeyid != null">
         accesskeyid,
       </if>
-      <if test="fileid != null">
-        fileId,
+      <if test="fileId != null">
+        file_id,
+      </if>
+      <if test="duration != null">
+        duration,
       </if>
       <if test="url != null">
         url,
@@ -226,17 +247,20 @@
       <if test="videoInfoId != null">
         #{videoInfoId,jdbcType=INTEGER},
       </if>
-      <if test="storedatetime != null">
-        #{storedatetime,jdbcType=VARCHAR},
+      <if test="storeDatetime != null">
+        #{storeDatetime,jdbcType=VARCHAR},
       </if>
-      <if test="bucketname != null">
-        #{bucketname,jdbcType=VARCHAR},
+      <if test="bucketName != null">
+        #{bucketName,jdbcType=VARCHAR},
       </if>
-      <if test="extensionname != null">
-        #{extensionname,jdbcType=VARCHAR},
+      <if test="extensionName != null">
+        #{extensionName,jdbcType=VARCHAR},
       </if>
       <if test="endpoint != null">
         #{endpoint,jdbcType=VARCHAR},
+      </if>
+      <if test="success != null">
+        #{success,jdbcType=TINYINT},
       </if>
       <if test="securitytoken != null">
         #{securitytoken,jdbcType=VARCHAR},
@@ -244,8 +268,8 @@
       <if test="accesskeysecret != null">
         #{accesskeysecret,jdbcType=VARCHAR},
       </if>
-      <if test="storagetype != null">
-        #{storagetype,jdbcType=VARCHAR},
+      <if test="storageType != null">
+        #{storageType,jdbcType=VARCHAR},
       </if>
       <if test="expiration != null">
         #{expiration,jdbcType=VARCHAR},
@@ -256,8 +280,11 @@
       <if test="accesskeyid != null">
         #{accesskeyid,jdbcType=VARCHAR},
       </if>
-      <if test="fileid != null">
-        #{fileid,jdbcType=VARCHAR},
+      <if test="fileId != null">
+        #{fileId,jdbcType=VARCHAR},
+      </if>
+      <if test="duration != null">
+        #{duration,jdbcType=BIGINT},
       </if>
       <if test="url != null">
         #{url,jdbcType=VARCHAR},
@@ -291,17 +318,20 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.by.blcu.resource.dto.VideoInfo">
     update video_info
     <set>
-      <if test="storedatetime != null">
-        storeDatetime = #{storedatetime,jdbcType=VARCHAR},
+      <if test="storeDatetime != null">
+        store_datetime = #{storeDatetime,jdbcType=VARCHAR},
       </if>
-      <if test="bucketname != null">
-        bucketName = #{bucketname,jdbcType=VARCHAR},
+      <if test="bucketName != null">
+        bucket_name = #{bucketName,jdbcType=VARCHAR},
       </if>
-      <if test="extensionname != null">
-        extensionName = #{extensionname,jdbcType=VARCHAR},
+      <if test="extensionName != null">
+        extension_name = #{extensionName,jdbcType=VARCHAR},
       </if>
       <if test="endpoint != null">
         endpoint = #{endpoint,jdbcType=VARCHAR},
+      </if>
+      <if test="success != null">
+        success = #{success,jdbcType=TINYINT},
       </if>
       <if test="securitytoken != null">
         securitytoken = #{securitytoken,jdbcType=VARCHAR},
@@ -309,8 +339,8 @@
       <if test="accesskeysecret != null">
         accesskeysecret = #{accesskeysecret,jdbcType=VARCHAR},
       </if>
-      <if test="storagetype != null">
-        storageType = #{storagetype,jdbcType=VARCHAR},
+      <if test="storageType != null">
+        storage_type = #{storageType,jdbcType=VARCHAR},
       </if>
       <if test="expiration != null">
         expiration = #{expiration,jdbcType=VARCHAR},
@@ -321,8 +351,11 @@
       <if test="accesskeyid != null">
         accesskeyid = #{accesskeyid,jdbcType=VARCHAR},
       </if>
-      <if test="fileid != null">
-        fileId = #{fileid,jdbcType=VARCHAR},
+      <if test="fileId != null">
+        file_id = #{fileId,jdbcType=VARCHAR},
+      </if>
+      <if test="duration != null">
+        duration = #{duration,jdbcType=BIGINT},
       </if>
       <if test="url != null">
         url = #{url,jdbcType=VARCHAR},
@@ -356,17 +389,19 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.by.blcu.resource.dto.VideoInfo">
     update video_info
-    set storeDatetime = #{storedatetime,jdbcType=VARCHAR},
-      bucketName = #{bucketname,jdbcType=VARCHAR},
-      extensionName = #{extensionname,jdbcType=VARCHAR},
+    set store_datetime = #{storeDatetime,jdbcType=VARCHAR},
+      bucket_name = #{bucketName,jdbcType=VARCHAR},
+      extension_name = #{extensionName,jdbcType=VARCHAR},
       endpoint = #{endpoint,jdbcType=VARCHAR},
+      success = #{success,jdbcType=TINYINT},
       securitytoken = #{securitytoken,jdbcType=VARCHAR},
       accesskeysecret = #{accesskeysecret,jdbcType=VARCHAR},
-      storageType = #{storagetype,jdbcType=VARCHAR},
+      storage_type = #{storageType,jdbcType=VARCHAR},
       expiration = #{expiration,jdbcType=VARCHAR},
       key_word = #{keyWord,jdbcType=VARCHAR},
       accesskeyid = #{accesskeyid,jdbcType=VARCHAR},
-      fileId = #{fileid,jdbcType=VARCHAR},
+      file_id = #{fileId,jdbcType=VARCHAR},
+      duration = #{duration,jdbcType=BIGINT},
       url = #{url,jdbcType=VARCHAR},
       create_user = #{createUser,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},

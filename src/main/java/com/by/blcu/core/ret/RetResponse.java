@@ -32,4 +32,16 @@ public class RetResponse {
    public static <T> RetResult<T> makeRsp(T data,long total){
       return new RetResult<T>().setCode(RetCode.SUCCESS).setData(data).setTotal(total);
    }
-}
+
+   public static <T> AutoCheckRetResponse makeAutoCheckRetResponse(int code,String msg,String dataId,String taskId,T results){
+      AutoCheckRetResponse<T> tAutoCheckRetResponse = new AutoCheckRetResponse<>();
+      tAutoCheckRetResponse.setCode(code);
+      tAutoCheckRetResponse.setMsg(msg);
+      tAutoCheckRetResponse.setTaskId(taskId);
+      if(null!=dataId)
+         tAutoCheckRetResponse.setDataId(dataId);
+      if(null!=results)
+         tAutoCheckRetResponse.setResults(results);
+      return tAutoCheckRetResponse;
+   }
+ }

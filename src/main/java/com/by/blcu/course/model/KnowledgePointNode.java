@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Data
-@ApiModel(value = "目录节点")
+@ApiModel(value = "KnowledgePointNode",description = "目录节点")
 public class KnowledgePointNode implements Serializable {
 
     private static final long serialVersionUID = 9083701279240122528L;
@@ -21,6 +21,9 @@ public class KnowledgePointNode implements Serializable {
 
     @ApiModelProperty(value = "主键id")
     private Integer id;
+
+    @ApiModelProperty("目录状态")
+    private Integer catalogStatus;
 
     @ApiModelProperty(value = "子节点")
     private List<KnowledgePointNode> nodes;

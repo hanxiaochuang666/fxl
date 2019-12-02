@@ -1,37 +1,49 @@
 package com.by.blcu.mall.vo;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+import javax.persistence.Column;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-
-public class CourseCategoryInfoVo implements Comparable<CourseCategoryInfoVo>{
+@ApiModel(value = "课程分类对象")
+public class CourseCategoryInfoVo implements Serializable {
+    private static final long serialVersionUID = 4619358193363971823L;
     /**
      * 课程分类id
      */
+    @ApiModelProperty(value = "主键id")
     private String ccId;
 
     /**
      * 分类名称
      */
+    @ApiModelProperty(value = "分类名")
     private String ccName;
 
     /**
      * 父分类id
      */
+    @ApiModelProperty(value = "父分类id")
     private String parentId;
 
     /**
      * 状态(删除：0，正常：1)
      */
+    @ApiModelProperty(value = "是否删除")
     private Integer ccStatus;
 
     /**
      * 顺序
      */
+    @ApiModelProperty(value = "顺序")
     private Integer ccSort;
 
     /**
      * 创建时间
      */
+    @ApiModelProperty(value = "创建时间")
     private Date ccCreateTime;
 
     public List<CourseCategoryInfoVo> getChildren() {
@@ -45,8 +57,14 @@ public class CourseCategoryInfoVo implements Comparable<CourseCategoryInfoVo>{
     /**
      * 创建人
      */
-
+    @ApiModelProperty(value = "创建人")
     private String ccCreator;
+
+    /**
+     * 目录级别
+     */
+    @ApiModelProperty(value = "目录级别")
+    private Integer level;
 
     private List<CourseCategoryInfoVo> children;
 
@@ -176,8 +194,11 @@ public class CourseCategoryInfoVo implements Comparable<CourseCategoryInfoVo>{
         this.ccCreator = ccCreator == null ? null : ccCreator.trim();
     }
 
-    @Override
-    public int compareTo(CourseCategoryInfoVo o) {
-        return this.getCcSort().compareTo(o.getCcSort());
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 }

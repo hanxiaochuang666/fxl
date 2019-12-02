@@ -38,7 +38,7 @@ public class UploadActionUtil {
                   // String tempName="demo"+fileTyps;
                   String tempName = UUID.randomUUID().toString() + fileTyps;
                   // 创建文件夹
-                  String folderPath = ProjectConstant.SAVEFILEPATH + File.separator + folderName();
+                  String folderPath = ProjectConstant.Mall.SAVEFILEPATH + File.separator + folderName();
                   File fileFolder = new File(folderPath);
                   if (!fileFolder.exists() && !fileFolder.isDirectory()) {
                      fileFolder.mkdir();
@@ -46,8 +46,8 @@ public class UploadActionUtil {
                   File uploadFile = new File(folderPath + File.separator + tempName);
                   file.transferTo(uploadFile);
                   myFileName = folderName() + File.separator + tempName;
-                  //list.add(ProjectConstant.SAVEFILEPATH + "//" + myFileName);
-                  map.put("filePath",ProjectConstant.SAVEFILEPATH + "//" + myFileName);
+                  //list.add(ProjectConstant.Mall.SAVEFILEPATH + "//" + myFileName);
+                  map.put("filePath",ProjectConstant.Mall.SAVEFILEPATH + "//" + myFileName);
 
                }
             }

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.by.blcu.manager.dao.ManagerPermissionMapper">
+  <resultMap id="BaseResultMap" type="com.by.blcu.manager.model.ManagerPermission">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="permission_id" jdbcType="VARCHAR" property="permissionId" />
+    <result column="menu_name" jdbcType="VARCHAR" property="menuName" />
+    <result column="menu_code" jdbcType="VARCHAR" property="menuCode" />
+    <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+    <result column="class_layer" jdbcType="INTEGER" property="classLayer" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="is_system" jdbcType="BIT" property="isSystem" />
+    <result column="is_display" jdbcType="BIT" property="isDisplay" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="perms" jdbcType="VARCHAR" property="perms" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="modify_by" jdbcType="VARCHAR" property="modifyBy" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    permission_id, menu_name, menu_code, parent_id, class_layer, type, is_system, is_display, url,
+    perms, icon, status, sort, is_deleted, note, create_time, create_by, modify_time,
+    modify_by
+  </sql>
+  <sql id="Base_Model_Equ_And">
+    (is_deleted is not true)
+    <!-- 字段 -->
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(status)">
+      and status = #{status,jdbcType=INTEGER}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(type)">
+      and `type` = #{type,jdbcType=INTEGER}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrFalse(isSystem)">
+      and is_system = #{isSystem,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrFalse(isDisplay)">
+      and is_display = #{isDisplay,jdbcType=BIT}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(permissionId)">
+      and permission_id = #{permissionId,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(menuName)">
+      and menu_name = #{menuName,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(menuCode)">
+      and menu_code = #{menuCode,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(parentId)">
+      and parent_id = #{parentId,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(url)">
+      and url = #{url,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(perms)">
+      and perms = #{perms,jdbcType=BIT}
+    </if>
+    <!-- 列表 -->
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(permissionIdList)">
+      and permission_id in
+      <foreach collection="permissionIdList" index="index" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+  </sql>
+  <sql id="Base_Model_Like_And">
+    (is_deleted is not true)
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(status)">
+      and status = #{status,jdbcType=INTEGER}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(type)">
+      and `type` = #{type,jdbcType=INTEGER}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrFalse(isSystem)">
+      and is_system = #{isSystem,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrFalse(isDisplay)">
+      and is_display = #{isDisplay,jdbcType=BIT}
+    </if>
+  </sql>
+  <sql id="Base_Select_Order">
+    order by sort asc, create_time desc
+  </sql>
+
+  <!-- 基本操作 -->
+  <select id="findPermissionEquAnd" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from manager_permission
+    <where>
+      <include refid="Base_Model_Equ_And"/>
+    </where>
+    <include refid="Base_Select_Order"/>
+  </select>
+  <select id="findPermissionList" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from manager_permission
+    <where>
+      <include refid="Base_Model_Like_And"/>
+    </where>
+    <include refid="Base_Select_Order"/>
+  </select>
+
+  <update id="deletePermissionById" parameterType="java.util.Map">
+    update manager_permission
+    set is_deleted=1, modify_time=#{modifyTime}, modify_by=#{modifyBy}
+    where permission_id in
+    <foreach collection="permissionIdList" open="(" close=")" separator="," item="item">
+      #{item,jdbcType=INTEGER}
+    </foreach>
+  </update>
+
+  <select id="findLevelAndParent" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from manager_permission
+    <where>
+      (is_deleted is not true)
+      <trim prefix=" and (" prefixOverrides="or" suffix=")">
+        <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(parentId)">
+          parent_id = #{parentId,jdbcType=VARCHAR}
+        </if>
+        <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(permissionId)">
+          permission_id = #{permissionId,jdbcType=VARCHAR}
+        </if>
+      </trim>
+    </where>
+  </select>
+
+  <select id="findAccountPermission" parameterType="com.by.blcu.manager.model.sql.InputPermission" resultType="java.lang.String">
+    select m.*  from manager_account a
+    left join manager_account_role_r  a_r on a.account_id = a_r.account_id
+    left join manager_role r on a_r.role_id = r.role_id
+    left join manager_role_permission_r r_m on r.role_id = r_m.role_id
+    left join manager_permission m on r_m.permission_id = m.permission_id
+    where a.status=1  and a.is_deleted is not true and  r.status=1 and  r.is_deleted is not true and m.is_deleted is not true
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(accountId)">
+      and a.account_id = #{accountId,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(userId)">
+      and a.user_id = #{userId,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(userName)">
+      and a.user_name = #{userName,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(roleId)">
+      and r.role_id = #{roleId,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(orgCode)">
+      and a.org_code = #{orgCode,jdbcType=VARCHAR}
+    </if>
+  </select>
+
+  <!-- 检查验证 -->
+  <select id="findRExist" parameterType="com.by.blcu.manager.model.sql.InputPermission" resultType="java.lang.Integer">
+    select count(1) from manager_role_permission_r r_p
+    left join manager_permission p on r_p.permission_id=p.permission_id
+    where p.is_deleted is not true
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(permissionId)">
+      and p.permission_id=#{permissionId,jdbcType=VARCHAR}
+    </if>
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(menuName)">
+      and p.menu_name=#{menuName,jdbcType=VARCHAR}
+    </if>
+    <!-- 列表 -->
+    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(permissionIdList)">
+      and p.permission_id in
+      <foreach collection="permissionIdList" index="index" item="item" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+  </select>
+
+  </mapper>

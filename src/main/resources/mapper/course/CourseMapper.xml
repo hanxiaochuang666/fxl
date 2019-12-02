@@ -4,21 +4,26 @@
   <resultMap id="BaseResultMap" type="com.by.blcu.course.dto.Course">
     <id column="course_id" jdbcType="INTEGER" property="courseId" />
     <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="category_one" jdbcType="INTEGER" property="categoryOne" />
+    <result column="category_one" jdbcType="VARCHAR" property="categoryOne" />
     <result column="status" jdbcType="INTEGER" property="status" />
-    <result column="category_two" jdbcType="INTEGER" property="categoryTwo" />
-    <result column="org_id" jdbcType="INTEGER" property="orgId" />
+    <result column="category_two" jdbcType="VARCHAR" property="categoryTwo" />
+    <result column="org_code" jdbcType="INTEGER" property="orgCode" />
+    <result column="commit_time" jdbcType="TIMESTAMP" property="commitTime" />
+    <result column="examine_user" jdbcType="INTEGER" property="examineUser" />
+    <result column="examine_time" jdbcType="TIMESTAMP" property="examineTime" />
+    <result column="examine_context" jdbcType="VARCHAR" property="examineContext" />
     <result column="create_user" jdbcType="INTEGER" property="createUser" />
-    <result column="create_time" jdbcType="DATE" property="createTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_user" jdbcType="INTEGER" property="updateUser" />
-    <result column="update_time" jdbcType="DATE" property="updateTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="bak1" jdbcType="VARCHAR" property="bak1" />
     <result column="bak2" jdbcType="VARCHAR" property="bak2" />
     <result column="bak3" jdbcType="VARCHAR" property="bak3" />
   </resultMap>
   <sql id="Base_Column_List">
-    course_id, name, category_one, status, category_two, org_id, create_user, create_time, 
-    update_user, update_time, bak1, bak2, bak3
+    course_id, name, category_one, status, category_two, org_code, commit_time,examine_user, examine_time,
+    examine_context, create_user, create_time, update_user, update_time, bak1, bak2, 
+    bak3
   </sql>
   <sql id="BaseWhere">
     	<if test="!@org.springframework.util.StringUtils@isEmpty(entityKeyValues)">
@@ -37,31 +42,55 @@
 			and course_id=#{courseId,jdbcType=INTEGER}
 		</if>
 		<if test="!@org.springframework.util.StringUtils@isEmpty(name)">
-			and name=#{name,jdbcType=VARCHAR}
+			and name like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
 		</if>
+        <if test="!@org.springframework.util.StringUtils@isEmpty(nameReal)">
+              and name =#{nameReal,jdbcType=VARCHAR}
+        </if>
 		<if test="!@org.springframework.util.StringUtils@isEmpty(categoryOne)">
-			and category_one=#{categoryOne,jdbcType=INTEGER}
+			and category_one=#{categoryOne,jdbcType=VARCHAR}
 		</if>
 		<if test="!@org.springframework.util.StringUtils@isEmpty(status)">
 			and status=#{status,jdbcType=INTEGER}
 		</if>
+      <if test="!@org.springframework.util.StringUtils@isEmpty(minStatus)">
+          and status >=#{minStatus,jdbcType=INTEGER}
+      </if>
 		<if test="!@org.springframework.util.StringUtils@isEmpty(categoryTwo)">
-			and category_two=#{categoryTwo,jdbcType=INTEGER}
+			and category_two=#{categoryTwo,jdbcType=VARCHAR}
 		</if>
-		<if test="!@org.springframework.util.StringUtils@isEmpty(orgId)">
-			and org_id=#{orgId,jdbcType=INTEGER}
+		<if test="!@org.springframework.util.StringUtils@isEmpty(orgCode)">
+			and org_Code=#{orgCode,jdbcType=VARCHAR}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(examineUser)">
+			and examine_user=#{examineUser,jdbcType=INTEGER}
+		</if>
+        <if test="!@org.springframework.util.StringUtils@isEmpty(commitTime)">
+            and commit_time=#{commitTime,jdbcType=TIMESTAMP}
+        </if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(examineTime)">
+			and examine_time=#{examineTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="!@org.springframework.util.StringUtils@isEmpty(examineContext)">
+			and examine_context=#{examineContext,jdbcType=VARCHAR}
 		</if>
 		<if test="!@org.springframework.util.StringUtils@isEmpty(createUser)">
 			and create_user=#{createUser,jdbcType=INTEGER}
 		</if>
+          <if test="!@org.springframework.util.StringUtils@isEmpty(createUsers)">
+              and course_id in
+              <foreach item="item" index="index" collection="createUsers" open="(" separator="," close=")">
+                  #{item}
+              </foreach>
+          </if>
 		<if test="!@org.springframework.util.StringUtils@isEmpty(createTime)">
-			and create_time=#{createTime,jdbcType=DATE}
+			and create_time=#{createTime,jdbcType=TIMESTAMP}
 		</if>
 		<if test="!@org.springframework.util.StringUtils@isEmpty(updateUser)">
 			and update_user=#{updateUser,jdbcType=INTEGER}
 		</if>
 		<if test="!@org.springframework.util.StringUtils@isEmpty(updateTime)">
-			and update_time=#{updateTime,jdbcType=DATE}
+			and update_time=#{updateTime,jdbcType=TIMESTAMP}
 		</if>
 		<if test="!@org.springframework.util.StringUtils@isEmpty(bak1)">
 			and bak1=#{bak1,jdbcType=VARCHAR}
@@ -72,6 +101,9 @@
 		<if test="!@org.springframework.util.StringUtils@isEmpty(bak3)">
 			and bak3=#{bak3,jdbcType=VARCHAR}
 		</if>
+        <if test="true">
+            and delete_at is null
+        </if>
 
   </sql>
   <select id="selectCount" parameterType="java.util.Map" resultType="java.lang.Long">
@@ -108,17 +140,20 @@
   </delete>
   <insert id="insert" parameterType="com.by.blcu.course.dto.Course">
     insert into course (course_id, name, category_one, 
-      status, category_two, org_id, 
+      status, category_two, org_code,commit_time,
+      examine_user, examine_time, examine_context, 
       create_user, create_time, update_user, 
       update_time, bak1, bak2, 
       bak3)
-    values (#{courseId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{categoryOne,jdbcType=INTEGER}, 
-      #{status,jdbcType=INTEGER}, #{categoryTwo,jdbcType=INTEGER}, #{orgId,jdbcType=INTEGER}, 
-      #{createUser,jdbcType=INTEGER}, #{createTime,jdbcType=DATE}, #{updateUser,jdbcType=INTEGER}, 
-      #{updateTime,jdbcType=DATE}, #{bak1,jdbcType=VARCHAR}, #{bak2,jdbcType=VARCHAR}, 
+    values (#{courseId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{categoryOne,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{categoryTwo,jdbcType=VARCHAR}, #{orgCode,jdbcType=VARCHAR},#{commitTime,jdbcType=TIMESTAMP},
+      #{examineUser,jdbcType=INTEGER}, #{examineTime,jdbcType=TIMESTAMP}, #{examineContext,jdbcType=VARCHAR}, 
+      #{createUser,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{bak1,jdbcType=VARCHAR}, #{bak2,jdbcType=VARCHAR}, 
       #{bak3,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.by.blcu.course.dto.Course">
+  <insert id="insertSelective" parameterType="com.by.blcu.course.dto.Course"
+          useGeneratedKeys="true"  keyProperty="courseId">
     insert into course
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="courseId != null">
@@ -136,8 +171,20 @@
       <if test="categoryTwo != null">
         category_two,
       </if>
-      <if test="orgId != null">
-        org_id,
+      <if test="orgCode != null">
+        org_Code,
+      </if>
+      <if test="commitTime != null">
+          commit_time,
+      </if>
+      <if test="examineUser != null">
+        examine_user,
+      </if>
+      <if test="examineTime != null">
+        examine_time,
+      </if>
+      <if test="examineContext != null">
+        examine_context,
       </if>
       <if test="createUser != null">
         create_user,
@@ -169,28 +216,40 @@
         #{name,jdbcType=VARCHAR},
       </if>
       <if test="categoryOne != null">
-        #{categoryOne,jdbcType=INTEGER},
+        #{categoryOne,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
       </if>
       <if test="categoryTwo != null">
-        #{categoryTwo,jdbcType=INTEGER},
+        #{categoryTwo,jdbcType=VARCHAR},
       </if>
-      <if test="orgId != null">
-        #{orgId,jdbcType=INTEGER},
+      <if test="orgCode != null">
+        #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="commitTime != null">
+        #{commitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="examineUser != null">
+        #{examineUser,jdbcType=INTEGER},
+      </if>
+      <if test="examineTime != null">
+        #{examineTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="examineContext != null">
+        #{examineContext,jdbcType=VARCHAR},
       </if>
       <if test="createUser != null">
         #{createUser,jdbcType=INTEGER},
       </if>
       <if test="createTime != null">
-        #{createTime,jdbcType=DATE},
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateUser != null">
         #{updateUser,jdbcType=INTEGER},
       </if>
       <if test="updateTime != null">
-        #{updateTime,jdbcType=DATE},
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="bak1 != null">
         #{bak1,jdbcType=VARCHAR},
@@ -210,28 +269,40 @@
         name = #{name,jdbcType=VARCHAR},
       </if>
       <if test="categoryOne != null">
-        category_one = #{categoryOne,jdbcType=INTEGER},
+        category_one = #{categoryOne,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
       </if>
       <if test="categoryTwo != null">
-        category_two = #{categoryTwo,jdbcType=INTEGER},
+        category_two = #{categoryTwo,jdbcType=VARCHAR},
       </if>
-      <if test="orgId != null">
-        org_id = #{orgId,jdbcType=INTEGER},
+      <if test="orgCode != null">
+        org_Code = #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="commitTime != null">
+          commit_time = #{commitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="examineUser != null">
+        examine_user = #{examineUser,jdbcType=INTEGER},
+      </if>
+      <if test="examineTime != null">
+        examine_time = #{examineTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="examineContext != null">
+        examine_context = #{examineContext,jdbcType=VARCHAR},
       </if>
       <if test="createUser != null">
         create_user = #{createUser,jdbcType=INTEGER},
       </if>
       <if test="createTime != null">
-        create_time = #{createTime,jdbcType=DATE},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateUser != null">
         update_user = #{updateUser,jdbcType=INTEGER},
       </if>
       <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=DATE},
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="bak1 != null">
         bak1 = #{bak1,jdbcType=VARCHAR},
@@ -248,17 +319,26 @@
   <update id="updateByPrimaryKey" parameterType="com.by.blcu.course.dto.Course">
     update course
     set name = #{name,jdbcType=VARCHAR},
-      category_one = #{categoryOne,jdbcType=INTEGER},
+      category_one = #{categoryOne,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
-      category_two = #{categoryTwo,jdbcType=INTEGER},
-      org_id = #{orgId,jdbcType=INTEGER},
+      category_two = #{categoryTwo,jdbcType=VARCHAR},
+      org_Code = #{orgCode,jdbcType=VARCHAR},
+      commit_time = #{commitTime,jdbcType=TIMESTAMP},
+      examine_user = #{examineUser,jdbcType=INTEGER},
+      examine_time = #{examineTime,jdbcType=TIMESTAMP},
+      examine_context = #{examineContext,jdbcType=VARCHAR},
       create_user = #{createUser,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=DATE},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
       update_user = #{updateUser,jdbcType=INTEGER},
-      update_time = #{updateTime,jdbcType=DATE},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
       bak1 = #{bak1,jdbcType=VARCHAR},
       bak2 = #{bak2,jdbcType=VARCHAR},
       bak3 = #{bak3,jdbcType=VARCHAR}
     where course_id = #{courseId,jdbcType=INTEGER}
   </update>
+    <update id="logicDeleteByPrimaryKey" parameterType="java.lang.Integer">
+        update course
+        set delete_at = sysdate()
+        where course_id = #{courseId,jdbcType=INTEGER}
+    </update>
 </mapper>

@@ -1,63 +1,811 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.by.blcu.mall.dao.CommodityInfoMapper">
-  <resultMap id="BaseResultMap" type="com.by.blcu.mall.model.CommodityInfo">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="commodity_id" jdbcType="VARCHAR" property="commodityId" />
-    <result column="cc_id" jdbcType="VARCHAR" property="ccId" />
-    <result column="course_name" jdbcType="VARCHAR" property="courseName" />
-    <result column="commodity_status" jdbcType="INTEGER" property="commodityStatus" />
-    <result column="price" jdbcType="DOUBLE" property="price" />
-    <result column="status" jdbcType="INTEGER" property="status" />
-    <result column="validity" jdbcType="INTEGER" property="validity" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="creator" jdbcType="VARCHAR" property="creator" />
-    <result column="introduce" jdbcType="VARCHAR" property="introduce" />
-    <result column="preferential" jdbcType="DOUBLE" property="preferential" />
-    <result column="persion_num" jdbcType="INTEGER" property="persionNum" />
-    <result column="class_time" jdbcType="INTEGER" property="classTime" />
-    <result column="open_class_time" jdbcType="DATE" property="openClassTime" />
-    <result column="lesson_type" jdbcType="INTEGER" property="lessonType" />
-    <result column="lecturer" jdbcType="VARCHAR" property="lecturer" />
-    <result column="audition_video_path" jdbcType="VARCHAR" property="auditionVideoPath" />
-    <result column="picture_path" jdbcType="VARCHAR" property="picturePath" />
-    <result column="contact_info" jdbcType="VARCHAR" property="contactInfo" />
-    <result column="aoto_mail" jdbcType="INTEGER" property="aotoMail" />
-    <result column="course_introduce" jdbcType="VARCHAR" property="courseIntroduce" />
-    <result column="course_id" jdbcType="VARCHAR" property="courseId" />
-    <result column="course_type" jdbcType="INTEGER" property="courseType" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.by.blcu.mall.model.CommodityInfo">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="commodity_id" jdbcType="VARCHAR" property="commodityId"/>
+        <result column="cc_id" jdbcType="VARCHAR" property="ccId"/>
+        <result column="course_name" jdbcType="VARCHAR" property="courseName"/>
+        <result column="commodity_status" jdbcType="INTEGER" property="commodityStatus"/>
+        <result column="price" jdbcType="DOUBLE" property="price"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="validity" jdbcType="INTEGER" property="validity"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="creator" jdbcType="VARCHAR" property="creator"/>
+        <result column="introduce" jdbcType="VARCHAR" property="introduce"/>
+        <result column="preferential" jdbcType="DOUBLE" property="preferential"/>
+        <result column="persion_num" jdbcType="INTEGER" property="persionNum"/>
+        <result column="class_time" jdbcType="INTEGER" property="classTime"/>
+        <result column="open_class_time" jdbcType="DATE" property="openClassTime"/>
+        <result column="lesson_type" jdbcType="INTEGER" property="lessonType"/>
+        <!--<result column="lecturer" jdbcType="VARCHAR" property="lecturer"/>-->
+        <result column="audition_video_path" jdbcType="VARCHAR" property="auditionVideoPath"/>
+        <result column="picture_path" jdbcType="VARCHAR" property="picturePath"/>
+        <result column="contact_info" jdbcType="VARCHAR" property="contactInfo"/>
+        <result column="aoto_mail" jdbcType="INTEGER" property="aotoMail"/>
+        <result column="course_introduce" jdbcType="VARCHAR" property="courseIntroduce"/>
+        <result column="course_id" jdbcType="VARCHAR" property="courseId"/>
+        <result column="course_type" jdbcType="INTEGER" property="courseType"/>
+        <result column="sort" jdbcType="INTEGER" property="sort"/>
+        <result column="isRecommend" jdbcType="INTEGER" property="isRecommend"/>
+        <result column="org_code" jdbcType="VARCHAR" property="orgCode"/>
+        <result column="recommend_sort" jdbcType="INTEGER" property="recommendSort"/>
+        <result column="standard" jdbcType="DOUBLE" property="standard"/>
+        <result column="is_view" jdbcType="INTEGER" property="isView"/>
+        <result column="is_packing" jdbcType="INTEGER" property="isPacking"/>
+        <result column="meal_type" jdbcType="INTEGER" property="mealType"/>
 
-  <sql id="Base_Column_List">
-  commodity_id, cc_id, course_name, commodity_status, price, status, validity, create_time, creator, introduce, preferential,persion_num,class_time,open_class_time,lesson_type,lecturer,audition_video_path,picture_path,contact_info,aoto_mail,course_introduce,course_id,course_type
+    </resultMap>
+
+    <resultMap id="BaseResultVoMap" type="com.by.blcu.mall.vo.CommodityInfoVo">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="commodity_id" jdbcType="VARCHAR" property="commodityId" />
+        <result column="cc_id" jdbcType="VARCHAR" property="ccId" />
+        <result column="cc_name" jdbcType="VARCHAR" property="ccName" />
+        <result column="course_name" jdbcType="VARCHAR" property="courseName" />
+        <result column="commodity_status" jdbcType="INTEGER" property="commodityStatus" />
+        <result column="price" jdbcType="DOUBLE" property="price" />
+        <result column="status" jdbcType="INTEGER" property="status" />
+        <result column="validity" jdbcType="INTEGER" property="validity" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="creator" jdbcType="VARCHAR" property="creator" />
+        <result column="introduce" jdbcType="VARCHAR" property="introduce" />
+        <result column="preferential" jdbcType="DOUBLE" property="preferential" />
+        <result column="persion_num" jdbcType="INTEGER" property="persionNum" />
+        <result column="class_time" jdbcType="INTEGER" property="classTime" />
+        <result column="open_class_time" jdbcType="DATE" property="openClassTime" />
+        <result column="lesson_type" jdbcType="INTEGER" property="lessonType" />
+        <!--<result column="lecturer" jdbcType="VARCHAR" property="lecturer" />-->
+        <result column="audition_video_path" jdbcType="VARCHAR" property="auditionVideoPath" />
+        <result column="picture_path" jdbcType="VARCHAR" property="picturePath" />
+        <result column="contact_info" jdbcType="VARCHAR" property="contactInfo" />
+        <result column="aoto_mail" jdbcType="INTEGER" property="aotoMail" />
+        <result column="course_introduce" jdbcType="VARCHAR" property="courseIntroduce" />
+        <result column="course_id" jdbcType="VARCHAR" property="courseId" />
+        <result column="course_type" jdbcType="INTEGER" property="courseType" />
+        <result column="sort" jdbcType="INTEGER" property="sort" />
+        <result column="isRecommend" jdbcType="INTEGER" property="isRecommend" />
+        <result column="org_code" jdbcType="VARCHAR" property="orgCode" />
+        <result column="recommend_sort" jdbcType="INTEGER" property="recommendSort"/>
+        <result column="standard" jdbcType="DOUBLE" property="standard"/>
+        <result column="is_view" jdbcType="INTEGER" property="isView"/>
+        <result column="is_packing" jdbcType="INTEGER" property="isPacking"/>
+        <result column="meal_type" jdbcType="INTEGER" property="mealType"/>
+        <collection property="commodityLecturerList" ofType="com.by.blcu.mall.model.CommodityLecturer">
+            <id column="cl_id" jdbcType="VARCHAR" property="clId"/>
+            <result column="commodity_id" jdbcType="VARCHAR" property="commodityId"/>
+            <result column="lecturer" jdbcType="VARCHAR" property="lecturer"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="BaseResultVoPageMap" type="com.by.blcu.mall.vo.CommodityInfoVo">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="commodity_id" jdbcType="VARCHAR" property="commodityId" />
+        <result column="cc_id" jdbcType="VARCHAR" property="ccId" />
+        <result column="cc_name" jdbcType="VARCHAR" property="ccName" />
+        <result column="course_name" jdbcType="VARCHAR" property="courseName" />
+        <result column="commodity_status" jdbcType="INTEGER" property="commodityStatus" />
+        <result column="price" jdbcType="DOUBLE" property="price" />
+        <result column="status" jdbcType="INTEGER" property="status" />
+        <result column="validity" jdbcType="INTEGER" property="validity" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="creator" jdbcType="VARCHAR" property="creator" />
+        <result column="introduce" jdbcType="VARCHAR" property="introduce" />
+        <result column="preferential" jdbcType="DOUBLE" property="preferential" />
+        <result column="persion_num" jdbcType="INTEGER" property="persionNum" />
+        <result column="class_time" jdbcType="INTEGER" property="classTime" />
+        <result column="open_class_time" jdbcType="DATE" property="openClassTime" />
+        <result column="lesson_type" jdbcType="INTEGER" property="lessonType" />
+        <!--<result column="lecturer" jdbcType="VARCHAR" property="lecturer" />-->
+        <result column="audition_video_path" jdbcType="VARCHAR" property="auditionVideoPath" />
+        <result column="picture_path" jdbcType="VARCHAR" property="picturePath" />
+        <result column="contact_info" jdbcType="VARCHAR" property="contactInfo" />
+        <result column="aoto_mail" jdbcType="INTEGER" property="aotoMail" />
+        <result column="course_introduce" jdbcType="VARCHAR" property="courseIntroduce" />
+        <result column="course_id" jdbcType="VARCHAR" property="courseId" />
+        <result column="course_type" jdbcType="INTEGER" property="courseType" />
+        <result column="sort" jdbcType="INTEGER" property="sort" />
+        <result column="isRecommend" jdbcType="INTEGER" property="isRecommend" />
+        <result column="org_code" jdbcType="VARCHAR" property="orgCode" />
+        <result column="recommend_sort" jdbcType="INTEGER" property="recommendSort"/>
+        <result column="standard" jdbcType="DOUBLE" property="standard"/>
+        <result column="is_view" jdbcType="INTEGER" property="isView"/>
+        <result column="is_packing" jdbcType="INTEGER" property="isPacking"/>
+        <result column="meal_type" jdbcType="INTEGER" property="mealType"/>
+        <collection property="commodityLecturerList" ofType="com.by.blcu.mall.model.CommodityLecturer" javaType="java.util.List" column="commodity_id" select="queryCommodityLecturerById">
+            <id column="cl_id" jdbcType="VARCHAR" property="clId"/>
+            <result column="commodity_id" jdbcType="VARCHAR" property="commodityId"/>
+            <result column="lecturer" jdbcType="VARCHAR" property="lecturer"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="commodityLecturer" type="com.by.blcu.mall.model.CommodityLecturer">
+        <id column="cl_id" jdbcType="VARCHAR" property="clId"/>
+        <result column="commodity_id" jdbcType="VARCHAR" property="commodityId"/>
+        <result column="lecturer" jdbcType="VARCHAR" property="lecturer"/>
+    </resultMap>
+
+
+    <resultMap id="BaseResultCenterVoMap" type="com.by.blcu.mall.vo.CommodityInfoCenterVo">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="commodity_id" jdbcType="VARCHAR" property="commodityId" />
+        <result column="cc_id" jdbcType="VARCHAR" property="ccId" />
+        <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+        <result column="cc_name" jdbcType="VARCHAR" property="ccName" />
+        <result column="course_name" jdbcType="VARCHAR" property="courseName" />
+        <result column="commodity_status" jdbcType="INTEGER" property="commodityStatus" />
+        <result column="price" jdbcType="DOUBLE" property="price" />
+        <result column="status" jdbcType="INTEGER" property="status" />
+        <result column="validity" jdbcType="INTEGER" property="validity" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="creator" jdbcType="VARCHAR" property="creator" />
+        <result column="introduce" jdbcType="VARCHAR" property="introduce" />
+        <result column="preferential" jdbcType="DOUBLE" property="preferential" />
+        <result column="persion_num" jdbcType="INTEGER" property="persionNum" />
+        <result column="class_time" jdbcType="INTEGER" property="classTime" />
+        <result column="open_class_time" jdbcType="DATE" property="openClassTime" />
+        <result column="lesson_type" jdbcType="INTEGER" property="lessonType" />
+        <result column="audition_video_path" jdbcType="VARCHAR" property="auditionVideoPath" />
+        <result column="picture_path" jdbcType="VARCHAR" property="picturePath" />
+        <result column="contact_info" jdbcType="VARCHAR" property="contactInfo" />
+        <result column="aoto_mail" jdbcType="INTEGER" property="aotoMail" />
+        <result column="course_introduce" jdbcType="VARCHAR" property="courseIntroduce" />
+        <result column="course_id" jdbcType="VARCHAR" property="courseId" />
+        <result column="course_type" jdbcType="INTEGER" property="courseType" />
+        <result column="sort" jdbcType="INTEGER" property="sort" />
+        <result column="isRecommend" jdbcType="INTEGER" property="isRecommend" />
+        <result column="org_code" jdbcType="VARCHAR" property="orgCode" />
+        <result column="recommend_sort" jdbcType="INTEGER" property="recommendSort"/>
+        <result column="standard" jdbcType="DOUBLE" property="standard"/>
+        <result column="is_view" jdbcType="INTEGER" property="isView"/>
+        <result column="is_packing" jdbcType="INTEGER" property="isPacking"/>
+        <result column="meal_type" jdbcType="INTEGER" property="mealType"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+  commodity_id, cc_id, course_name, commodity_status, price, status, validity, create_time, creator, introduce, preferential,persion_num,class_time,open_class_time,lesson_type,audition_video_path,picture_path,contact_info,aoto_mail,course_introduce,course_id,course_type,sort,isRecommend,org_code,recommend_sort,standard,is_view,is_packing,meal_type
 </sql>
 
-  <select id="selectAllByCourseName" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List"/>
+    <sql id="Base_Column_List1">
+  a.commodity_id, a.cc_id,b.cc_name, a.course_name, a.commodity_status, a.price, a.status, a.validity, a.create_time, a.creator, a.introduce, a.preferential,a.persion_num,a.class_time,a.open_class_time,a.lesson_type,a.audition_video_path,a.picture_path,a.contact_info,a.aoto_mail,a.course_introduce,a.course_id,a.course_type,a.sort,a.isRecommend,a.org_code,a.recommend_sort,a.standard,a.is_view,a.is_packing,a.meal_type
+</sql>
+
+    <sql id="Base_Column_List2">
+  a.commodity_id, a.cc_id, c.lecturer, c.cl_id, b.cc_name, a.course_name, a.commodity_status, a.price, a.status, a.validity, a.create_time, a.creator, a.introduce, a.preferential,a.persion_num,a.class_time,a.open_class_time,a.lesson_type,a.audition_video_path,a.picture_path,a.contact_info,a.aoto_mail,a.course_introduce,a.course_id,a.course_type,a.sort,a.isRecommend,a.org_code,a.recommend_sort,a.standard,a.is_view,a.is_packing,a.meal_type
+</sql>
+
+    <select id="queryCommodityLecturerById" parameterType="java.lang.String" resultMap="commodityLecturer">
+    select cl_id, lecturer
+    from mall_commodity_lecturer where commodity_id = #{commodity_id}
+</select>
+
+
+    <insert id="saveCommodity" parameterType="com.by.blcu.mall.model.CommodityInfo">
+        insert into mall_commodity_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="commodityId != null">
+                commodity_id,
+            </if>
+            <if test="ccId != null">
+                cc_id,
+            </if>
+            <if test="courseName != null">
+                course_name,
+            </if>
+            <if test="commodityStatus != null">
+                commodity_status,
+            </if>
+            <if test="price != null">
+                price,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="validity != null">
+                validity,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="creator != null">
+                creator,
+            </if>
+            <if test="introduce != null">
+                introduce,
+            </if>
+            <if test="preferential != null">
+                preferential,
+            </if>
+            <if test="persionNum != null">
+                persion_num,
+            </if>
+            <if test="classTime != null">
+                class_time,
+            </if>
+            <if test="openClassTime != null">
+                open_class_time,
+            </if>
+            <if test="lessonType != null">
+                lesson_type,
+            </if>
+            <if test="auditionVideoPath != null">
+                audition_video_path,
+            </if>
+            <if test="picturePath != null">
+                picture_path,
+            </if>
+            <if test="contactInfo != null">
+                contact_info,
+            </if>
+            <if test="aotoMail != null">
+                aoto_mail,
+            </if>
+            <if test="courseId != null">
+                course_id,
+            </if>
+            <if test="courseType != null">
+                course_type,
+            </if>
+            <if test="sort != null">
+                sort,
+            </if>
+            <if test="isRecommend != null">
+                isRecommend,
+            </if>
+            <if test="orgCode != null">
+                org_code,
+            </if>
+            <if test="recommendSort != null">
+                recommend_sort,
+            </if>
+            <if test="standard != null">
+                standard,
+            </if>
+            <if test="courseIntroduce != null">
+                course_introduce,
+            </if>
+            <if test="isView!=null">
+                is_view,
+            </if>
+            <if test="isPacking!=null">
+                is_packing,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="commodityId != null">
+                #{commodityId,jdbcType=VARCHAR},
+            </if>
+            <if test="ccId != null">
+                #{ccId,jdbcType=VARCHAR},
+            </if>
+            <if test="courseName != null">
+                #{courseName,jdbcType=VARCHAR},
+            </if>
+            <if test="commodityStatus != null">
+                #{commodityStatus,jdbcType=INTEGER},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="validity != null">
+                #{validity,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="creator != null">
+                #{creator,jdbcType=VARCHAR},
+            </if>
+            <if test="introduce != null">
+                #{introduce,jdbcType=VARCHAR},
+            </if>
+            <if test="preferential != null">
+                #{preferential,jdbcType=DOUBLE},
+            </if>
+            <if test="persionNum != null">
+                #{persionNum,jdbcType=INTEGER},
+            </if>
+            <if test="classTime != null">
+                #{classTime,jdbcType=INTEGER},
+            </if>
+            <if test="openClassTime != null">
+                #{openClassTime,jdbcType=DATE},
+            </if>
+            <if test="lessonType != null">
+                #{lessonType,jdbcType=INTEGER},
+            </if>
+            <if test="auditionVideoPath != null">
+                #{auditionVideoPath,jdbcType=VARCHAR},
+            </if>
+            <if test="picturePath != null">
+                #{picturePath,jdbcType=VARCHAR},
+            </if>
+            <if test="contactInfo != null">
+                #{contactInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="aotoMail != null">
+                #{aotoMail,jdbcType=INTEGER},
+            </if>
+            <if test="courseId != null">
+                #{courseId,jdbcType=VARCHAR},
+            </if>
+            <if test="courseType != null">
+                #{courseType,jdbcType=INTEGER},
+            </if>
+            <if test="sort != null">
+                #{sort,jdbcType=INTEGER},
+            </if>
+            <if test="isRecommend != null">
+                #{isRecommend,jdbcType=INTEGER},
+            </if>
+            <if test="orgCode != null">
+                #{orgCode,jdbcType=VARCHAR},
+            </if>
+            <if test="recommendSort != null">
+                #{recommendSort,jdbcType=INTEGER},
+            </if>
+            <if test="standard != null">
+                #{standard,jdbcType=DOUBLE},
+            </if>
+            <if test="courseIntroduce != null">
+                #{courseIntroduce,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="isView!=null">
+                #{isView,jdbcType=INTEGER},
+            </if>
+            <if test="isPacking!=null">
+                #{isPacking,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectListAll" resultMap="BaseResultVoPageMap">
+        select
+        <include refid="Base_Column_List1"/>
+        from mall_commodity_info a,mall_course_category_info b
+        <where>
+            a.cc_id = b.cc_id
+            and a.status="1"
+            <if test="commodityId!=null and commodityId!=''">
+                and a.commodity_id=#{commodityId}
+            </if>
+            <if test="ccId!=null and ccId!=''">
+                and a.cc_id=#{ccId}
+            </if>
+            <if test="courseName!=null and courseName!=''">
+                and a.course_name like CONCAT(CONCAT('%','${courseName}'),'%')
+            </if>
+            <if test="commodityStatus!=null">
+                and a.commodity_status=#{commodityStatus}
+            </if>
+            <if test="lessonType!=null and lessonType!=10">
+                and a.lesson_type=#{lessonType}
+            </if>
+            <if test="lessonType!=null and lessonType==10">
+                and a.lesson_type!="1"
+            </if>
+            <if test="courseType!=null">
+                and a.course_type=#{courseType}
+            </if>
+            <if test="orgCode!=null and orgCode!=''">
+                and a.org_code=#{orgCode}
+            </if>
+            <if test="isView!=null">
+                and a.is_view=#{isView}
+            </if>
+            <if test="isPacking!=null">
+                and a.is_packing=#{isPacking}
+            </if>
+            order by a.create_time desc,a.sort ASC
+        </where>
+    </select>
+
+    <select id="checkCourseName" resultMap="BaseResultVoPageMap">
+        select
+        <include refid="Base_Column_List1"/>
+        from mall_commodity_info a,mall_course_category_info b
+        <where>
+            a.cc_id = b.cc_id
+            and a.status="1"
+            and a.cc_id=#{ccId}
+            and a.course_name=#{courseName}
+            order by a.create_time desc,a.sort ASC
+        </where>
+    </select>
+
+    <select id="selectListByCommodityInfoCenterVo" resultMap="BaseResultVoPageMap">
+        select
+        <include refid="Base_Column_List1"/>
+        from mall_commodity_info a,mall_course_category_info b
+        <where>
+            a.cc_id = b.cc_id and a.commodity_status="1"
+            and a.status="1"
+            and a.is_view="1"
+            <if test="courseName!=null and courseName!=''">
+                and a.course_name like CONCAT(CONCAT('%','${courseName}'),'%')
+            </if>
+            <if test="parentId!=null and parentId!=''">
+                and b.parent_id=#{parentId}
+            </if>
+            <if test="lessonType!=null">
+                and a.lesson_type=#{lessonType}
+            </if>
+            <if test="orgCode!=null and orgCode!=''">
+                and a.org_code=#{orgCode}
+            </if>
+        </where>
+        order by a.sort ASC
+    </select>
+
+    <select id="selectListByCommodityIdList" parameterType="java.util.List" resultMap="BaseResultVoPageMap">
+        select
+        <include refid="Base_Column_List1"/>
+        from mall_commodity_info a,mall_course_category_info b
+        <where>
+            a.cc_id = b.cc_id and a.commodity_status="1"
+            and a.status="1"
+            <if test="list!=null">
+                and a.commodity_id in
+                <foreach collection="list" open="(" close=")" separator="," item="item">
+                    #{item, jdbcType=VARCHAR}
+                </foreach>;
+            </if>
+        </where>
+    </select>
+
+    <select id="selectByCourseId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from mall_commodity_info
+        where status="1"
+        and course_id=#{courseId}
+    </select>
+
+    <select id="listByCcId" resultMap="BaseResultVoPageMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List1"/>
+        from mall_commodity_info a,mall_course_category_info b
+        where a.cc_id = b.cc_id
+        <if test="ccId!=null and ccId!=''">
+            and a.cc_id=#{ccId}
+        </if>
+        <if test="orgCode!=null and orgCode!=''">
+            and a.org_code=#{orgCode}
+        </if>
+        and a.commodity_status="1"
+        and a.status="1"
+        and a.is_view="1"
+        order by a.sort ASC,a.create_time desc
+    </select>
+
+    <select id="listByCourseName" resultMap="BaseResultVoPageMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List1"/>
+        from mall_commodity_info a,mall_course_category_info b
+        where a.cc_id = b.cc_id
+        <if test="orgCode!=null and orgCode!=''">
+            and a.org_code=#{orgCode}
+        </if>
+        <if test="courseName!=null and courseName!=''">
+            and a.course_name like CONCAT(CONCAT('%','${courseName}'),'%')
+        </if>
+        and a.commodity_status="1"
+        and a.status="1"
+        and a.is_view="1"
+        order by a.sort ASC,a.create_time desc
+    </select>
+
+    <select id="listByRecommend" resultMap="BaseResultVoMap">
+        select
+        <include refid="Base_Column_List1"/>
+        from mall_commodity_info a,mall_course_category_info b
+        where a.cc_id = b.cc_id
+        and a.isRecommend="1"
+        and a.commodity_status="1"
+        and a.status="1"
+        order by a.recommend_sort ASC,a.create_time desc
+    </select>
+
+    <select id="listByecturer" resultMap="BaseResultVoMap">
+        select
+        <include refid="Base_Column_List2"/>
+        from mall_commodity_info a,mall_course_category_info b,mall_commodity_lecturer c
+        where a.cc_id = b.cc_id
+        and a.commodity_id = c.commodity_id
+        and a.commodity_status="1"
+        and a.status="1"
+        order by a.create_time desc
+    </select>
+
+    <select id="selectByCommodityId" resultMap="BaseResultVoMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List2"/>
+        from mall_commodity_info a,mall_course_category_info b,mall_commodity_lecturer c
+        where a.cc_id = b.cc_id
+        and a.commodity_id = c.commodity_id
+        and a.commodity_id =
+        #{commodityId} and a.commodity_status="1" and a.status="1"
+    </select>
+
+    <select id="selectByCommodityIdNoCommodityStatus" resultMap="BaseResultVoMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List2"/>
+        from mall_commodity_info a,mall_course_category_info b,mall_commodity_lecturer c
+        where a.cc_id = b.cc_id
+        and a.commodity_id = c.commodity_id
+        and a.commodity_id =
+        #{commodityId} and a.status="1"
+    </select>
+
+    <select id="selectByCommodityIdNoStatus" resultMap="BaseResultVoMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List2"/>
+        from mall_commodity_info a,mall_course_category_info b,mall_commodity_lecturer c
+        where a.cc_id = b.cc_id
+        and a.commodity_id = c.commodity_id
+        and a.commodity_id =
+        #{commodityId}
+    </select>
+
+    <select id="selectEditByCommodityId" resultMap="BaseResultVoMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List2"/>
+        from mall_commodity_info a,mall_course_category_info b,mall_commodity_lecturer c
+        where a.cc_id = b.cc_id
+        and a.commodity_id = c.commodity_id
+        and a.commodity_id =
+        #{commodityId} and a.status="1"
+    </select>
+
+    <select id="selectStatusByCommodityId" resultMap="BaseResultVoMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from mall_commodity_info
+        where commodity_id = #{commodityId}
+        and status="1"
+    </select>
+
+    <select id="selectStatusByCommodityIdAndIsRecommend" resultMap="BaseResultVoMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from mall_commodity_info where commodity_id =
+        #{commodityId} and status="1" and isRecommend="0"
+    </select>
+
+
+    <select id="listByCommodityStatus" resultMap="BaseResultVoMap">
+        select
+        <include refid="Base_Column_List2"/>
+        from mall_commodity_info a,mall_course_category_info b,mall_commodity_lecturer c
+        where a.cc_id = b.cc_id
+        and a.commodity_id = c.commodity_id
+        and a.commodity_status="1"
+        and a.status="1"
+        and a.is_view="1"
+        order by create_time desc,sort ASC
+    </select>
+
+    <select id="listByCommodityStatusByOrgCode" resultMap="BaseResultVoMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List2"/>
+        from mall_commodity_info a,mall_course_category_info b,mall_commodity_lecturer c
+        where a.cc_id = b.cc_id
+        and a.commodity_id = c.commodity_id
+        and a.commodity_status="1"
+        and org_code=#{orgCode}
+        and a.status="1"
+        and a.is_view="1"
+        order by create_time desc,sort ASC
+    </select>
+
+    <select id="selectLecturerList" resultType="java.lang.String">
+    select lecturer
     from mall_commodity_info
-    <where>
-      <if test="courseName!=null">
-        and course_name like CONCAT(CONCAT('%','${courseName}'),'%')
-      </if>
-      <if test="commodityStatus!=null">
-        and commodity_status=#{commodityStatus}
-      </if>
-    </where>
   </select>
 
-  <update id="updateComStatusById" parameterType="java.lang.String">
-    update mall_commodity_info
-    <set>
-      <if test="commodityStatus!=null">commodity_status=#{commodityStatus},</if>
-    </set>
-    <where>
-      <if test="commodityId!=null">
-        and commodity_id=#{commodityId}
-      </if>
-    </where>
-  </update>
+    <select id="selectByLessonType" resultMap="BaseResultVoMap">
+        select
+        <include refid="Base_Column_List2"/>
+        from mall_commodity_info a left join mall_course_category_info b on a.cc_id = b.cc_id left join mall_commodity_lecturer c on a.commodity_id = c.commodity_id
+        where a.isRecommend="1"
+        and a.commodity_status="1"
+        and a.status="1"
+        order by a.recommend_sort
+    </select>
 
+    <select id="selectcommoditydIListByIsRecommend" resultType="java.lang.String">
+        select commodity_id
+        from mall_commodity_info
+        where isRecommend="1"
+        and commodity_status="1"
+        and status="1"
+        <if test="lessonType!=null and lessonType!=10">
+            and lesson_type=#{lessonType}
+        </if>
+        <if test="lessonType!=null and lessonType==10">
+            and lesson_type!="1"
+        </if>
+    </select>
+
+    <select id="selectCountByCommodityId" resultType="java.lang.Integer">
+        select
+        count(1)
+        from mall_commodity_info where lesson_type="1" and
+        isRecommend="1" and commodity_status="1" and status="1"
+    </select>
+
+    <select id="selectCountByCommodityIdType" resultType="java.lang.Integer">
+        select
+        count(1)
+        from mall_commodity_info where lesson_type!="1" and
+        isRecommend="1" and commodity_status="1" and status="1"
+    </select>
+
+    <select id="selectByAudition" resultMap="BaseResultVoMap">
+        select
+        <include refid="Base_Column_List2"/>
+        from mall_commodity_info a,mall_course_category_info b,mall_commodity_lecturer c
+        where a.cc_id = b.cc_id
+        and a.commodity_id = c.commodity_id
+        and a.lesson_type!="1"
+        and a.isRecommend="1"
+        and a.commodity_status="1"
+        and a.status="1"
+        order by a.recommend_sort
+    </select>
+
+    <select id="selectFavoriteListByCommodityIdList" parameterType="java.util.List" resultMap="BaseResultVoPageMap">
+        select
+        <include refid="Base_Column_List1"/>
+        from mall_commodity_info a,mall_course_category_info b
+        <where>
+            a.cc_id = b.cc_id
+            <if test="list!=null">
+                and a.commodity_id in
+                <foreach collection="list" open="(" close=")" separator="," item="item">
+                    #{item, jdbcType=VARCHAR}
+                </foreach>;
+            </if>
+        </where>
+    </select>
+
+    <update id="updateComStatusById" parameterType="java.lang.String">
+        update mall_commodity_info
+        <set>
+            <if test="commodityStatus!=null">commodity_status=#{commodityStatus},</if>
+        </set>
+        <where>
+            <if test="commodityId!=null">
+                and commodity_id=#{commodityId}
+            </if>
+        </where>
+    </update>
+
+    <update id="updateSortByCommodityId">
+        update mall_commodity_info
+        <set>
+            <if test="sort!=null">sort=#{sort},</if>
+        </set>
+        <where>
+            status="1"
+            <if test="commodityId!=null">
+                and commodity_id=#{commodityId}
+            </if>
+        </where>
+    </update>
+
+    <update id="updateCourseIntroduceByCommodityId">
+        update mall_commodity_info
+        <set>
+            <if test="courseIntroduce!=null">course_introduce=#{courseIntroduce},</if>
+        </set>
+        <where>
+            status="1"
+            and commodity_status!="1"
+            <if test="commodityId!=null">
+                and commodity_id=#{commodityId}
+            </if>
+        </where>
+    </update>
+
+    <update id="updateMealTypeByCommodityId">
+        update mall_commodity_info
+        <set>
+            <if test="mealType!=null">meal_type=#{mealType},</if>
+        </set>
+        <where>
+            status="1"
+            and commodity_status!="1"
+            <if test="commodityId!=null">
+                and commodity_id=#{commodityId}
+            </if>
+        </where>
+    </update>
+
+    <update id="updateCourseIdByCommodityId">
+        update mall_commodity_info
+        <set>
+            <if test="courseId!=null">course_id=#{courseId},</if>
+        </set>
+        <where>
+            status="1"
+            and commodity_status="2"
+            <if test="commodityId!=null">
+                and commodity_id=#{commodityId}
+            </if>
+        </where>
+    </update>
+
+    <update id="updateRecommendSortByCommodityId">
+        update mall_commodity_info
+        <set>
+            <if test="recommendSort!=null">recommend_sort=#{recommendSort},</if>
+        </set>
+        <where>
+            status="1"
+            and isRecommend="1"
+            and commodity_id=#{commodityId}
+        </where>
+    </update>
+
+    <update id="updateComStatusByCommodityId">
+        update mall_commodity_info
+        <set>
+            <if test="commodityStatus!=null">commodity_status=#{commodityStatus},</if>
+        </set>
+        where 1>2
+        or commodity_id in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="deleteListByCommodityId">
+        update mall_commodity_info
+        set status="0"
+        where 1>2
+        or commodity_id in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="updateIsRecommendByCommodityId">
+        update mall_commodity_info
+        set isRecommend="1"
+        where 1>2
+        or commodity_id in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="updateIsRecommendToFalse">
+        update mall_commodity_info
+        set isRecommend="0"
+        where isRecommend="1"
+    </update>
+
+    <update id="deleteIsRecommendByCommodityId" parameterType="java.lang.String">
+        update mall_commodity_info
+        set isRecommend="0"
+        <where>
+            status="1"
+            and commodity_status="1"
+            <if test="commodityId!=null">
+                and commodity_id=#{commodityId}
+            </if>
+        </where>
+    </update>
 </mapper>

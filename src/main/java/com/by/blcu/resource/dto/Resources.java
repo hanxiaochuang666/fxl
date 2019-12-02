@@ -1,7 +1,12 @@
 package com.by.blcu.resource.dto;
 
+import lombok.Data;
+import lombok.ToString;
+
 import java.util.Date;
 
+@Data
+@ToString
 public class Resources {
     /**
 	 *INTEGER
@@ -17,7 +22,7 @@ public class Resources {
 
     /**
 	 *INTEGER
-	 *资源类型（0：测试；1：作业；2：讨论；3：问答；4：视频；5：直播；6文档；7文本；8资料）
+	 *资源类型（0：测试；1：作业；2：视频；3：直播；4：讨论；5：问答；6文档；7文本；8资料）
 	 */
     private Integer type;
 
@@ -25,7 +30,7 @@ public class Resources {
 	 *INTEGER
 	 *机构id
 	 */
-    private Integer orgId;
+    private String orgCode ;
 
     /**
 	 *VARCHAR
@@ -40,7 +45,7 @@ public class Resources {
     private Integer createUser;
 
     /**
-	 *DATE
+	 *TIMESTAMP
 	 *创建时间
 	 */
     private Date creayeTime;
@@ -56,6 +61,36 @@ public class Resources {
 	 *修改时间
 	 */
     private Date updateTime;
+
+    /**
+	 *INTEGER
+	 *审核状态（0：待审核；1::机审不通过；2：机审通过；3：人审不通过；4：人审通过）
+	 */
+    private Integer checkStatus;
+
+    /**
+	 *TIMESTAMP
+	 *审核时间
+	 */
+    private Date checkTime;
+
+    /**
+	 *INTEGER
+	 *审核人id
+	 */
+    private Integer checkUser;
+
+    /**
+	 *VARCHAR
+	 *审核意见
+	 */
+    private String checkMsg;
+
+    /**
+	 *VARCHAR
+	 *审核id
+	 */
+    private String checkId;
 
     /**
 	 *VARCHAR
@@ -75,121 +110,5 @@ public class Resources {
 	 */
     private String bak3;
 
-    public Integer getResourcesId() {
-        return resourcesId;
-    }
 
-    public void setResourcesId(Integer resourcesId) {
-        this.resourcesId = resourcesId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title == null ? null : title.trim();
-    }
-
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
-    }
-
-    public Integer getOrgId() {
-        return orgId;
-    }
-
-    public void setOrgId(Integer orgId) {
-        this.orgId = orgId;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content == null ? null : content.trim();
-    }
-
-    public Integer getCreateUser() {
-        return createUser;
-    }
-
-    public void setCreateUser(Integer createUser) {
-        this.createUser = createUser;
-    }
-
-    public Date getCreayeTime() {
-        return creayeTime;
-    }
-
-    public void setCreayeTime(Date creayeTime) {
-        this.creayeTime = creayeTime;
-    }
-
-    public Integer getUpdateUser() {
-        return updateUser;
-    }
-
-    public void setUpdateUser(Integer updateUser) {
-        this.updateUser = updateUser;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public String getBak1() {
-        return bak1;
-    }
-
-    public void setBak1(String bak1) {
-        this.bak1 = bak1 == null ? null : bak1.trim();
-    }
-
-    public String getBak2() {
-        return bak2;
-    }
-
-    public void setBak2(String bak2) {
-        this.bak2 = bak2 == null ? null : bak2.trim();
-    }
-
-    public String getBak3() {
-        return bak3;
-    }
-
-    public void setBak3(String bak3) {
-        this.bak3 = bak3 == null ? null : bak3.trim();
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", resourcesId=").append(resourcesId);
-        sb.append(", title=").append(title);
-        sb.append(", type=").append(type);
-        sb.append(", orgId=").append(orgId);
-        sb.append(", content=").append(content);
-        sb.append(", createUser=").append(createUser);
-        sb.append(", creayeTime=").append(creayeTime);
-        sb.append(", updateUser=").append(updateUser);
-        sb.append(", updateTime=").append(updateTime);
-        sb.append(", bak1=").append(bak1);
-        sb.append(", bak2=").append(bak2);
-        sb.append(", bak3=").append(bak3);
-        sb.append("]");
-        return sb.toString();
-    }
 }

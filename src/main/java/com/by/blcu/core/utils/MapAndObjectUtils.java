@@ -1,14 +1,12 @@
 package com.by.blcu.core.utils;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.poi.ss.formula.functions.T;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MapAndObjectUtils {
 
@@ -20,11 +18,11 @@ public class MapAndObjectUtils {
      * @Param 
      * @return 
      **/
-    public static  Object MapToObject(Map<String,Object> map, Class<?>  entity)throws Exception {
+    public static  <T> T MapToObject(Map<String,Object> map, Class<T>  entity)throws Exception {
         if (map == null)
             return null;
 
-        Object obj = entity.newInstance();
+        T obj = entity.newInstance();
         BeanUtils.populate(obj,map);
 
         return obj;
@@ -153,7 +151,8 @@ public class MapAndObjectUtils {
                     Field[] declaredFields = obj.getClass().getDeclaredFields();
                     boolean isExists=false;
                     for (Field declaredField : declaredFields) {
-                        if(declaredField.getName().equals(field.getName())) {
+                        if(declaredField.getName().equals(field.getName())
+                                && declaredField.getType().isAssignableFrom(declaredField.getType())) {
                             isExists=true;
                             break;
                         }
@@ -178,11 +177,76 @@ public class MapAndObjectUtils {
      * 是否是基本类型、包装类型、String类型
      */
     private static boolean isWrapType(Field field) {
-        String[] types = { "java.lang.Integer", "java.lang.Double", "java.lang.Float", "java.lang.Long",
+        String[] types = { "java.lang.Integer","java.util.Date", "java.lang.Double", "java.lang.Float", "java.lang.Long",
                 "java.lang.Short", "java.lang.Byte", "java.lang.Boolean", "java.lang.Char", "java.lang.String", "int",
                 "double", "long", "short", "byte", "boolean", "char", "float" };
         List<String> typeList = Arrays.asList(types);
         return typeList.contains(field.getType().getName()) ? true : false;
     }
 
+    //参数认证串 hmac_safe
+    public static String getHmacSafeString(Object obj){
+        StringBuffer str = new StringBuffer();
+        if (obj == null) {
+            return null;
+        }
+        try {
+            Field[] declaredFields = obj.getClass().getDeclaredFields();
+            for (Field declaredField : declaredFields) {
+                declaredField.setAccessible(true);
+                if(declaredField.get(obj) == null) continue;
+                    if(StringUtils.isBlank(declaredField.get(obj).toString())){
+                        continue;
+                    }else{
+                        if(isPayBackType(declaredField.getName())) {
+                            str.append(declaredField.get(obj).toString());
+                            str.append("#");
+                        }
+                    }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if(str.length() > 1){
+            str.delete(str.length()-1, str.length());
+        }
+        return str.toString();
+    }
+
+    //签名认证 hmac
+    public static String[] getHmac(Object obj){
+        if (obj == null) {
+            return null;
+        }
+        String[] strArr = null;
+        List<String> strList = new ArrayList<>();
+        try {
+            Field[] declaredFields = obj.getClass().getDeclaredFields();
+            for (Field declaredField : declaredFields) {
+                declaredField.setAccessible(true);
+                if(declaredField.get(obj) == null) continue;
+                if(isPayBackType(declaredField.getName())) {
+                    strList.add(declaredField.get(obj).toString());
+                }
+            }
+            if(strList.size() > 0){
+                strArr = new String[strList.size()];
+                strList.toArray(strArr);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return strArr;
+    }
+
+
+    /**
+     * 是否是不拼接字段
+     */
+    private static boolean isPayBackType(String type) {
+        String[] types = { "hmac_safe","hmac","rb_BankId","ro_BankOrderId","rp_PayDate",
+                            "rq_CardNo","ru_Trxtime","rq_SourceFee","rq_TargetFee","action"};
+        List<String> typeList = Arrays.asList(types);
+        return typeList.contains(type) ? false : true;
+    }
 }

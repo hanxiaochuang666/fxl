@@ -1,6 +1,6 @@
 package com.by.blcu.core.authentication;
 
-import com.by.blcu.core.properties.ShiroProperties;
+import com.by.blcu.core.configurer.ShiroConfigurer;
 import com.by.blcu.core.utils.ApplicationUtils;
 import com.by.blcu.core.utils.SpringContextUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) throws UnauthorizedException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        ShiroProperties shiroProperties = SpringContextUtil.getBean(ShiroProperties.class);
+        ShiroConfigurer shiroProperties = SpringContextUtil.getBean(ShiroConfigurer.class);
         String[] anonUrl = StringUtils.splitByWholeSeparatorPreserveAllTokens(shiroProperties.getAnonUrl(), ",");
 
         boolean match = false;
@@ -48,6 +48,7 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
     protected boolean isLoginAttempt(ServletRequest request, ServletResponse response) {
         HttpServletRequest req = (HttpServletRequest) request;
         String token = req.getHeader(TOKEN);
+
         return token != null;
     }
 
@@ -76,6 +77,7 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
         httpServletResponse.setHeader("Access-control-Allow-Origin", httpServletRequest.getHeader("Origin"));
         httpServletResponse.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS,PUT,DELETE");
         httpServletResponse.setHeader("Access-Control-Allow-Headers", httpServletRequest.getHeader("Access-Control-Request-Headers"));
+        httpServletResponse.setHeader("Access-Control-Allow-Credentials", "true");
         // 跨域时会首先发送一个 option请求，这里我们给 option请求直接返回正常状态
         if (httpServletRequest.getMethod().equals(RequestMethod.OPTIONS.name())) {
             httpServletResponse.setStatus(HttpStatus.OK.value());

@@ -2,39 +2,40 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.by.blcu.resource.dao.IDiscussDao">
   <resultMap id="BaseResultMap" type="com.by.blcu.resource.dto.Discuss">
-    <id column="disscuss_id" jdbcType="INTEGER" property="disscussId" />
+    <id column="discuss_id" jdbcType="INTEGER" property="discussId" />
     <result column="student_id" jdbcType="INTEGER" property="studentId" />
     <result column="course_id" jdbcType="INTEGER" property="courseId" />
     <result column="resource_id" jdbcType="INTEGER" property="resourceId" />
     <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="parent_id" jdbcType="INTEGER" property="parentId" />
     <result column="create_user" jdbcType="INTEGER" property="createUser" />
-    <result column="create_time" jdbcType="DATE" property="createTime" />
+    <result column="parent_user_id" jdbcType="INTEGER" property="parentUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_user" jdbcType="INTEGER" property="updateUser" />
-    <result column="update_time" jdbcType="DATE" property="updateTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="bak1" jdbcType="VARCHAR" property="bak1" />
     <result column="bak2" jdbcType="VARCHAR" property="bak2" />
     <result column="bak3" jdbcType="VARCHAR" property="bak3" />
   </resultMap>
   <sql id="Base_Column_List">
-    disscuss_id, student_id, course_id, resource_id, content, parent_id, create_user, 
+    discuss_id, student_id, course_id, resource_id, content,parent_user_id, parent_id, create_user,
     create_time, update_user, update_time, bak1, bak2, bak3
   </sql>
   <sql id="BaseWhere">
     	<if test="!@org.springframework.util.StringUtils@isEmpty(entityKeyValues)">
-			and disscuss_id in
+			and discuss_id in
 			<foreach item="item" index="index" collection="entityKeyValues" open="(" separator="," close=")">
 				#{item}
 			</foreach>
 		</if>
 		<if test="!@org.springframework.util.StringUtils@isEmpty(notEntityKeyValues)">
-			and disscuss_id not in
+			and discuss_id not in
 			<foreach item="item" index="index" collection="notEntityKeyValues" open="(" separator="," close=")">
 				#{item}
 			</foreach>
 		</if>
-		<if test="!@org.springframework.util.StringUtils@isEmpty(disscussId)">
-			and disscuss_id=#{disscussId,jdbcType=INTEGER}
+		<if test="!@org.springframework.util.StringUtils@isEmpty(discussId)">
+			and discuss_id=#{discussId,jdbcType=INTEGER}
 		</if>
 		<if test="!@org.springframework.util.StringUtils@isEmpty(studentId)">
 			and student_id=#{studentId,jdbcType=INTEGER}
@@ -54,14 +55,17 @@
 		<if test="!@org.springframework.util.StringUtils@isEmpty(createUser)">
 			and create_user=#{createUser,jdbcType=INTEGER}
 		</if>
+        <if test="!@org.springframework.util.StringUtils@isEmpty(parentUserId)">
+           and parent_user_id=#{parentUserId,jdbcType=INTEGER}
+        </if>
 		<if test="!@org.springframework.util.StringUtils@isEmpty(createTime)">
-			and create_time=#{createTime,jdbcType=DATE}
+			and create_time=#{createTime,jdbcType=TIMESTAMP}
 		</if>
 		<if test="!@org.springframework.util.StringUtils@isEmpty(updateUser)">
 			and update_user=#{updateUser,jdbcType=INTEGER}
 		</if>
 		<if test="!@org.springframework.util.StringUtils@isEmpty(updateTime)">
-			and update_time=#{updateTime,jdbcType=DATE}
+			and update_time=#{updateTime,jdbcType=TIMESTAMP}
 		</if>
 		<if test="!@org.springframework.util.StringUtils@isEmpty(bak1)">
 			and bak1=#{bak1,jdbcType=VARCHAR}
@@ -100,29 +104,30 @@
     select 
     <include refid="Base_Column_List" />
     from discuss
-    where disscuss_id = #{disscussId,jdbcType=INTEGER}
+    where discuss_id = #{discussId,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from discuss
-    where disscuss_id = #{disscussId,jdbcType=INTEGER}
+    where discuss_id = #{discussId,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.by.blcu.resource.dto.Discuss">
-    insert into discuss (disscuss_id, student_id, course_id, 
-      resource_id, content, parent_id, 
+    insert into discuss (discuss_id, student_id, course_id,
+      resource_id, content, parent_user_id, parent_id,
       create_user, create_time, update_user, 
       update_time, bak1, bak2, 
       bak3)
-    values (#{disscussId,jdbcType=INTEGER}, #{studentId,jdbcType=INTEGER}, #{courseId,jdbcType=INTEGER}, 
-      #{resourceId,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, #{parentId,jdbcType=INTEGER}, 
-      #{createUser,jdbcType=INTEGER}, #{createTime,jdbcType=DATE}, #{updateUser,jdbcType=INTEGER}, 
-      #{updateTime,jdbcType=DATE}, #{bak1,jdbcType=VARCHAR}, #{bak2,jdbcType=VARCHAR}, 
+    values (#{discussId,jdbcType=INTEGER}, #{studentId,jdbcType=INTEGER}, #{courseId,jdbcType=INTEGER},
+      #{resourceId,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR},#{parentUserId,jdbcType=INTEGER},  #{parentId,jdbcType=INTEGER},
+      #{createUser,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=INTEGER},
+      #{updateTime,jdbcType=TIMESTAMP}, #{bak1,jdbcType=VARCHAR}, #{bak2,jdbcType=VARCHAR},
       #{bak3,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.by.blcu.resource.dto.Discuss">
+  <insert id="insertSelective" parameterType="com.by.blcu.resource.dto.Discuss"
+          useGeneratedKeys="true"  keyProperty="discussId">
     insert into discuss
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="disscussId != null">
-        disscuss_id,
+      <if test="discussId != null">
+        discuss_id,
       </if>
       <if test="studentId != null">
         student_id,
@@ -138,6 +143,9 @@
       </if>
       <if test="parentId != null">
         parent_id,
+      </if>
+      <if test="parentUserId != null">
+        parent_user_id,
       </if>
       <if test="createUser != null">
         create_user,
@@ -162,8 +170,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="disscussId != null">
-        #{disscussId,jdbcType=INTEGER},
+      <if test="discussId != null">
+        #{discussId,jdbcType=INTEGER},
       </if>
       <if test="studentId != null">
         #{studentId,jdbcType=INTEGER},
@@ -180,17 +188,20 @@
       <if test="parentId != null">
         #{parentId,jdbcType=INTEGER},
       </if>
+      <if test="parentUserId != null">
+        #{parentUserId,jdbcType=INTEGER},
+      </if>
       <if test="createUser != null">
         #{createUser,jdbcType=INTEGER},
       </if>
       <if test="createTime != null">
-        #{createTime,jdbcType=DATE},
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateUser != null">
         #{updateUser,jdbcType=INTEGER},
       </if>
       <if test="updateTime != null">
-        #{updateTime,jdbcType=DATE},
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="bak1 != null">
         #{bak1,jdbcType=VARCHAR},
@@ -221,17 +232,20 @@
       <if test="parentId != null">
         parent_id = #{parentId,jdbcType=INTEGER},
       </if>
+      <if test="parentUserId != null">
+          parent_user_id = #{parentUserId,jdbcType=INTEGER},
+      </if>
       <if test="createUser != null">
         create_user = #{createUser,jdbcType=INTEGER},
       </if>
       <if test="createTime != null">
-        create_time = #{createTime,jdbcType=DATE},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateUser != null">
         update_user = #{updateUser,jdbcType=INTEGER},
       </if>
       <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=DATE},
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="bak1 != null">
         bak1 = #{bak1,jdbcType=VARCHAR},
@@ -243,7 +257,7 @@
         bak3 = #{bak3,jdbcType=VARCHAR},
       </if>
     </set>
-    where disscuss_id = #{disscussId,jdbcType=INTEGER}
+    where discuss_id = #{discussId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.by.blcu.resource.dto.Discuss">
     update discuss
@@ -251,14 +265,46 @@
       course_id = #{courseId,jdbcType=INTEGER},
       resource_id = #{resourceId,jdbcType=INTEGER},
       content = #{content,jdbcType=VARCHAR},
+      parent_user_id = #{parentUserId,jdbcType=INTEGER},
       parent_id = #{parentId,jdbcType=INTEGER},
       create_user = #{createUser,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=DATE},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
       update_user = #{updateUser,jdbcType=INTEGER},
-      update_time = #{updateTime,jdbcType=DATE},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
       bak1 = #{bak1,jdbcType=VARCHAR},
       bak2 = #{bak2,jdbcType=VARCHAR},
       bak3 = #{bak3,jdbcType=VARCHAR}
-    where disscuss_id = #{disscussId,jdbcType=INTEGER}
+    where discuss_id = #{discussId,jdbcType=INTEGER}
   </update>
+
+
+    <select id="queryDiscussList"  resultType="com.by.blcu.resource.model.DiscussModel">
+        SELECT
+          b.creaye_time createTime,
+          b.content discussContent,
+          b.title discussTitle,
+          b.create_user createUserId,
+          b.resources_id resourceId,
+          a.course_id courseId,
+          a.catalog_id catalogId,
+          a.model_type modelType
+        FROM
+          course_detail a,
+          resources b
+        WHERE 1 = 1
+          AND a.resources_id = b.resources_id
+        <if test="!@org.springframework.util.StringUtils@isEmpty(type)">
+            and b.type=#{type,jdbcType=INTEGER}
+        </if>
+        <if test="!@org.springframework.util.StringUtils@isEmpty(title)">
+            and b.title like concat('%',#{title,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="!@org.springframework.util.StringUtils@isEmpty(courseId)">
+            and a.course_id=#{courseId,jdbcType=INTEGER}
+        </if>
+        <if test="!@org.springframework.util.StringUtils@isEmpty(createUser)">
+            AND a.create_user=#{createUser,jdbcType=INTEGER}
+        </if>
+            ORDER BY b.creaye_time DESC
+    </select>
 </mapper>

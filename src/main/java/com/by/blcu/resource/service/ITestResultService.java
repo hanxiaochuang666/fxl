@@ -4,17 +4,20 @@ import com.by.blcu.core.ret.RetResult;
 import com.by.blcu.core.universal.IBaseService;
 import com.by.blcu.resource.model.StudentCourseModel;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Set;
 
 public interface ITestResultService extends IBaseService {
     /**
      * 同步学生作业
-     * @param userId
+     * @param
      * @param courseId
      * @param studentId
      * @return
      */
-    RetResult syncTestPaper(Integer userId, Integer courseId, Integer studentId);
+    RetResult syncTestPaper(Integer courseId, Integer studentId);
 
     /**
      * 关联作业后的回调
@@ -31,10 +34,26 @@ public interface ITestResultService extends IBaseService {
      * @param courseId
      * @return
      */
-    List<StudentCourseModel> getStudentCourseLst(Integer useType, Integer studentId, Integer courseId)throws Exception;
+    List<StudentCourseModel> getStudentCourseLst(Integer useType, int studentId, String studentName, Integer courseId,Boolean isMyCourse)throws Exception;
 
     /**
      *用于检测试卷的定时任务
      */
     void checkTestResultStatus();
+
+    /**
+     * 学生端导出试卷
+     * @param httpServletRequest
+     * @param response
+     * @param testPagerId
+     */
+    void exporTestPaperById(HttpServletRequest httpServletRequest, HttpServletResponse response, int testPagerId);
+
+    /**
+     * 试卷关联修改后同步资源
+     * @param courseId
+     * @param insertTestPager
+     * @param deletePager
+     */
+    void syncStudentTestPager(Integer courseId,Integer courseDetailId,Integer insertTestPager,Integer deletePager);
 }

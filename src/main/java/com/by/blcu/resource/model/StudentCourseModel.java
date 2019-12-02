@@ -10,5 +10,6 @@ import java.util.List;
 public class StudentCourseModel implements Serializable {
     private static final long serialVersionUID = -3809167894184884895L;
     private String courseName;
+    private Integer courseId;
     List<StudentCourseInfoModel> StudentCourseInfoLst;
 }

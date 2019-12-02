@@ -16,41 +16,44 @@ public class SystemUtils {
 
     private static Logger log = LoggerFactory.getLogger(SystemUtils.class);
 
-    /**
-     * 模拟两个用户
-     *
-     * @return List<User>
-     */
-    private static List<User> users() {
-        List<User> users = new ArrayList<>();
-        // 模拟两个用户：
-        // 1. 用户名 admin，密码 123456，角色 admin（管理员），权限 "user:add"，"user:view"
-        // 1. 用户名 scott，密码 123456，角色 regist（注册用户），权限 "user:view"
-        users.add(new User(
-                "admin",
-                "bfc62b3f67a4c3e57df84dad8cc48a3b",
-                new HashSet<>(Collections.singletonList("admin")),
-                new HashSet<>(Arrays.asList("user:add", "user:view","user:view1","user:view2","user:view3","user:view4","user:view5","user:view6","user:v1iew","user:2view","user:3view","user:v2iew","use2r:view","user:view","user:view"
-                ,"user:vie32fdw","user:12view","user:kklview","user:vaiew","user:vixew","user:hyview","usesdfr:view","user:gfdview","user:sfdview","user:vsiew","userdf:view","us0er:view","user789:view","us8er:vggiew","user:456view","use43r:view","user:view","user:view",
-                        "user:vdiew","useioir:view","user:view","user:view","user:view","user:viedfw","user:vsfiew","user:vi2ew","user:vdfiew","user:vidfgew","user:wqview","user:vniew","user:vivew","user:vbview"
-                ,"usehr:view","user:viasdew","user:12view","user:vi2ew","user:vsiew","user:vixew","user:bnview","usebnr:view","user:vbnview"))));
-        users.add(new User(
-                "scott",
-                "11bd73355c7bbbac151e4e4f943e59be",
-                new HashSet<>(Collections.singletonList("regist")),
-                new HashSet<>(Collections.singletonList("user:view"))));
-        return users;
-    }
+    private static String audio = "cd;ogg;mp3;asf;wma;wav;mp3pro;real;ape;module;midi;vqf;flac;tak;tta;wv;mid;aac";
+    private static String pic = "bmp;jpeg;gif;psd;png;tiff;tag;jpg";
+    private static String doc = "exe;chm;pdf;psd;ai;txt;pdm;zip;rar;7z;doc;docx;ppt;vsdx;xls;xlsx;pptx";
+    private static String video = "mpeg1;mpeg2;mpeg4;mpeg-1;mpg;avi;rm;rmvb;asf;wmv;mov;mp4;mov;mtv;3gp;amv;flv;mkv;f4v;iso";
 
     /**
-     * 获取用户
+     * 获取多媒体文件类型
      *
-     * @param username 用户名
-     * @return 用户
+     * @return File_Type
      */
-    public static User getUser(String username) {
-        List<User> users = SystemUtils.users();
-        return users.stream().filter(user -> StringUtils.equalsIgnoreCase(username, user.getUsername())).findFirst().orElse(null);
+    public static String getFileType(String fileName){
+        String fileType = "unknown";
+        if(fileName.indexOf(".") > 0){
+            fileName = fileName.toLowerCase();
+            String[] typeArr = fileName.split("\\.");
+
+            if(audio.contains(typeArr[1])){
+                return "audio";
+            }
+            if(pic.contains(typeArr[1])){
+                return "pic";
+            }
+            if(doc.contains(typeArr[1])){
+                return "doc";
+            }
+            if(video.contains(typeArr[1])){
+                return "video";
+            }
+        }
+        return fileType;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(getFileType("file.mp4"));
+        System.out.println(getFileType("file.doc"));
+        System.out.println(getFileType("file.avi"));
+        System.out.println(getFileType("file.mp3"));
+        System.out.println(getFileType("file.jpg"));
     }
 
 }

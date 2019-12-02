@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter4;
+import com.by.blcu.core.dataSource.DynamicDataSourceInterceptor;
 import com.by.blcu.core.ret.RetCode;
 import com.by.blcu.core.ret.ServiceException;
 import com.by.blcu.core.ret.RetResult;
@@ -26,6 +27,8 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
@@ -193,6 +196,7 @@ public class WebConfigurer extends WebMvcConfigurationSupport {
         config.addAllowedMethod(HttpMethod.PUT);
         config.addAllowedMethod(HttpMethod.DELETE);
         config.addAllowedMethod(HttpMethod.OPTIONS);
+        config.setAllowCredentials(true);
         return config;
     }
 
@@ -202,5 +206,12 @@ public class WebConfigurer extends WebMvcConfigurationSupport {
         //处理全部请求路径
         configSource.registerCorsConfiguration("/**", buildConfig());
         return new CorsFilter(configSource);
+    }
+
+    @Override
+    protected void addInterceptors(InterceptorRegistry registry) {
+        //登录拦截的管理器
+        InterceptorRegistration registration = registry.addInterceptor(new DynamicDataSourceInterceptor());     //拦截的对象会进入这个类中进行判断
+        registration.addPathPatterns("/**");
     }
 }

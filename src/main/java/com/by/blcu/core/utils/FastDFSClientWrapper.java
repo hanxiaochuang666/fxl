@@ -8,12 +8,11 @@ package com.by.blcu.core.utils;
  */
 
 import com.by.blcu.core.configurer.FdfsConfig;
-import com.by.blcu.core.constant.GlobalConstants;
 import com.github.tobato.fastdfs.domain.fdfs.StorePath;
 import com.github.tobato.fastdfs.domain.proto.storage.DownloadByteArray;
-import com.github.tobato.fastdfs.domain.proto.storage.DownloadFileWriter;
 import com.github.tobato.fastdfs.exception.FdfsUnsupportStorePathException;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
+import lombok.Data;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -23,9 +22,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.net.URLEncoder;
 
 /**
@@ -36,6 +37,7 @@ import java.net.URLEncoder;
  * @date 2018/10/12
  */
 @Component
+@Data
 public class FastDFSClientWrapper {
 
     public final static Logger log = LoggerFactory.getLogger(FastDFSClientWrapper.class);
@@ -74,7 +76,7 @@ public class FastDFSClientWrapper {
         //GlobalConstants.HTTP_PRODOCOL +
         //String part =fdfsConfig.getTrackerList().substring(fdfsConfig.getTrackerList().lastIndexOf("/")+1);
         //String fileUrl = GlobalConstants.HTTP_FILEURL + ":" + part + "/" + storePath.getFullPath();
-        String fileUrl = fdfsConfig.getHost() + ":" + fdfsConfig.getPart() + "/" + storePath.getFullPath();
+        String fileUrl = fdfsConfig.getHead() + fdfsConfig.getHost() + ":" + fdfsConfig.getPart() + "/" + storePath.getFullPath();
         log.info("fileUrl:" + fileUrl);
         return fileUrl;
     }
@@ -124,6 +126,17 @@ public class FastDFSClientWrapper {
         return null;
     }
 
+    public byte[] getByteData(String fileUrl){
+        try {
+            StorePath storePath = StorePath.parseFromUrl(fileUrl);
+            byte[] fileByte = storageClient.downloadFile(storePath.getGroup(), storePath.getPath(), new DownloadByteArray());
+            return fileByte;
+        } catch (Exception e) {
+            log.error("Non IO Exception: Get File from Fast DFS failed", e);
+        }
+        return null;
+    }
+
     /**
      * 功能描述: 浏览器下载文件
      *
@@ -133,17 +146,28 @@ public class FastDFSClientWrapper {
      * @date 2018/10/12
      * @version V1.0
      */
-    public void webDownFile(HttpServletResponse response,String fileUrl,String fileName){
+    public void webDownFile(HttpServletRequest httpServletRequest, HttpServletResponse response, String fileUrl, String fileName){
         response.setContentType("application/force-download");
         //支持中文名称
         try {
             fileName = URLEncoder.encode(fileName,"UTF-8");
+            if (httpServletRequest.getHeader("User-Agent").toUpperCase().indexOf("MSIE") > 0) {
+                fileName = URLEncoder.encode(fileName, "UTF-8");
+            } else {
+                fileName = new String(fileName.getBytes("UTF-8"), "ISO-8859-1");
+            }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        int i = fileUrl.lastIndexOf(".");
-        String substring = fileUrl.substring(i);
-        response.setHeader("Content-Disposition", "attachment;fileName=" + fileName+substring);
+
+        //兼容下载文件名称
+        if(fileName.indexOf(".") < 0){
+            fileName = fileName + ".docx";
+        }
+
+        response.setHeader("Access-Control-Expose-Headers","fileName");
+        response.setHeader("fileName", fileName);
+        response.setHeader("Content-Disposition", "attachment;fileName=" + fileName);
         try {
             OutputStream outputStream = response.getOutputStream();
             StorePath storePath = StorePath.parseFromUrl(fileUrl);
@@ -155,4 +179,33 @@ public class FastDFSClientWrapper {
         }
 
     }
+
+
+    public static byte[] readInputStream(InputStream inStream) throws Exception {
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[10240];
+        int len = 0;
+        while ((len = inStream.read(buffer)) != -1) {
+            outStream.write(buffer, 0, len);
+        }
+        inStream.close();
+        return outStream.toByteArray();
+    }
+
+    public static InputStream getImageFromNetByUrl(String strUrl) {
+        try {
+            URL url = new URL(strUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setConnectTimeout(5 * 1000);
+            InputStream inStream = conn.getInputStream();// 通过输入流获取图片数据
+            //byte[] btImg = readInputStream(inStream);// 得到图片的二进制数据
+            return inStream;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 }

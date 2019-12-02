@@ -62,11 +62,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.persistence</groupId>
-			<artifactId>org.eclipse.persistence.jpa</artifactId>
-			<version>2.6.0</version>
-		</dependency>
-		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>
 			<version>1.0.29</version>
@@ -153,6 +148,7 @@
 			<artifactId>commons-net</artifactId>
 			<version>3.6</version>
 		</dependency>
+        <!--邮件依赖-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
@@ -168,9 +164,9 @@
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<optional>true</optional> <!-- 这个需要为 true 热部署才有效 -->
+			<groupId>ognl</groupId>
+			<artifactId>ognl</artifactId>
+			<version>3.2.11</version>
 		</dependency>
 		<dependency>
 			<groupId>org.webjars</groupId>
@@ -182,6 +178,26 @@
 			<artifactId>fastdfs-client</artifactId>
 			<version>1.26.6</version>
 		</dependency>
+
+		<!--<dependency>-->
+			<!--<groupId>com.alibaba.rocketmq</groupId>-->
+			<!--<artifactId>rocketmq-common</artifactId>-->
+			<!--<version>3.6.2.Final</version>-->
+		<!--</dependency>-->
+		<!--<dependency>-->
+			<!--<groupId>com.alibaba.rocketmq</groupId>-->
+			<!--<artifactId>rocketmq-client</artifactId>-->
+			<!--<version>3.6.2.Final</version>-->
+		<!--</dependency>-->
+
+		<!--<dependency>-->
+			<!--<groupId>org.csource</groupId>-->
+			<!--<artifactId>fastdfs-client-java</artifactId>-->
+			<!--<scope>system</scope>-->
+			<!--<systemPath>${project.basedir}/src/main/resources/lib/fastdfs.jar</systemPath>-->
+			<!--<version>1.27-SNAPSHOT</version>-->
+		<!--</dependency>-->
+
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -218,7 +234,14 @@
 			<artifactId>swagger-models</artifactId>
 			<version>1.5.21</version>
 		</dependency>
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-cache</artifactId>
+		</dependency>
 		<!-- http client -->
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
@@ -254,6 +277,99 @@
             <artifactId>java-jwt</artifactId>
             <version>3.4.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.vaadin.external.google</groupId>
+            <artifactId>android-json</artifactId>
+            <version>RELEASE</version>
+        </dependency>
+		<dependency>
+			<groupId>net.minidev</groupId>
+			<artifactId>json-smart</artifactId>
+			<version>RELEASE</version>
+		</dependency>
+
+		<!--阿里内容安全依赖-->
+		<dependency>
+			<groupId>com.aliyun</groupId>
+			<artifactId>aliyun-java-sdk-core</artifactId>
+			<version>3.5.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.aliyun</groupId>
+			<artifactId>aliyun-java-sdk-green</artifactId>
+			<version>3.5.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.10</version>
+		</dependency>
+
+		<!--<dependency>-->
+			<!--<groupId>org.apache.rocketmq</groupId>-->
+			<!--<artifactId>rocketmq-spring-boot-starter</artifactId>-->
+			<!--<version>2.0.3</version>-->
+		<!--</dependency>-->
+
+		<!--<dependency>-->
+			<!--<groupId>com.alibaba.rocketmq</groupId>-->
+			<!--<artifactId>rocketmq-common</artifactId>-->
+			<!--<version>3.6.2.Final</version>-->
+		<!--</dependency>-->
+		<!--<dependency>-->
+			<!--<groupId>com.alibaba.rocketmq</groupId>-->
+			<!--<artifactId>rocketmq-client</artifactId>-->
+			<!--<version>3.6.2.Final</version>-->
+		<!--</dependency>-->
+
+		<!-- openoffice文档预览插件-->
+		<dependency>
+			<groupId>org.openoffice</groupId>
+			<artifactId>juh</artifactId>
+			<version>4.1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openoffice</groupId>
+			<artifactId>jurt</artifactId>
+			<version>4.1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openoffice</groupId>
+			<artifactId>ridl</artifactId>
+			<version>4.1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openoffice</groupId>
+			<artifactId>unoil</artifactId>
+			<version>4.1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.thoughtworks.xstream</groupId>
+			<artifactId>xstream</artifactId>
+			<version>1.4.10</version>
+		</dependency>
+		<!--office文件转html-->
+		<!-- https://mvnrepository.com/artifact/com.artofsolving/jodconverter-maven-plugin -->
+		<dependency>
+			<groupId>com.artofsolving</groupId>
+			<artifactId>jodconverter-maven-plugin</artifactId>
+			<version>2.2.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.belerweb</groupId>
+			<artifactId>pinyin4j</artifactId>
+			<version>2.5.0</version>
+		</dependency>
+
+        <dependency>
+              <groupId>org.wltea.analyzer</groupId>
+              <artifactId>IKAnalyzer</artifactId>
+              <version>1.0</version>
+        </dependency>
+
 	</dependencies>
 
 	<build>
@@ -272,7 +388,33 @@
 					<verbose>true</verbose>
 				</configuration>
 			</plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>2.5.2</version>
+                <executions>
+                    <execution>
+                        <id>install-external</id>
+                        <phase>clean</phase>
+                        <configuration>
+                            <file>${basedir}/src/main/resources/lib/IKAnalyzer.jar</file>
+                            <repositoryLayout>default</repositoryLayout>
+                            <groupId>org.wltea.analyzer</groupId>
+                            <artifactId>IKAnalyzer</artifactId>
+                            <version>1.0</version>
+                            <packaging>jar</packaging>
+                            <generatePom>true</generatePom>
+                        </configuration>
+
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 		</plugins>
-	</build>
+
+    </build>
 
 </project>

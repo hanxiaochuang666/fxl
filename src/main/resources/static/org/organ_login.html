@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>非学历培训平台</title>
+    <link href="../css/command.css" rel="stylesheet" type="text/css">
+    <link href="../css/css.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1200137_ei4wc2os8jv.css">
+    <link rel="stylesheet" type="text/css" href="../css/xcConfirm.css" />
+    <style>
+        .study_dl2 {
+            width: 386px;
+            height: 480px;
+            border: 1px solid #ccc;
+            z-index: 999;
+            background: #fff;
+            color: #646464;
+            margin: 0 auto;
+            position: relative;
+            border-radius: 5px;
+            margin-top: 80px;
+        }
+
+        .study_kszc2 {
+            width: 386px;
+            height: 415px;
+            border: 1px solid #ccc;
+            position: absolute;
+            z-index: 999;
+            background: #fff;
+            color: #646464;
+            margin: 0 auto;
+            position: relative;
+            border-radius: 5px;
+            display: none;
+            margin-top: 80px;
+        }
+
+        .pt_dl,
+        .dxyz {
+            background: #bb3b19;
+        }
+
+        .study_top li.study_topmax {
+            border-bottom: 2px solid #bb3b19;
+        }
+        .centerboxbg {
+            background: url([[${orgModel.webPic}]]) 0 0 no-repeat;
+        }
+    </style>
+</head>
+
+<body>
+
+<input type="text" th:value="${orgModel.orgCode}" class="orgcode" style="display: none;">
+<div class=" bgredbd clearfix" style="position:relative;">
+    <img th:src="${orgModel.organizationLogo}" />
+</div>
+<div class="centerboxbg">
+
+    <div class="popwarp">
+        <div class="study_dl2">
+            <ul class="study_top clearfix" ;>
+                <li class="study_topmax">普通登录</li>
+                <li>手机快速登录</li>
+            </ul>
+            <div class="go_study" style="display: block;">
+                <div class="pt_name"><input name="username" id="username" type="text" placeholder="用户名" /></div>
+                <div class="pt_need"><input name="passsword" id="password" type="password" placeholder="密码" /></div>
+                <p class="pt_dl" onclick="login1()">登录</p>
+            </div>
+            <div class="go_study" style="display:none;">
+                <div class="pt_tel" style="margin-top:22px;"><input name="phonenumber" id="phonenumber" type="text"
+                                                                    placeholder="请输入手机号" /></div>
+                <div class="yzm_box clearfix">
+                    <div class=" pt_yzm fl"><input id="photoyzm" name="photoyzm" type="text" placeholder="图片验证码" />
+                    </div>
+                    <div class="fl"><img id="yzmphoto" name="yzmphoto" style="margin-top:3px; margin-left:2px;"
+                                         src="" onclick="flushyzm()" /></div>
+                </div>
+                <div class="yzm_box clearfix">
+                    <div class=" pt_yzm fl"><input name="phonecode" id="phonecode" type="text"
+                                                   placeholder="手机验证码" />
+                    </div>
+                    <div id="dlgetyzm" class="fl dxyz" onclick="getmessagecode(0)">获取短信验证码</div>
+                </div>
+                <p class="pt_dl" style="margin-top:5px;" onclick="loginbynum()">登录</p>
+            </div>
+            <div class="meed_zh clearfix"><a href="javascript:zhmm()" class="fl wt_gray">忘记密码</a><span
+                    class="fr">没有账号？<a href="javascript:toregiest()" class="wz_blue">去注册</a></span></div>
+            <div class="dsf_bj"><span>第三方账号登录</span></div>
+            <div style="margin-top:15px;"><a style="cursor:pointer;margin-left:30px;"><img
+                    src="../img/wx.png" /></a><a
+                    style="cursor:pointer;margin-left:85px; margin-right:85px;"><img src="../img/qq.png" /></a><a
+                    style="cursor:pointer;"><img src="../img/wb.png" /></a></div>
+        </div>
+
+        <div class="study_kszc2">
+            <p class="study_top2">快速注册</p>
+            <div class="go_study2">
+                <div class="pt_tel" style="margin-top:0px;"><input id="zcphone" name="zcphone" type="text"
+                                                                   placeholder="手机号" /></div>
+                <div class="yzm_box clearfix" style="margin-top:15px;">
+                    <div class=" pt_yzm fl"><input type="text" placeholder="手机验证码" id="zcphoneyzm" /></div>
+                    <div id="zcgetyzm" class="fl dxyz" onclick="getmessagecode(1)">获取短信验证码</div>
+                </div>
+                <div class="pt_mm"><input id="zcpassword" type="password" placeholder="请设置6-14位密码" /></div>
+                <p class="pt_dl" style="margin-top:5px;" onclick="regiest()">注册</p>
+                <div class="meed_zh clearfix"><span>没有账号？<a href="javascript:tologin()"
+                                                            class="wz_blue">立即登陆</a></span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="boxbot">
+    <div class="centerbox" style=" height:160px; ">
+        <p><a class="bottitle"></a></p>
+        <ul class="fl mr80" style=" margin-left:86px;">
+
+            <li class="mb16"><a href="底部_如何注册.html">如何注册</a></li>
+            <li><a href="如何购买课程.html">如何购买课程</a></li>
+        </ul>
+
+        <ul class="fl  mr80">
+
+            <li class="mb16"><a href="底部_在线支付.html">在线支付</a></li>
+            <li><a>银行汇款</a></li>
+        </ul>
+        <ul class="fl  mr80">
+
+            <li class="mb16"><a href="发票制度.html">发票制度</a></li>
+            <li><a href="问题反馈.html">问题反馈</a></li>
+        </ul>
+        <ul class="fl  mr80">
+
+            <li class="mb16"><a href="关于我们.html">关于我们</a></li>
+            <li><a href="联系我们.html">联系我们</a></li>
+        </ul>
+        <p class="tel clearfix fl"> <span class="no_pl mt30">联系客服</span> <span class="Phone">电话：010-82303579</span>
+            <span class="phonenum">138102422665
+                <!-- <img src="img/zx.gif" width="58" height="17" style=" position:relative;top:4px;"/>--></span>
+            <span class="qqing">QQ: 2314976064</span>
+            <!-- <span class="Phone">010-511111111</span>
+            <span class="qq">在线客服 <img src="img/zx.gif" width="58" height="17" style=" position:relative;top:4px;"/></span></span>-->
+            <span class="mail">2314976064@qq.com</span>
+        </p>
+        <p class="weixin fr">
+            <img src="../img/wechat_03.png" alt=""><br />
+            <span>微信扫一扫<br />实时获取更多资讯</span></p>
+    </div>
+</div>
+
+</body>
+<script src="../js/jquery-1.9.1.min.js"></script>
+<script src="../js/banner.js"></script>
+<script src="../js/move.js"></script>
+<script src="../js/root.js"></script>
+<script src="../teacher/js/com.js"></script>
+<script src="../js/select.js"></script>
+<script src="../js/pager.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/xcConfirm.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/head.js"></script>
+<script>
+
+    function toregiest() {//去注册
+        flushText();
+        $('.study_kszc2').show();
+        $('.study_dl2').hide();
+    }
+    function tologin() {//去登录
+        flushText();
+        $('.study_dl2').show();
+        $('.study_kszc2').hide();
+    }
+
+</script>
+
+</html>
