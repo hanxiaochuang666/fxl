@@ -11,7 +11,6 @@ import java.util.List;
 /**
  * 用户角色类
  */
-@Data
 @ApiModel(description= "用户角色类")
 public class AccountRoleRModel {
 
@@ -39,5 +38,36 @@ public class AccountRoleRModel {
     @ApiModelProperty(value = "角色Id列表")
     private List<String> roleIdList;
 
+    public String getOrgCode() {
+        return orgCode;
+    }
+
+    public void setOrgCode(String orgCode) {
+        this.orgCode = orgCode == null ? null : orgCode.trim();
+    }
+
+    public String getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(String accountId) {
+        this.accountId = accountId == null ? null : accountId.trim();
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId == null ? null : userId.trim();
+    }
+
+    public List<String> getRoleIdList() {
+        return roleIdList;
+    }
+
+    public void setRoleIdList(List<String> roleIdList) {
+        this.roleIdList = roleIdList;
+    }
 }
 

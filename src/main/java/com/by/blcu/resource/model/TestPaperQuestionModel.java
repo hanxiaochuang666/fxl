@@ -21,5 +21,6 @@ public class TestPaperQuestionModel implements Serializable {
     private int isScore;
     private String  categoryTwoName;
     private Integer checkStatus;
+    private Integer optType;
     List<TestPaperQuestionResModel> questionResModelList;
 }

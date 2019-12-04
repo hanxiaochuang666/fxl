@@ -8,7 +8,6 @@ import lombok.Data;
 import javax.persistence.Column;
 
 @ApiModel(description= "名师团队显示类")
-@Data
 public class TeacherShowModel extends ManagerTeacher {
 
     /**
@@ -16,4 +15,12 @@ public class TeacherShowModel extends ManagerTeacher {
      */
     @ApiModelProperty(value = "机构名称")
     private String orgName;
+
+    public String getOrgName() {
+        return orgName;
+    }
+
+    public void setOrgName(String orgName) {
+        this.orgName = orgName == null ? null : orgName.trim();
+    }
 }

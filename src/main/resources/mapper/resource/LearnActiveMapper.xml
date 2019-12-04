@@ -291,4 +291,28 @@
         and course_id=#{courseId,jdbcType=INTEGER}
         and course_detail_id=#{courseDetailId,jdbcType=INTEGER})
     </insert>
+
+    <select id="selectLearnActiveCount" parameterType="java.util.Map" resultType="java.lang.Long">
+        SELECT
+        COUNT(1)
+        FROM
+        learn_active a,
+        course_detail b
+        WHERE a.course_detail_id = b.course_detail_id
+        <if test="!@org.springframework.util.StringUtils@isEmpty(studentId)">
+            and a.student_id=#{studentId,jdbcType=INTEGER}
+        </if>
+        <if test="!@org.springframework.util.StringUtils@isEmpty(courseId)">
+            and a.course_id=#{courseId,jdbcType=INTEGER}
+        </if>
+        <if test="!@org.springframework.util.StringUtils@isEmpty(learnFlag)">
+            and a.learn_flag=#{learnFlag,jdbcType=TINYINT}
+        </if>
+        <if test="!@org.springframework.util.StringUtils@isEmpty(catalogIds)">
+            and b.catalog_id in
+            <foreach item="item" index="index" collection="catalogIds" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
 </mapper>

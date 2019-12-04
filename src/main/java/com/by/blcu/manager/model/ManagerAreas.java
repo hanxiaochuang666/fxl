@@ -1,72 +1,88 @@
 package com.by.blcu.manager.model;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.math.BigDecimal;
 import javax.persistence.*;
 
 @Table(name = "manager_areas")
+@ApiModel(description= "省市区表")
 public class ManagerAreas {
     /**
-     * 省市区表Id(自增)
+     *省市区表Id(自增)
      */
     @Id
     @Column(name = "areas_id")
+    @ApiModelProperty(value = "省市区表Id(自增)")
     private Integer areasId;
 
     /**
-     * 全国编码
+     *全国编码
      */
+    @ApiModelProperty(value = "全国编码")
     private String code;
 
     /**
-     * 名称
+     *名称
      */
+    @ApiModelProperty(value = "名称")
     private String name;
 
     /**
-     * 上级标识
+     *上级标识
      */
-    private Integer pid;
+    @ApiModelProperty(value = "上级标识")
+    private String pid;
 
     /**
-     * 地名简称
+     *地名简称
      */
+    @ApiModelProperty(value = "地名简称")
     private String sname;
 
     /**
-     * 等级
+     *等级
      */
+    @ApiModelProperty(value = "等级")
     private Integer level;
 
     /**
-     * 简编
+     *简编
      */
+    @ApiModelProperty(value = "简编")
     private String citycode;
 
     /**
-     * 邮政编码
+     *邮政编码
      */
+    @ApiModelProperty(value = "邮政编码")
     private String yzcode;
 
     /**
-     * 组合名称
+     *组合名称
      */
+    @ApiModelProperty(value = "组合名称")
     private String mername;
 
     /**
-     * 经度
+     *经度
      */
     @Column(name = "Lng")
+    @ApiModelProperty(value = "经度")
     private BigDecimal lng;
 
     /**
-     * 纬度
+     *纬度
      */
     @Column(name = "Lat")
+    @ApiModelProperty(value = "纬度")
     private BigDecimal lat;
 
     /**
-     * 名称拼音
+     *名称拼音
      */
+    @ApiModelProperty(value = "名称拼音")
     private String pingyin;
 
     /**
@@ -128,7 +144,7 @@ public class ManagerAreas {
      *
      * @return pid - 上级标识
      */
-    public Integer getPid() {
+    public String getPid() {
         return pid;
     }
 
@@ -137,8 +153,8 @@ public class ManagerAreas {
      *
      * @param pid 上级标识
      */
-    public void setPid(Integer pid) {
-        this.pid = pid;
+    public void setPid(String pid) {
+        this.pid = pid == null ? null : pid.trim();
     }
 
     /**

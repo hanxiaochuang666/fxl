@@ -83,14 +83,11 @@ public class CourseServiceImpl extends BaseServiceImpl implements ICourseService
 
         if (StringUtils.isEmpty(model.getCourseId())) {
             //注意，课程名称不可重复
-            Map<String, Object> param = MapUtils.initMap("name", model.getName());
-            List<Course> courses = courseDao.selectList(param);
-            if (courses != null && courses.size() > 0) {
-                for(Course c : courses){
-                    if(c.getName().equals(model.getName())){
-                        throw new ServiceException("已存在同名课程：" + model.getName());
-                    }
-                }
+            Map<String, Object> param = MapUtils.initMap("nameReal", model.getName());
+            param.put("createUser", userId);//限制创建人课程中不允许重名课程
+            long selectCount = courseDao.selectCount(param);
+            if (selectCount > 0) {
+                throw new ServiceException("已存在同名课程：" + model.getName());
             }
 
             //1.创建课程表
@@ -128,7 +125,7 @@ public class CourseServiceImpl extends BaseServiceImpl implements ICourseService
             //2.课程更新
             Course courseNew = courseList.get(0);
             if (!courseNew.getName().equals(model.getName())) {
-                Map<String, Object> nameParam = MapUtils.initMap("name", model.getName());
+                Map<String, Object> nameParam = MapUtils.initMap("nameReal", model.getName());
                 nameParam.put("createUser", userId);//限制创建人课程中不允许重名课程
                 long selectCount = courseDao.selectCount(nameParam);
                 if (selectCount > 0) {
@@ -242,8 +239,9 @@ public class CourseServiceImpl extends BaseServiceImpl implements ICourseService
         Map<String, Object> initMap = MapUtils.initMap();
         for(Integer courseId:courseIdLst){
             testResultService.syncTestPaper(courseId, student);
+            initMap.put("studentId",student);
             List<CourseDetail> courseId1 = courseDetailDao.selectList(MapUtils.initMap("courseId", courseId));
-            KnowledgePointNode knowledgePoints = catalogService.getKnowledgePoints(courseId);
+            KnowledgePointNode knowledgePoints = catalogService.getKnowledgePoints(courseId,null);
             Map<Integer, Integer> catalogSortMap = getCatalogSortMap(knowledgePoints);
             for (CourseDetail courseDetail : courseId1) {
                 if (!catalogSortMap.containsKey(courseDetail.getCatalogId()))

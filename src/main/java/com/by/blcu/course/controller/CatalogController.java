@@ -63,11 +63,15 @@ public class CatalogController {
     @RequestMapping(value = "/getKnowledgePoints", method = RequestMethod.POST ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequiresPermissions("teacher")
     @ApiOperation(value = "查询课程目录结构",notes = "查询课程目录结构")
-    public RetResult<KnowledgePointNode> getKnowledgePoints(@ApiParam(value = "课程id【courseId】") @RequestBody JSONObject obj) throws ServiceException {
+    public RetResult<KnowledgePointNode> getKnowledgePoints(@ApiParam(value = "课程id【courseId】；status(状态：启用 1； 禁用 0)") @RequestBody JSONObject obj) throws ServiceException {
 
+        Integer status = 1;
+        if(obj.containsKey("status")){
+            status = Integer.valueOf(obj.getString("status"));
+        }
         if(obj.containsKey("courseId")){
             int courseId = Integer.parseInt(obj.getString("courseId"));
-            return RetResponse.makeOKRsp(catalogService.getKnowledgePoints(courseId));
+            return RetResponse.makeOKRsp(catalogService.getKnowledgePoints(courseId,status));
         }else {
             throw new ServiceException("参数：【courseId】必传！");
         }

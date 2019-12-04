@@ -12,7 +12,6 @@ import java.util.List;
  *名师团队查询类
  */
 @ApiModel(description= "名师团队查询类")
-@Data
 public class TeacherSearchModel  extends ManagerPagerModel{
     /**
      *名师团队表Id
@@ -54,4 +53,59 @@ public class TeacherSearchModel  extends ManagerPagerModel{
     @ApiModelProperty(value = "名师团队表Id列表")
     private List<String> teacherIdList;
 
+    public String getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(String teacherId) {
+        this.teacherId = teacherId == null ? null : teacherId.trim();
+    }
+
+    public String getTeacherName() {
+        return teacherName;
+    }
+
+    public void setTeacherName(String teacherName) {
+        this.teacherName = teacherName == null ? null : teacherName.trim();
+    }
+
+    public String getOrgCode() {
+        return orgCode;
+    }
+
+    public void setOrgCode(String orgCode) {
+        this.orgCode = orgCode == null ? null : orgCode.trim();
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public String getCcId() {
+        return ccId;
+    }
+
+    public void setCcId(String ccId) {
+        this.ccId = ccId == null ? null : ccId.trim();
+    }
+
+    public List<String> getTeacherIdList() {
+        return teacherIdList;
+    }
+
+    public void setTeacherIdList(List<String> teacherIdList) {
+        this.teacherIdList = teacherIdList;
+    }
 }

@@ -100,6 +100,7 @@ public class CourseManageController {
         }
         Map<String,Object> parMap = new HashMap<>();
         parMap.put("categoryTwo",categoryTwoId);
+        parMap.put("status","2");
         return RetResponse.makeOKRsp(courseService.selectList(parMap));
     }
 

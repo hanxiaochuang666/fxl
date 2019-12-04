@@ -39,6 +39,9 @@ public class ReplyInfoModel implements Serializable {
     @ApiModelProperty(value = "发起者id")
     private Integer createUserId;
 
+    @ApiModelProperty(value = "当前登录者id")
+    private Integer nowUserId;
+
     @ApiModelProperty(value = "发起者头像地址")
     private String createUserHeadUrl;
 
@@ -47,6 +50,12 @@ public class ReplyInfoModel implements Serializable {
 
     @ApiModelProperty(value = "被回复者id")
     private Integer replyUserId;
+
+    @ApiModelProperty(value = "是否可编辑 1:可以 0：不可以")
+    private Integer canEdit;
+
+    @ApiModelProperty(value = "是否可删除 1:可以 0：不可以")
+    private Integer canDelete;
 
     @ApiModelProperty(value = "被回复者头像地址")
     private String replyUserHeadUrl;

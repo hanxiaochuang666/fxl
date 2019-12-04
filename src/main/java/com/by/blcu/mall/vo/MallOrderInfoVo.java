@@ -29,6 +29,11 @@ public class MallOrderInfoVo implements Serializable {
     private Date createTime;
 
     /**
+     * 支付日期
+     */
+    private Date paymentTime;
+
+    /**
      * 机构
      */
     private String org;

@@ -7,7 +7,6 @@ import lombok.Data;
 /**
  * 分页查询基类
  */
-@Data
 @ApiModel(description= "用户")
 public class ManagerPagerModel {
     /**
@@ -21,4 +20,19 @@ public class ManagerPagerModel {
     @ApiModelProperty(value = "每页条数")
     private Integer size;
 
+    public Integer getPage() {
+        return page;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
+    }
+
+    public Integer getSize() {
+        return size;
+    }
+
+    public void setSize(Integer size) {
+        this.size = size;
+    }
 }

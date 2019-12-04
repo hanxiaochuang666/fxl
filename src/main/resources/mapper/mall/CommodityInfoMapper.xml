@@ -535,7 +535,7 @@
         where a.cc_id = b.cc_id
         and a.commodity_id = c.commodity_id
         and a.commodity_id =
-        #{commodityId} and a.commodity_status="1" and a.status="1"
+        #{commodityId} and a.status="1"
     </select>
 
     <select id="selectByCommodityIdNoCommodityStatus" resultMap="BaseResultVoMap" parameterType="java.lang.String">

@@ -59,9 +59,9 @@
     <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(roleName)">
       and role_name = #{roleName,jdbcType=VARCHAR}
     </if>
-    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(orgCode)">
-      and org_code = #{orgCode,jdbcType=VARCHAR}
-    </if>
+    <!--<if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(orgCode)">-->
+      <!--and org_code = #{orgCode,jdbcType=VARCHAR}-->
+    <!--</if>-->
     <!-- 列表 -->
     <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(roleIdList)">
       and role_id in
@@ -84,9 +84,9 @@
     <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(roleName)">
       and role_name like CONCAT('%',#{roleName,jdbcType=VARCHAR},'%')
     </if>
-    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(orgCode)">
-      and org_code like CONCAT('%',#{orgCode,jdbcType=VARCHAR},'%')
-    </if>
+    <!--<if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(orgCode)">-->
+      <!--and org_code like CONCAT('%',#{orgCode,jdbcType=VARCHAR},'%')-->
+    <!--</if>-->
   </sql>
   <sql id="Base_Select_Order">
     order by create_time desc
@@ -156,9 +156,9 @@
     <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(status)">
       and r.status = #{status,jdbcType=INTEGER}
     </if>
-    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(orgCode)">
-      and r.org_code = #{orgCode,jdbcType=VARCHAR}
-    </if>
+    <!--<if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(orgCode)">-->
+      <!--and r.org_code = #{orgCode,jdbcType=VARCHAR}-->
+    <!--</if>-->
     <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(roleId)">
       and r.role_id = #{roleId,jdbcType=VARCHAR}
     </if>
@@ -207,9 +207,9 @@
     left join manager_role_permission_r r_m on r.role_id = r_m.role_id
     left join manager_permission m on r_m.permission_id = m.permission_id
     where  r.status=1 and  r.is_deleted is not true and m.is_deleted is not true
-    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(orgCode)">
-      and r.org_code = #{orgCode,jdbcType=VARCHAR}
-    </if>
+    <!--<if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(orgCode)">-->
+      <!--and r.org_code = #{orgCode,jdbcType=VARCHAR}-->
+    <!--</if>-->
   </select>
   <select id="findRolePermissionExcept" parameterType="java.util.Map" resultMap="OrgPermission">
     select a.org_code, m.*  from manager_account a

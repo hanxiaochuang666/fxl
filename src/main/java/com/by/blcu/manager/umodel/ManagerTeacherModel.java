@@ -13,7 +13,6 @@ import java.util.List;
 /**
  * teacher相关操作类
  */
-@Data
 @ApiModel(description= "教师")
 public class ManagerTeacherModel {
     @ApiModelProperty(value = "教师Id列表")
@@ -32,4 +31,52 @@ public class ManagerTeacherModel {
     //修改人
     @Column(name = "modify_by")
     private String modifyBy;
+
+    public List<String> getTeacherIdList() {
+        return teacherIdList;
+    }
+
+    public void setTeacherIdList(List<String> teacherIdList) {
+        this.teacherIdList = teacherIdList;
+    }
+
+    public String getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(String teacherId) {
+        this.teacherId = teacherId == null ? null : teacherId.trim();
+    }
+
+    public String getOrgCode() {
+        return orgCode;
+    }
+
+    public void setOrgCode(String orgCode) {
+        this.orgCode = orgCode == null ? null : orgCode.trim();
+    }
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
+
+    public Date getModifyTime() {
+        return modifyTime;
+    }
+
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
+    }
+
+    public String getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(String modifyBy) {
+        this.modifyBy = modifyBy == null ? null : modifyBy.trim();
+    }
 }

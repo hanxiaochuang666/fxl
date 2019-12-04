@@ -7,7 +7,6 @@ import lombok.Data;
 /**
  * 前端用户登录类
  */
-@Data
 @ApiModel(description= "用户")
 public class LoginInfoModel {
     /**
@@ -30,4 +29,36 @@ public class LoginInfoModel {
      */
     @ApiModelProperty(value = "token过期时间")
     private String exipreTime;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId == null ? null : userId.trim();
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName == null ? null : userName.trim();
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token == null ? null : token.trim();
+    }
+
+    public String getExipreTime() {
+        return exipreTime;
+    }
+
+    public void setExipreTime(String exipreTime) {
+        this.exipreTime = exipreTime == null ? null : exipreTime.trim();
+    }
 }

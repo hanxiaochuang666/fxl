@@ -28,7 +28,7 @@ public class Constants {
     /**
      * 试题选项字母候选
      */
-    public static final String WORLD_KEY = "ABCDEFGHIGKLMNOPQRSTUVWXYZ";
+    public static final String WORLD_KEY = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     public static final Map<Integer,String> WORLD_MAP = new HashMap<>();
     static {

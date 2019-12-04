@@ -78,7 +78,7 @@ public class CommodityInfoController {
             commodityInfo.setCreator((String) httpServletRequest.getAttribute("username"));
             commodityInfo.setIsRecommend(0);
             if(commodityInfo.getSort() == null){
-                commodityInfo.setSort(9999);
+                commodityInfo.setSort(999);
             }
             commodityInfo.setRecommendSort(999);
             state = commodityInfoService.saveCommodity(commodityInfo,commodityLecturerList);

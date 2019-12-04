@@ -23,7 +23,7 @@ public class PermissionOrgExtend {
     }
 
     public void setOrgCode(String orgCode) {
-        this.orgCode = orgCode;
+        this.orgCode = orgCode == null ? null : orgCode.trim();
     }
 
     public Set<String> getPermissionList() {

@@ -7,6 +7,7 @@ import com.by.blcu.core.universal.Service;
 import com.by.blcu.manager.model.ManagerOrgType;
 import com.by.blcu.manager.model.ManagerRole;
 import com.by.blcu.manager.model.SsoUser;
+import com.by.blcu.manager.model.sql.InputAccount;
 import com.by.blcu.manager.umodel.AccountRoleRModel;
 import com.by.blcu.manager.umodel.AccountSearchModel;
 import com.by.blcu.manager.umodel.AccountUpdateModel;
@@ -29,7 +30,7 @@ public interface ManagerAccountService extends Service<ManagerAccount> {
 
      RetResult<Integer> updateAccount(AccountUpdateModel user, UserSessionHelper helper);
 
-     RetResult<Integer> deleteByUserNameList(List<String> userNameList, UserSessionHelper helper);
+     RetResult<Integer> deleteAccount(InputAccount model, UserSessionHelper helper);
 
      RetResult<AccountUpdateModel> selectAccountByUserName(String userName,String orgCode, UserSessionHelper helper);
 

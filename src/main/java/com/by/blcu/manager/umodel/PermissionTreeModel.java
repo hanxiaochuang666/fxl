@@ -10,7 +10,6 @@ import java.util.List;
 /**
  * 权限树
  */
-@Data
 @ApiModel(description= "权限树")
 public class PermissionTreeModel extends ManagerPermission {
 
@@ -19,4 +18,12 @@ public class PermissionTreeModel extends ManagerPermission {
      */
     @ApiModelProperty(value = "子权限树")
     private List<ManagerPermission> childrenList;
+
+    public List<ManagerPermission> getChildrenList() {
+        return childrenList;
+    }
+
+    public void setChildrenList(List<ManagerPermission> childrenList) {
+        this.childrenList = childrenList;
+    }
 }

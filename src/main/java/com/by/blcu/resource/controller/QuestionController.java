@@ -214,7 +214,7 @@ public class QuestionController {
         }else{
             map.put("difficultyLevel", model.getDifficultyLevel());
         }
-        map.put("questionBody", model.getQuestionBody());
+        map.put("questionBody", StringUtils.isEmpty(model.getQuestionBody())?"":model.getQuestionBody().trim());
         map.put("points", model.getKnowledgePoints());
         map.put("pageSize", model.getPageSize());
         map.put("page", model.getPage());

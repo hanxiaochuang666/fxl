@@ -556,6 +556,7 @@ public class MallOrderInfoServiceImpl extends AbstractService<MallOrderInfo> imp
     @Override
     @Transactional
     public Integer updateMallOrderInfoVoByOrderId(MallOrderInfo mallOrderInfo) {
+        mallOrderInfo.setPaymentTime(new Date());
         Integer integer = mallOrderInfoMapper.updateMallOrderInfoVoByOrderId(mallOrderInfo);
         if(null != mallOrderInfo.getPaymentStatus() && mallOrderInfo.getPaymentStatus() == 1 && !StringUtils.isBlank(mallOrderInfo.getUserName())){
             try {

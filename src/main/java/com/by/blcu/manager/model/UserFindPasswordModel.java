@@ -7,7 +7,6 @@ import lombok.Data;
 /**
  * 用户找回密码类
  */
-@Data
 @ApiModel(description= "用户找回密码类")
 public class UserFindPasswordModel {
     /**
@@ -29,4 +28,36 @@ public class UserFindPasswordModel {
      */
     @ApiModelProperty(value = "邮件/短信验证码")
     private String verifyCode;
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account == null ? null : account.trim();
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public String getVerifyCodeImg() {
+        return verifyCodeImg;
+    }
+
+    public void setVerifyCodeImg(String verifyCodeImg) {
+        this.verifyCodeImg = verifyCodeImg == null ? null : verifyCodeImg.trim();
+    }
+
+    public String getVerifyCode() {
+        return verifyCode;
+    }
+
+    public void setVerifyCode(String verifyCode) {
+        this.verifyCode = verifyCode == null ? null : verifyCode.trim();
+    }
 }

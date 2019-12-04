@@ -154,6 +154,16 @@ public class CommonUtils {
         return "WANXINGTIANKONG".equals(code) || "PEIDUI".equals(code) || "YUEDULIJIE".equals(code) || "ZONGHE".equals(code) ;
     }
 
+    /**
+     * 判断是否是带子题，目前包含：完形填空题，阅读理解题，配对题，综合题
+     * @param type
+     * @return
+     */
+    public static boolean isSingleQuestion(String type){
+
+        return !"配对题".equals(type) && !"阅读理解题".equals(type) && !"完形填空题".equals(type) && !"综合题".equals(type);
+    }
+
     /***
      * 去除String数组中的空值
      */

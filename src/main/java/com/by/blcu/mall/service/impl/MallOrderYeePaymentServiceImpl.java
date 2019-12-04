@@ -255,6 +255,7 @@ public class MallOrderYeePaymentServiceImpl implements MallOrderYeePaymentServic
                 orderPayment.setUpdateTime(new Date());
                 mallOrderPaymentDao.updateByPrimaryKey(orderPayment);
                 order.setPaymentStatus(Constants.PAY_SUCCESS);//支付成功 更新订单状态
+                order.setPaymentTime(new Date());
                 mallOrderInfoService.update(order);
 
                 Boolean flag = mallOrderPaymentService.syncCourseResources(order);

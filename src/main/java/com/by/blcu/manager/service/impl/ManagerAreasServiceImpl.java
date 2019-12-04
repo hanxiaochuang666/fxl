@@ -2,15 +2,17 @@ package com.by.blcu.manager.service.impl;
 
 import com.by.blcu.core.universal.AbstractService;
 import com.by.blcu.manager.common.RedisHelper;
+import com.by.blcu.manager.common.ReflexHelper;
 import com.by.blcu.manager.common.StringHelper;
+import com.by.blcu.manager.common.UserSessionHelper;
 import com.by.blcu.manager.dao.ManagerAreasMapper;
 import com.by.blcu.manager.model.ManagerAreas;
-import com.by.blcu.manager.model.sql.InputAreas;
+import com.by.blcu.manager.model.extend.AreaTree;
 import com.by.blcu.manager.service.ManagerAreasService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -91,4 +93,61 @@ public class ManagerAreasServiceImpl extends AbstractService<ManagerAreas> imple
         return  sql.collect(Collectors.toList());
     }
 
+
+    //region 操作树
+
+    public List<AreaTree> selectAreaTree(UserSessionHelper helper){
+        List<ManagerAreas> categoryListAll =selectList();
+        if(categoryListAll==null || categoryListAll.isEmpty()){
+            return null;
+        }
+        List<AreaTree> resultList = new ArrayList<AreaTree>();
+        List<ManagerAreas> firstList =null;
+        firstList = categoryListAll.stream().filter(t->t.getLevel()==1).collect(Collectors.toList());
+
+        if(firstList!=null && !firstList.isEmpty()){
+            for(ManagerAreas item : firstList){
+                if(item!=null){
+                    AreaTree treeItem = new AreaTree();
+                    try{
+                        ReflexHelper.Copy(item,treeItem);
+                    }catch (Exception ex){
+
+                    }
+                    resultList.add(treeItem);
+                }
+            }
+            for(AreaTree item:resultList) {
+                item.setChildren(selectAreaTreeChildren(categoryListAll,item));
+            }
+        }
+        return resultList;
+    }
+
+    private List<AreaTree> selectAreaTreeChildren(List<ManagerAreas> categoryListAll, AreaTree parentModel){
+        if(parentModel==null || parentModel.getLevel()==null){
+            return null;
+        }
+        List<AreaTree> resultList =new ArrayList<AreaTree>();
+        List<ManagerAreas> firstList = categoryListAll.stream().filter(t->t.getPid().equals(parentModel.getCode())).collect(Collectors.toList());
+        if(firstList!=null && !firstList.isEmpty()){
+            for(ManagerAreas item : firstList){
+                if(item!=null){
+                    AreaTree treeItem = new AreaTree();
+                    try{
+                        ReflexHelper.Copy(item,treeItem);
+                    }catch (Exception ex){
+
+                    }
+                    resultList.add(treeItem);
+                }
+            }
+            for(AreaTree item:resultList) {
+                item.setChildren(selectAreaTreeChildren(categoryListAll,item));
+            }
+        }
+        return resultList;
+    }
+
+    //endregion
 }

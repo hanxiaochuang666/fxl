@@ -10,7 +10,6 @@ import javax.persistence.Id;
 /**
  * 后台角色查询类
  */
-@Data
 @ApiModel(description= "后台角色查询类")
 public class RoleSearchModel  extends ManagerPagerModel {
     /**
@@ -41,4 +40,44 @@ public class RoleSearchModel  extends ManagerPagerModel {
      */
     @ApiModelProperty(value = "所属组织编码")
     private String orgCode;
+
+    public String getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(String roleId) {
+        this.roleId = roleId == null ? null : roleId.trim();
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName == null ? null : roleName.trim();
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Boolean getIsSystem() {
+        return isSystem;
+    }
+
+    public void setIsSystem(Boolean isSystem) {
+        isSystem = isSystem;
+    }
+
+    public String getOrgCode() {
+        return orgCode;
+    }
+
+    public void setOrgCode(String orgCode) {
+        this.orgCode = orgCode == null ? null : orgCode.trim();
+    }
 }

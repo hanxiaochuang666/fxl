@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-@Data
 @ApiModel(description= "验证验证码类")
 public class VcodeVerify {
     /**
@@ -17,4 +16,20 @@ public class VcodeVerify {
      */
     @ApiModelProperty(value = "验证码")
     private String code;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email == null ? null : email.trim();
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code == null ? null : code.trim();
+    }
 }

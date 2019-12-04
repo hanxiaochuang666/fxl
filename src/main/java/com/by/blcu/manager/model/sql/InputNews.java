@@ -12,8 +12,7 @@ import javax.persistence.Id;
 import java.util.Date;
 import java.util.List;
 
-@Data
-@ApiModel(description= "新闻内容")
+@ApiModel(description= "新闻内容类")
 public class InputNews extends ManagerPagerModel {
     @ApiModelProperty(value = "新闻Id")
     private String newsId;
@@ -43,14 +42,131 @@ public class InputNews extends ManagerPagerModel {
     private Date createTimeEnd;
     @ApiModelProperty(value = "新闻Id列表")
     private List<String> newsIdList;
-
-    //region 删除时使用
-
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty(value = "修改时间")
     private Date modifyTime;
+    @ApiModelProperty(value = "修改人")
     private String modifyBy;
 
-    //endregion
+    public String getNewsId() {
+        return newsId;
+    }
+
+    public void setNewsId(String newsId) {
+        this.newsId = newsId == null ? null : newsId.trim();
+    }
+
+    public String getCcId1() {
+        return ccId1;
+    }
+
+    public void setCcId1(String ccId1) {
+        this.ccId1 = ccId1 == null ? null : ccId1.trim();
+    }
+
+    public String getCcId2() {
+        return ccId2;
+    }
+
+    public void setCcId2(String ccId2) {
+        this.ccId2 = ccId2 == null ? null : ccId2.trim();
+    }
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId == null ? null : categoryId.trim();
+    }
+
+    public String getOrgCode() {
+        return orgCode;
+    }
+
+    public void setOrgCode(String orgCode) {
+        this.orgCode = orgCode == null ? null : orgCode.trim();
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title == null ? null : title.trim();
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Integer getClicks() {
+        return clicks;
+    }
+
+    public void setClicks(Integer clicks) {
+        this.clicks = clicks;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean isDeleted) {
+        isDeleted = isDeleted;
+    }
+
+    public Date getCreateTimeStart() {
+        return createTimeStart;
+    }
+
+    public void setCreateTimeStart(Date createTimeStart) {
+        this.createTimeStart = createTimeStart;
+    }
+
+    public Date getCreateTimeEnd() {
+        return createTimeEnd;
+    }
+
+    public void setCreateTimeEnd(Date createTimeEnd) {
+        this.createTimeEnd = createTimeEnd;
+    }
+
+    public List<String> getNewsIdList() {
+        return newsIdList;
+    }
+
+    public void setNewsIdList(List<String> newsIdList) {
+        this.newsIdList = newsIdList;
+    }
+
+    public Date getModifyTime() {
+        return modifyTime;
+    }
+
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
+    }
+
+    public String getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(String modifyBy) {
+        this.modifyBy = modifyBy == null ? null : modifyBy.trim();
+    }
 
 }

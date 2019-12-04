@@ -10,6 +10,7 @@ import com.by.blcu.manager.common.StringHelper;
 import com.by.blcu.manager.model.ManagerAccount;
 import com.by.blcu.manager.model.ManagerRole;
 import com.by.blcu.manager.model.SsoUser;
+import com.by.blcu.manager.model.sql.InputAccount;
 import com.by.blcu.manager.service.ManagerAccountService;
 import com.by.blcu.manager.service.SsoUserService;
 import com.by.blcu.manager.umodel.*;
@@ -38,7 +39,7 @@ import java.util.stream.Collectors;
         "2、机构用户管理-根据(用户账号/手机号/邮箱)查找一个用户【findAccount】\n" +
         "3、机构用户管理-添加用户【addAccount】\n" +
         "4、机构用户管理-修改用户【updateAccount】\n" +
-        "5、机构用户管理-删除用户【deleteByUserNameList】\n" +
+        "5、机构用户管理-删除用户【deleteByAccountIdList】\n" +
         "6、机构用户管理-根据用户账号查询用户【selectAccountByUserName】\n" +
         "7、机构用户管理-根据用户Id查询用户【selectAccountByUserId】\n" +
         "8、机构用户管理-查询用户列表【searchAccount】\n" +
@@ -87,10 +88,10 @@ public class ManagerAccountController extends ManagerBase {
     }
 
     @ApiOperation(value = "机构用户管理-删除用户", notes = "通过用户名列表，批量删除用户")
-    @PostMapping("/deleteByUserNameList")
+    @PostMapping("/deleteByAccountIdList")
     @RequiresPermissions("system:account")
-    public RetResult<Integer> deleteByUserNameList(@ApiParam(name = "userNameList", value = "用户名列表") @RequestBody List<String> userNameList) throws Exception {
-        return managerAccountService.deleteByUserNameList(userNameList,userSessionHelper);
+    public RetResult<Integer> deleteByAccountIdList(@ApiParam(name = "userNameList", value = "用户名列表") @RequestBody InputAccount model) throws Exception {
+        return managerAccountService.deleteAccount(model,userSessionHelper);
     }
 
     @ApiOperation(value = "机构用户管理-根据用户账号查询用户", notes = "根据用户账号，查找用户")

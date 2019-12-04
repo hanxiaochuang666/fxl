@@ -12,6 +12,7 @@ import com.by.blcu.manager.dao.ManagerOrganizationMapper;
 import com.by.blcu.manager.model.ManagerOrganization;
 import com.by.blcu.manager.model.ManagerOrganization;
 import com.by.blcu.manager.model.SsoUser;
+import com.by.blcu.manager.model.sql.InputOrg;
 import com.by.blcu.manager.service.ManagerOrganizationService;
 import com.by.blcu.core.universal.AbstractService;
 import com.by.blcu.manager.umodel.OrganizationSearchModel;
@@ -40,12 +41,23 @@ public class ManagerOrganizationServiceImpl extends AbstractService<ManagerOrgan
                 || StringHelper.IsNullOrWhiteSpace(managerOrganization.getOrganizationLogo()) || StringHelper.IsNullOrWhiteSpace(managerOrganization.getWebPic())  ) {
             return RetResponse.makeErrRsp("[机构名称，入驻者组织编码，机构Logo图标，首页封面]不能为空");
         }
-        Map<String,String> map =new HashMap<String,String>();
-        map.put("orgCode",managerOrganization.getOrgCode());
-        List<ManagerOrganization> listOrganization = managerOrganizationMapper.findOrganizationEquAnd(map);
-        if(listOrganization!=null && !listOrganization.isEmpty()){
-            return RetResponse.makeErrRsp("[入驻者组织编码]已存在");
+
+        //判重
+        InputOrg checkExitModel =new InputOrg();
+        checkExitModel.setOrgCode(managerOrganization.getOrgCode());
+        checkExitModel.setOrganizationName(managerOrganization.getOrganizationName());
+        List<ManagerOrganization> checkResult = managerOrganizationMapper.checkExit(checkExitModel);
+        if(checkResult!=null && !checkResult.isEmpty()){
+            Optional<ManagerOrganization>  checkCode= checkResult.stream().filter(t->t.getOrgCode().equals(managerOrganization.getOrgCode())).findAny();
+            if(checkCode.isPresent()){
+                return RetResponse.makeErrRsp("[入驻者组织编码]已存在");
+            }
+            Optional<ManagerOrganization> checkName= checkResult.stream().filter(t->t.getOrganizationName().equals(managerOrganization.getOrganizationName())).findAny();
+            if(checkName.isPresent()){
+                return RetResponse.makeErrRsp("[机构名称]已存在");
+            }
         }
+
 //        String orgCode = "";
 //        Map<String,Integer> map =new HashMap<String,Integer>();
 //        map.put("orgCodeLength",StringHelper.OrgCodeLenth);
@@ -77,8 +89,8 @@ public class ManagerOrganizationServiceImpl extends AbstractService<ManagerOrgan
         if(StringHelper.IsNullOrZero(managerOrganization.getStatus())){
             managerOrganization.setStatus(1);
         }
-        if(StringHelper.IsNullOrZero(managerOrganization.getType())){
-            managerOrganization.setType(1);
+        if(StringHelper.IsNullOrZero(managerOrganization.getType()) || managerOrganization.getType()==1){
+            managerOrganization.setType(3);
         }
         if(StringHelper.IsNullOrZero(managerOrganization.getVerifyStatus())){
             managerOrganization.setVerifyStatus(0);
@@ -101,32 +113,36 @@ public class ManagerOrganizationServiceImpl extends AbstractService<ManagerOrgan
         if (managerOrganization == null || StringUtils.isEmpty(managerOrganization.getOrganizationId())) {
             return RetResponse.makeErrRsp("[机构表Id]不能为空");
         }
-        Map<String,String> map =new HashMap<String,String>();
-        map.put("organizationId",managerOrganization.getOrganizationId());
-        List<ManagerOrganization> listOrganization = managerOrganizationMapper.findOrganizationEquAnd(map);
-        if(listOrganization==null || listOrganization.isEmpty()){
-            return RetResponse.makeErrRsp("不存在此机构");
-        }
-//        Map<String,String> mapCheck =new HashMap<String,String>();
-//        map.put("orgCode",managerOrganization.getOrgCode());
-//        List<ManagerOrganization> mapCheckResult = managerOrganizationMapper.findOrganizationEquAnd(map);
-//        Optional<ManagerOrganization> exitId = mapCheckResult.stream().filter(t->!t.getOrganizationId().equals(managerOrganization.getOrganizationId())).findAny();
-//        if(exitId.isPresent()){
-//            return RetResponse.makeErrRsp("[入驻者组织编码]已存在");
-//        }
-        ManagerOrganization model = listOrganization.get(0);
-        if(!StringHelper.IsNullOrWhiteSpace(managerOrganization.getOrgCode()) && !managerOrganization.getOrgCode().equals(model.getOrgCode()))
-        {
-            return RetResponse.makeErrRsp("不能修改机构编号");
+
+        //判重
+        InputOrg checkExitModel =new InputOrg();
+        checkExitModel.setOrganizationName(managerOrganization.getOrganizationName());
+        checkExitModel.setOrganizationId(managerOrganization.getOrganizationId());
+        List<ManagerOrganization> checkResult = managerOrganizationMapper.checkExit(checkExitModel);
+        if(checkResult!=null && !checkResult.isEmpty()){
+            Optional<ManagerOrganization>  updateModelOpt= checkResult.stream().filter(t->t.getOrganizationId().equals(managerOrganization.getOrganizationId())).findFirst();
+            if(!updateModelOpt.isPresent()){
+                return RetResponse.makeErrRsp("不存在此机构");
+            }
+            ManagerOrganization model = updateModelOpt.get();
+            Optional<ManagerOrganization> checkName= checkResult.stream().filter(t->t.getOrganizationName().equals(managerOrganization.getOrganizationName()) && !t.getOrganizationId().equals(model.getOrganizationId())).findAny();
+            if(checkName.isPresent()){
+                return RetResponse.makeErrRsp("[机构名称]已存在");
+            }
+            if(!StringHelper.IsNullOrWhiteSpace(managerOrganization.getOrgCode()) && !managerOrganization.getOrgCode().equals(model.getOrgCode()))
+            {
+                return RetResponse.makeErrRsp("不能修改机构编号");
+            }
         }
 
         if(managerOrganization.getStatus()!=null && managerOrganization.getStatus()==0 ){
             managerOrganization.setStatus(1);
         }
-        if(managerOrganization.getType()!=null && managerOrganization.getType()==0 ){
-            managerOrganization.setType(1);
-        }
+//        if((managerOrganization.getType()!=null && managerOrganization.getType()==0 ) || managerOrganization.getType()==1){
+//            managerOrganization.setType(3);
+//        }
         Date datetime = new Date();
+        managerOrganization.setType(null);
         managerOrganization.setOrgCode(null);
         managerOrganization.setCreateBy(null);
         managerOrganization.setCreateTime(null);

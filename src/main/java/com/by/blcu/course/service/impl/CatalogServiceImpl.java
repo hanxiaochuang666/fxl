@@ -141,7 +141,7 @@ public class CatalogServiceImpl extends BaseServiceImpl implements ICatalogServi
         }
         checkPoints(successList);
         courseId = insertPoints(successList, paraMap);
-        return getKnowledgePoints(courseId);
+        return getKnowledgePoints(courseId,null);
     }
 
     // 校验是否有重复目录名称
@@ -314,7 +314,7 @@ public class CatalogServiceImpl extends BaseServiceImpl implements ICatalogServi
      * @throws ServiceException
      */
     @Override
-    public KnowledgePointNode getKnowledgePoints(int courseId) throws ServiceException {
+    public KnowledgePointNode getKnowledgePoints(int courseId,Integer status) throws ServiceException {
 
         Map<String, Object> map = new HashMap<>();
         map.put("courseId", courseId);
@@ -324,6 +324,7 @@ public class CatalogServiceImpl extends BaseServiceImpl implements ICatalogServi
         paraMap.put("parentId", "0");
         paraMap.put("_order_", "ASC");
         paraMap.put("courseId", courseId);
+        paraMap.put("status", status);
         // 递归查询子节点
         nodes = getChildNodes(paraMap);
         KnowledgePointNode node = new KnowledgePointNode();
@@ -342,6 +343,7 @@ public class CatalogServiceImpl extends BaseServiceImpl implements ICatalogServi
      */
     private List<KnowledgePointNode> getChildNodes(Map<String, Object> paraMap) {
 
+        Integer status = (Integer)paraMap.get("status");
         List<KnowledgePointNode> nodes = new ArrayList<>();
         List<Catalog> lists = new ArrayList<>();
         lists = catalogDao.selectList(paraMap);
@@ -356,6 +358,7 @@ public class CatalogServiceImpl extends BaseServiceImpl implements ICatalogServi
                 paraMap.put("parentId", catalog.getCatalogId());
                 paraMap.put("_order_", "ASC");
                 paraMap.put("courseId", catalog.getCourseId());
+                paraMap.put("status", status);
                 List<KnowledgePointNode> list = getChildNodes(paraMap);
                 if (!CommonUtils.listIsEmptyOrNull(list)) {
                     nodeTmp.setNodes(list);

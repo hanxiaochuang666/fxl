@@ -12,6 +12,7 @@ import com.by.blcu.manager.dao.ManagerAccountMapper;
 import com.by.blcu.manager.dao.ManagerOrganizationMapper;
 import com.by.blcu.manager.dao.SsoUserMapper;
 import com.by.blcu.manager.model.*;
+import com.by.blcu.manager.model.sql.InputAccount;
 import com.by.blcu.manager.model.sql.OrgPermission;
 import com.by.blcu.manager.service.*;
 import com.by.blcu.core.universal.AbstractService;
@@ -164,20 +165,22 @@ public class ManagerAccountServiceImpl extends AbstractService<ManagerAccount> i
         return RetResponse.makeOKRsp(state);
     }
 
-    public RetResult<Integer> deleteByUserNameList(List<String> userNameList, UserSessionHelper helper){
-        if(userNameList == null || userNameList.isEmpty()){
-            return RetResponse.makeErrRsp("参数不能为空");
+    public RetResult<Integer> deleteAccount(InputAccount model, UserSessionHelper helper){
+        if(model==null ||  StringHelper.IsNullOrEmpty(model.getAccountIdList())){
+            return RetResponse.makeErrRsp("[后台用户Id列表]不能为空");
         }
+
         Date datetime = new Date();
-        Map<String,Object> map =new HashMap<String,Object>();
-        map.put("modifyTime",datetime);
-        map.put("modifyBy",helper.getUserName());
-        map.put("userNameList",userNameList);
+        InputAccount deleteModel =new InputAccount();
+        deleteModel.setModifyTime(datetime);
+        deleteModel.setModifyBy(helper.getUserName());
+        deleteModel.setAccountIdList(model.getAccountIdList());
+
         if(!helper.getOrgType().equals(ManagerHelper.OrgType)){
-            map.put("orgCode",helper.getOrgCode());
+            deleteModel.setOrgCode(helper.getOrgCode());
         }
-        Integer state = managerAccountMapper.deleteAccount(map);
-        managerLogService.addLogAsync(ManagerLogEnum.Account_Delete.getName(), JSON.toJSONString(userNameList),helper);
+        Integer state = managerAccountMapper.deleteAccount(deleteModel);
+        managerLogService.addLogAsync(ManagerLogEnum.Account_Delete.getName(), JSON.toJSONString(deleteModel),helper);
 
         return RetResponse.makeOKRsp(state);
     }

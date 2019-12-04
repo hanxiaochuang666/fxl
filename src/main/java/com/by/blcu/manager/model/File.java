@@ -1,100 +1,120 @@
 package com.by.blcu.manager.model;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 import javax.persistence.*;
 
+@ApiModel(description= "用户")
 public class File {
     /**
-     * 文件ID
+     *文件ID
      */
     @Id
     @Column(name = "file_id")
+    @ApiModelProperty(value = "文件ID")
     private String fileId;
 
     /**
-     * 商品ID
+     *商品ID
      */
     @Column(name = "commodity_id")
+    @ApiModelProperty(value = "商品ID")
     private String commodityId;
 
     /**
-     * 文件名
+     *文件名
      */
     @Column(name = "file_name")
+    @ApiModelProperty(value = "文件名")
     private String fileName;
 
     /**
-     * 文件路径
+     *文件路径
      */
     @Column(name = "file_path")
+    @ApiModelProperty(value = "文件路径")
     private String filePath;
 
     /**
-     * 创建时间
+     *创建时间
      */
     @Column(name = "file_time")
+    @ApiModelProperty(value = "创建时间")
     private Date fileTime;
 
     /**
-     * 是否删除(删除：0，未删除：1)
+     *是否删除(删除：0，未删除：1)
      */
+    @ApiModelProperty(value = "是否删除(删除：0，未删除：1)")
     private Integer isdelete;
 
     /**
-     * 是否有效(无效：0，有效：1)
+     *是否有效(无效：0，有效：1)
      */
+    @ApiModelProperty(value = "是否有效(无效：0，有效：1)")
     private Integer isvalidity;
 
     /**
-     * 存储文件名
+     *存储文件名
      */
     @Column(name = "file_size")
+    @ApiModelProperty(value = "存储文件名")
     private String fileSize;
 
     /**
-     * 审核状态（0：待审核；1::机审不通过；2：机审通过；3：人审不通过；4：人审通过）
+     *审核状态（0：待审核；1::机审不通过；2：机审通过；3：人审不通过；4：人审通过）
      */
     @Column(name = "check_status")
+    @ApiModelProperty(value = "审核状态（0：待审核；1::机审不通过；2：机审通过；3：人审不通过；4：人审通过）")
     private Integer checkStatus;
 
     /**
-     * 审核时间
+     *审核时间
      */
     @Column(name = "check_time")
+    @ApiModelProperty(value = "审核时间")
     private Date checkTime;
 
     /**
-     * 审核人id
+     *审核人id
      */
     @Column(name = "check_user")
+    @ApiModelProperty(value = "审核人id")
     private Integer checkUser;
 
     /**
-     * 审核意见
+     *审核意见
      */
     @Column(name = "check_msg")
+    @ApiModelProperty(value = "审核意见")
     private String checkMsg;
 
     /**
-     * 审核id
+     *审核id
      */
     @Column(name = "check_id")
+    @ApiModelProperty(value = "审核id")
     private String checkId;
 
     /**
-     * 音频:audio 图片:pic 文档:doc 视频:video
+     *音频:audio 图片:pic 文档:doc 视频:video
      */
     @Column(name = "file_type")
+    @ApiModelProperty(value = "音频:audio 图片:pic 文档:doc 视频:video")
     private String fileType;
 
     /**
-     * 备用2
+     *备用2
      */
+    @ApiModelProperty(value = "备用2")
     private String bak2;
 
     /**
-     * 备用3
+     *备用3
      */
+    @ApiModelProperty(value = "备用3")
     private String bak3;
 
     /**

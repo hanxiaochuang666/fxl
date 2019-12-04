@@ -40,6 +40,9 @@ public class DiscussModel implements Serializable {
     @ApiModelProperty(value = "创建人id")
     private Integer createUserId;
 
+    @ApiModelProperty(value = "当前登录者id")
+    private Integer nowUserId;
+
     @ApiModelProperty(value = "创建人名称")
     private String createUserName;
 
@@ -48,6 +51,12 @@ public class DiscussModel implements Serializable {
 
     @ApiModelProperty(value = "创建日期")
     private Date createTime;
+
+    @ApiModelProperty(value = "是否可编辑 1:可以 0：不可以")
+    private Integer canEdit;
+
+    @ApiModelProperty(value = "是否可删除 1:可以 0：不可以")
+    private Integer canDelete;
 
     @ApiModelProperty(value = "回复条数")
     private Long replyCount;

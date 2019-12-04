@@ -260,6 +260,7 @@ public class MallOrderPaymentServiceImpl extends BaseServiceImpl implements IMal
                     mallOrderPaymentDao.updateByPrimaryKey(orderPayment);
 
                     order.setPaymentStatus(Constants.PAY_SUCCESS);//支付成功 更新订单状态
+                    order.setPaymentTime(new Date());
                     mallOrderInfoService.update(order);
                     //同步课程资料
                     Boolean flag = syncCourseResources(order);
@@ -415,6 +416,7 @@ public class MallOrderPaymentServiceImpl extends BaseServiceImpl implements IMal
                 MallOrderInfo order = mallOrderInfoService.selectBy("orderNo", orderNo);
                 if (null != order) {
                     order.setPaymentStatus(Constants.PAY_SUCCESS);//支付成功 更新订单状态
+                    order.setPaymentTime(new Date());
                     Integer state = mallOrderInfoService.update(order);
                     Integer insert = mallPayLogInfoService.insert(mallPayLogInfo);
                     try {

@@ -12,7 +12,6 @@ import javax.persistence.Id;
 import java.util.Date;
 import java.util.List;
 
-@Data
 @ApiModel(description= "新闻分类")
 public class InputNewsCategory  extends ManagerPagerModel {
     @ApiModelProperty(value = "新闻分类Id")
@@ -39,16 +38,114 @@ public class InputNewsCategory  extends ManagerPagerModel {
     @ApiModelProperty(value = "课程二级分类Id")
     private String ccId2;
 
-    //region 删除时使用
-
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty(value = "修改时间")
     private Date modifyTime;
+    @ApiModelProperty(value = "修改人")
     private String modifyBy;
 
-    //endregion
+    public String getCategoryId() {
+        return categoryId;
+    }
 
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId == null ? null : categoryId.trim();
+    }
 
+    public String getCcId() {
+        return ccId;
+    }
 
+    public void setCcId(String ccId) {
+        this.ccId = ccId;
+    }
 
+    public String getOrgCode() {
+        return orgCode;
+    }
+
+    public void setOrgCode(String orgCode) {
+        this.orgCode = orgCode == null ? null : orgCode.trim();
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName == null ? null : categoryName.trim();
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code == null ? null : code.trim();
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId == null ? null : parentId.trim();
+    }
+
+    public Integer getClassLayer() {
+        return classLayer;
+    }
+
+    public void setClassLayer(Integer classLayer) {
+        this.classLayer = classLayer;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public List<String> getCategoryIdList() {
+        return categoryIdList;
+    }
+
+    public void setCategoryIdList(List<String> categoryIdList) {
+        this.categoryIdList = categoryIdList;
+    }
+
+    public String getCcId1() {
+        return ccId1;
+    }
+
+    public void setCcId1(String ccId1) {
+        this.ccId1 = ccId1 == null ? null : ccId1.trim();
+    }
+
+    public String getCcId2() {
+        return ccId2;
+    }
+
+    public void setCcId2(String ccId2) {
+        this.ccId2 = ccId2 == null ? null : ccId2.trim();
+    }
+
+    public Date getModifyTime() {
+        return modifyTime;
+    }
+
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
+    }
+
+    public String getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(String modifyBy) {
+        this.modifyBy = modifyBy == null ? null : modifyBy.trim();
+    }
 }

@@ -509,7 +509,7 @@ public class ResourcesServiceImpl extends BaseServiceImpl implements IResourcesS
                 resourcesViewModel.setData(videoInfo);
             }else if(resources.getType().intValue() == ResourceTypeEnum.LIVE.getTypeCode().intValue()){
                 //3.直播
-                Map liveParam = MapUtils.initMap("roomId", resources.getContent());
+                Map liveParam = MapUtils.initMap("romeId", resources.getContent());
                 List<LiveTelecast> list = liveTelecastDao.selectList(liveParam);
                 if(list != null && list.size() > 0){
                     resourcesViewModel.setData(list.get(0));

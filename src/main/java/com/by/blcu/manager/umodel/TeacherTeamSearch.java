@@ -11,7 +11,6 @@ import javax.persistence.Id;
  *名师团队查询类
  */
 @ApiModel(description= "名师团队查询类")
-@Data
 public class TeacherTeamSearch extends ManagerPagerModel {
 
      /**
@@ -32,4 +31,36 @@ public class TeacherTeamSearch extends ManagerPagerModel {
 
     @ApiModelProperty(value = "教师姓名")
     private String teacherName;
+
+    public String getOrgCode() {
+        return orgCode;
+    }
+
+    public void setOrgCode(String orgCode) {
+        this.orgCode = orgCode == null ? null : orgCode.trim();
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public String getCcId() {
+        return ccId;
+    }
+
+    public void setCcId(String ccId) {
+        this.ccId = ccId == null ? null : ccId.trim();
+    }
+
+    public String getTeacherName() {
+        return teacherName;
+    }
+
+    public void setTeacherName(String teacherName) {
+        this.teacherName = teacherName == null ? null : teacherName.trim();
+    }
 }

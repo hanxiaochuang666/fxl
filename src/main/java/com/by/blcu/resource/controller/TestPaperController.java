@@ -119,7 +119,7 @@ public class TestPaperController {
             //判断重名试卷
             String name = testPaper.getName();
             if(!StringUtils.isEmpty(name)){
-                Map<String, Object> initMap = MapUtils.initMap("name", name);
+                Map<String, Object> initMap = MapUtils.initMap("nameAll", name);
                 initMap.put("createUser",userId);
                 long selectCount = testPaperService.selectCount(initMap);
                 if(selectCount>0){

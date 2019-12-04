@@ -78,7 +78,7 @@ public class ThymeleafHelper {
         //机构目录
         String orgNameShot = ChineseCharacterUtil.getLowerCase(organization.getOrganizationName()+"_"+organization.getOrgCode(),false);
         //本地根路径
-        String path = parent+"/"+orgNameShot+"/";
+        String path = parent+ "/suborg/" +orgNameShot+"/";
         //本地生成文件全路径
         String targetIndex=path+"student/"+template+".html";
 

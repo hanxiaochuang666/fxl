@@ -9,7 +9,6 @@ import lombok.Data;
 import javax.persistence.Column;
 
 @ApiModel(description= "后台用户")
-@Data
 public class AccountUpdateModel extends ManagerAccount {
 
     /**
@@ -44,4 +43,52 @@ public class AccountUpdateModel extends ManagerAccount {
 
     @ApiModelProperty(value = "用户扩展信息")
     private ManagerAccountExtend accountExtend;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName == null ? null : userName.trim();
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password == null ? null : password.trim();
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName == null ? null : realName.trim();
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone == null ? null : phone.trim();
+    }
+
+    public String getOrgName() {
+        return orgName;
+    }
+
+    public void setOrgName(String orgName) {
+        this.orgName = orgName == null ? null : orgName.trim();
+    }
+
+    public ManagerAccountExtend getAccountExtend() {
+        return accountExtend;
+    }
+
+    public void setAccountExtend(ManagerAccountExtend accountExtend) {
+        this.accountExtend = accountExtend;
+    }
 }

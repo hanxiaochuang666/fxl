@@ -51,6 +51,7 @@ import java.net.URLEncoder;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -100,11 +101,12 @@ public class StudentCourseServiceImpl implements IStudentCourseService {
         Integer pageSize = StringUtils.isEmpty(size)?10:size;
         Integer pageIndex = StringUtils.isEmpty(index)?1:index;
         String userName = StringUtils.obj2Str(request.getAttribute("username"));
+        int studentId = Integer.valueOf(request.getAttribute("userId").toString());
         List<MallOrderInfoVo> orderInfoVos = orderInfoService.selectMallOrderInfoVoByUserName(userName);
 
         // 创建日期修改一下改为订单的创建日期
         orderInfoVos.forEach(o->{
-            Date orderDate = o.getCreateTime();
+            Date orderDate = o.getPaymentTime();
             List<MallCommodityOrderVo> list = o.getMallCommodityOrderVoList();
             if(!CommonUtils.listIsEmptyOrNull(list)){
                 list.forEach(m-> m.getCommodityInfoFileVo().setCreateTime(orderDate));
@@ -124,7 +126,7 @@ public class StudentCourseServiceImpl implements IStudentCourseService {
         List<StudentCourseModel> courseModelsN = new ArrayList<>();
 
         for (MallCommodityOrderVo vo : mallCommodityOrderVos) {
-            setCourseModel(courseModelsY, courseModelsN, vo);
+            setCourseModel(courseModelsY, courseModelsN, vo,studentId);
         }
         // 分页
         if(1 == type){// 在学
@@ -136,7 +138,7 @@ public class StudentCourseServiceImpl implements IStudentCourseService {
         }
     }
 
-    private void setCourseModel(List<StudentCourseModel> courseModelsY, List<StudentCourseModel> courseModelsN, MallCommodityOrderVo vo) {
+    private void setCourseModel(List<StudentCourseModel> courseModelsY, List<StudentCourseModel> courseModelsN, MallCommodityOrderVo vo,Integer studentId) {
 
         Integer isPackage = vo.getCommodityInfoFileVo().getCourseType();
         StudentCourseModel studentCourseModel = new StudentCourseModel();
@@ -159,17 +161,17 @@ public class StudentCourseServiceImpl implements IStudentCourseService {
             endDate = DateUtils.change(createDate, 5, 30 * validity);
         }
         if (1 == isPackage) {// 套餐
-            List<StudentCourseModel> studentCourseModels = getChileMallOrderInfo(vo);
+            List<StudentCourseModel> studentCourseModels = getChileMallOrderInfo(vo,studentId);
             studentCourseModel.setChildList(studentCourseModels);
             // 套餐的话，学习进度把各个课程都加起来算
-            setStudySchedule(studentCourseModel, vo);
+            setStudySchedule(studentCourseModel, vo,studentId);
 
         } else {
             studentCourseModel.setCourseId(vo.getCommodityInfoFileVo().getCourseId());
             if (StringUtils.isBlank(vo.getCommodityInfoFileVo().getCourseId())) {
                 throw new ServiceException("当前购买商品：" + vo.getCommodityInfoFileVo().getCourseName() + ",尚未绑定课程！");
             }
-            Map<String, Object> map = selectStudySchedule(Integer.valueOf(vo.getCommodityInfoFileVo().getCourseId()));
+            Map<String, Object> map = selectStudySchedule(Integer.valueOf(vo.getCommodityInfoFileVo().getCourseId()),studentId);
             if (map.isEmpty())
                 return;
             if (StringUtils.isEmpty(map.get("learnCount")) || StringUtils.isEmpty(map.get("courseCount"))) {
@@ -211,7 +213,7 @@ public class StudentCourseServiceImpl implements IStudentCourseService {
         }
     }
 
-    private void setStudySchedule(StudentCourseModel studentCourseModel, MallCommodityOrderVo vo) {
+    private void setStudySchedule(StudentCourseModel studentCourseModel, MallCommodityOrderVo vo,Integer studentId) {
 
         List<CommodityInfoFileVo> fileVoList = vo.getCommodityInfoFileVo().getCommodityInfoFileVoList();
         if (!CommonUtils.listIsEmptyOrNull(fileVoList)) {
@@ -221,7 +223,7 @@ public class StudentCourseServiceImpl implements IStudentCourseService {
                 if (StringUtils.isBlank(infoFileVo.getCourseId())) {
                     throw new ServiceException("当前购买商品：" + infoFileVo.getCourseName() + ",尚未绑定课程！");
                 }
-                Map<String, Object> map = selectStudySchedule(Integer.valueOf(infoFileVo.getCourseId()));
+                Map<String, Object> map = selectStudySchedule(Integer.valueOf(infoFileVo.getCourseId()),studentId);
                 if (map.isEmpty())
                     continue;
                 if (StringUtils.isEmpty(map.get("learnCount")) || StringUtils.isEmpty(map.get("courseCount"))) {
@@ -246,7 +248,7 @@ public class StudentCourseServiceImpl implements IStudentCourseService {
     }
 
     // 获取套餐中的子商品列表
-    private List<StudentCourseModel> getChileMallOrderInfo(MallCommodityOrderVo vo) {
+    private List<StudentCourseModel> getChileMallOrderInfo(MallCommodityOrderVo vo,Integer studentId) {
 
         List<StudentCourseModel> models = new ArrayList<>();
         if (!CommonUtils.listIsEmptyOrNull(vo.getCommodityInfoFileVo().getCommodityInfoFileVoList())) {
@@ -264,7 +266,7 @@ public class StudentCourseServiceImpl implements IStudentCourseService {
                 if (StringUtils.isBlank(fileVo.getCourseId())) {
                     throw new ServiceException("当前购买商品：" + fileVo.getCourseName() + ",尚未绑定课程！");
                 }
-                Map<String, Object> map = selectStudySchedule(Integer.valueOf(fileVo.getCourseId()));
+                Map<String, Object> map = selectStudySchedule(Integer.valueOf(fileVo.getCourseId()),studentId);
                 if (!map.isEmpty()) {
                     if (StringUtils.isEmpty(map.get("learnCount")) || StringUtils.isEmpty(map.get("courseCount"))) {
                         throw new ServiceException("商品：" + fileVo.getCourseName() + ",关联课程信息有误！");
@@ -290,19 +292,23 @@ public class StudentCourseServiceImpl implements IStudentCourseService {
     }
 
     @Override
-    public Map<String, Object> selectStudySchedule(Integer courseId) throws ServiceException {
+    public Map<String, Object> selectStudySchedule(Integer courseId,Integer studentId) throws ServiceException {
 
         Map<String,Object> retMap = new HashMap<>();
         // 先查课程目录的所有课时
         Map<String,Object> pMap = new HashMap<>();
         pMap.put("courseId",courseId);
+        pMap.put("studentId",studentId);
+        pMap.put("status","1");
         List<Catalog> catalogs = catalogDao.selectChildNode(pMap);
         if(!CommonUtils.listIsEmptyOrNull(catalogs)){
+            List<Integer> catalogIds = catalogs.stream().map(Catalog::getCatalogId).collect(Collectors.toList());
             Integer courseCount = catalogs.size();
             retMap.put("courseCount",courseCount);
             // 再查所有已学习的课时
             pMap.put("learnFlag","1");
-            Long learnCount = learnActiveDao.selectCount(pMap);
+            pMap.put("catalogIds",catalogIds);
+            Long learnCount = learnActiveDao.selectLearnActiveCount(pMap);
             retMap.put("learnCount",learnCount);
         }else{
             log.error("根据课程id【"+courseId+"】未查询到课时");
@@ -335,6 +341,7 @@ public class StudentCourseServiceImpl implements IStudentCourseService {
 
     private List<CatalogAndResourceModel> getChildNodes(Map<String, Object> paraMap,String userType,int studentId) {
 
+        Integer catalogStatus = (Integer) paraMap.get("status");
         List<CatalogAndResourceModel> nodes = new ArrayList<>();
         List<Catalog> lists = new ArrayList<>();
         lists = catalogDao.selectList(paraMap);
@@ -431,7 +438,7 @@ public class StudentCourseServiceImpl implements IStudentCourseService {
                 paraMap.put("parentId", catalog.getCatalogId());
                 paraMap.put("_order_", "ASC");
                 paraMap.put("courseId", catalog.getCourseId());
-                paraMap.put("status", catalog.getStatus());
+                paraMap.put("status", catalogStatus);
                 List<CatalogAndResourceModel> list = getChildNodes(paraMap,userType,studentId);
                 if(!CommonUtils.listIsEmptyOrNull(list)){
                     nodeTmp.setNodes(list);

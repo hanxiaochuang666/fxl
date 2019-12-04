@@ -781,12 +781,10 @@ public class QuestionServiceImpl extends BaseServiceImpl implements IQuestionSer
         // 规则校验
         checkQuestionRule(successList);
         childQuestions = successList.stream().filter(s ->
-                !StringUtils.isEmpty(s.getChildQuestionType()) || "配对题".equals(s.getQuestionType()) || "阅读理解题".equals(s.getQuestionType())
-                        || "完形填空题".equals(s.getQuestionType()) || "综合题".equals(s.getQuestionType()))
+                !StringUtils.isEmpty(s.getChildQuestionType()) && !CommonUtils.isSingleQuestion(s.getQuestionType()))
                 .collect(Collectors.toList());
         singleQuestions = successList.stream().filter(s ->
-                StringUtils.isEmpty(s.getChildQuestionType()) && (!"配对题".equals(s.getQuestionType()) && !"阅读理解题".equals(s.getQuestionType())
-                        && !"完形填空题".equals(s.getQuestionType()) && !"综合题".equals(s.getQuestionType())))
+                StringUtils.isEmpty(s.getChildQuestionType()) && CommonUtils.isSingleQuestion(s.getQuestionType()))
                 .collect(Collectors.toList());
         Map<String, Object> pointMap = new HashMap<>();
         pointMap.put("courseId", courseId);
@@ -845,8 +843,20 @@ public class QuestionServiceImpl extends BaseServiceImpl implements IQuestionSer
                 if("PANDUAN".equals(type.getCode())){
                     // 判断题 默认选项
                     ss.setQuestionOpt("正确;错误");
+                    JSONArray array = new JSONArray();
+                        String[] opts = ss.getQuestionOpt().split(";");
+                        if (opts.length > 0) {
+                            for (String opt : opts) {
+                                JSONObject object = new JSONObject();
+                                object.put("option", StringUtils.isEmpty(opt.trim()) ? opt : opt.trim());
+                                array.add(object);
+                            }
+                        }
+
+                    cModel.setQuestionOpt(array.toJSONString());
+                }else{
+                    cModel.setQuestionOpt(getJsonOption(ss.getQuestionOpt().trim()));
                 }
-                cModel.setQuestionOpt(getJsonOption(ss.getQuestionOpt().trim()));
             }else{
                 if(!"FANYI".equals(type.getCode()) && !"JISUAN".equals(type.getCode()) && !"TIANKONG".equals(type.getCode())
                         && !"WENDA".equals(type.getCode())){
@@ -858,11 +868,11 @@ public class QuestionServiceImpl extends BaseServiceImpl implements IQuestionSer
                 if(("DANXUAN".equals(type.getCode()) || "TIAOCUO".equals(type.getCode())) && ss.getQuestionAnswer().contains(";")){
                     throw new ServiceException("试题序号为【"+ss.getOrder()+"】的试题报错：单选题、挑错题，答案有且只能有一个！");
                 }
-                if(!"FANYI".equals(type.getCode()) && !"TIANKONG".equals(type.getCode()) && !"WENDA".equals(type.getCode())
+                if(!"FANYI".equals(type.getCode()) && !"WENDA".equals(type.getCode())
                         && !"JISUAN".equals(type.getCode())){
                     checkAnswer(ss,ss.getQuestionAnswer().trim(),ss.getQuestionOpt(),type.getCode());
                 }
-                cModel.setQuestionAnswer(getAnswerJson(ss.getQuestionAnswer().trim(), type.getCode(),ss.getQuestionOpt()));
+                cModel.setQuestionAnswer(getAnswerJson(getReplaceString(ss.getQuestionAnswer().trim()), type.getCode(),ss.getQuestionOpt()));
             }else{
                 if(!"WENDA".equals(type.getCode())){
                     throw new ServiceException("试题序号为【"+ss.getOrder()+"】的试题报错：答案不能为空！");
@@ -893,15 +903,17 @@ public class QuestionServiceImpl extends BaseServiceImpl implements IQuestionSer
         if(StringUtils.isEmpty(option)){
             return;
         }else{
-            StringBuilder builder = new StringBuilder();
-            String[] opts = option.split("["+Constants.WORLD_KEY+"](\\.|。)");
-            opts = CommonUtils.removeEmptyArray(opts);
-            if (opts.length > 0) {
-                for (int i = 0; i < opts.length; i++) {
-                    builder.append(Constants.WORLD_MAP.get(i)).append(".").append(opts[i].trim()).append(";");
+            if(!"PANDUAN".equals(type)){
+                StringBuilder builder = new StringBuilder();
+                String[] opts = option.split("["+Constants.WORLD_KEY+"](\\.|。)");
+                opts = CommonUtils.removeEmptyArray(opts);
+                if (opts.length > 0) {
+                    for (int i = 0; i < opts.length; i++) {
+                        builder.append(Constants.WORLD_MAP.get(i)).append(".").append(opts[i].trim()).append(";");
+                    }
                 }
+                option  = builder.toString();
             }
-            option  = builder.toString();
         }
         if(!answer.contains(";")){
             answer+=";";
@@ -991,6 +1003,7 @@ public class QuestionServiceImpl extends BaseServiceImpl implements IQuestionSer
                     }
                     if ("配对题".equals(ss.getQuestionType()) && s.getQuestionSec().equals(ss.getQuestionSec())) {
                         checkAnswer(ss,ss.getQuestionAnswer().trim(),s.getQuestionOpt(),"");
+                        ss.setQuestionOpt(s.getQuestionOpt());
                         modelList.add(getModel(ss, categoryOne, categoryTwo, courseId, orgCode));
                     }
                 }
@@ -1075,7 +1088,7 @@ public class QuestionServiceImpl extends BaseServiceImpl implements IQuestionSer
             if(("DANXUAN".equals(type.getCode()) || "TIAOCUO".equals(type.getCode())) && ss.getQuestionAnswer().contains(";")){
                 throw new ServiceException("子题序号为【"+ss.getOrder()+"】的试题报错：单选题,挑错题，答案只能有一个！");
             }
-            cModel.setQuestionAnswer(getAnswerJson(ss.getQuestionAnswer().trim(), type.getCode(),ss.getQuestionOpt()));
+            cModel.setQuestionAnswer(getAnswerJson(getReplaceString(ss.getQuestionAnswer().trim()), type.getCode(),ss.getQuestionOpt()));
         }else{
             throw new ServiceException("子题序号为【"+ss.getOrder()+"】的试题报错：子题答案不能为空！");
         }
@@ -1102,13 +1115,41 @@ public class QuestionServiceImpl extends BaseServiceImpl implements IQuestionSer
         String answerS = "";
         StringBuilder answerStr = new StringBuilder();
         switch (questionType) {
-            case "DUOXUAN":
             case "TIANKONG":
-            case "XUANCITIANKONG":
                 String[] ans = answer.split(";");
                 if (ans.length > 0) {
                     for (String an : ans) {
                         answerStr.append(StringUtils.isEmpty(an)?an:an.trim()).append("#&&&#");
+                    }
+                }
+                answerS = answerStr.toString().substring(0, answerStr.length() - 5);
+                break;
+            case "DUOXUAN":
+            case "XUANCITIANKONG":
+                answer = answer.toUpperCase();
+                StringBuilder builders = new StringBuilder();
+                String[] options = option.split("["+Constants.WORLD_KEY+"]\\.");
+                options = CommonUtils.removeEmptyArray(options);
+                if (options.length > 0) {
+                    for (int i = 0; i < options.length; i++) {
+                        builders.append(Constants.WORLD_MAP.get(i)).append(".").append(options[i].trim()).append(";");
+                    }
+                }
+                option  = builders.toString();
+                String [] optArrys = option.split(";");
+
+
+                String[] anss = answer.split(";");
+                if (anss.length > 0) {
+                    for (String an : anss) {
+                        for(String o:optArrys){
+                            o = StringUtils.isEmpty(o)?o:o.trim();
+                            if(o.startsWith(an)){
+                                an = o;
+                                answerStr.append(an).append("#&&&#");
+                                break;
+                            }
+                        }
                     }
                 }
                 answerS = answerStr.toString().substring(0, answerStr.length() - 5);
@@ -1121,11 +1162,11 @@ public class QuestionServiceImpl extends BaseServiceImpl implements IQuestionSer
                 opts = CommonUtils.removeEmptyArray(opts);
                 if (opts.length > 0) {
                     for (int i = 0; i < opts.length; i++) {
-                        builder.append(Constants.WORLD_MAP.get(i)).append(".").append(opts[i].trim()).append(";");
+                        builder.append(Constants.WORLD_MAP.get(i)).append(".").append(opts[i].trim()).append("|");
                     }
                 }
                 option  = builder.toString();
-                String [] optArry = option.split(";");
+                String [] optArry = option.split("\\|");
                 for(String o:optArry){
                     o = StringUtils.isEmpty(o)?o:o.trim();
                     if(o.startsWith(answer)){
@@ -1145,20 +1186,12 @@ public class QuestionServiceImpl extends BaseServiceImpl implements IQuestionSer
     private String getJsonOption(String option) {
 
         JSONArray array = new JSONArray();
-        /*String[] opts = option.split(";");
-        if (opts.length > 0) {
-            for (String opt : opts) {
-                JSONObject object = new JSONObject();
-                object.put("option", StringUtils.isEmpty(opt.trim())?opt:opt.trim());
-                array.add(object);
-            }
-        }*/
-        String[] opts = option.split("["+Constants.WORLD_KEY+"]\\.");
+        String[] opts = option.split("[" + Constants.WORLD_KEY + "]\\.");
         opts = CommonUtils.removeEmptyArray(opts);
         if (opts.length > 0) {
             for (int i = 0; i < opts.length; i++) {
                 JSONObject object = new JSONObject();
-                object.put("option", Constants.WORLD_MAP.get(i)+"."+opts[i].trim());
+                object.put("option", Constants.WORLD_MAP.get(i) + "." + opts[i].trim());
                 array.add(object);
             }
         }

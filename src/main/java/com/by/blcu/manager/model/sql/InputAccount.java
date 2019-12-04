@@ -1,72 +1,41 @@
-package com.by.blcu.manager.umodel;
+package com.by.blcu.manager.model.sql;
 
+import com.by.blcu.manager.umodel.ManagerPagerModel;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
+import javax.persistence.Id;
+import java.util.Date;
+import java.util.List;
 
-/**
- * 后台用户查询类
- */
-@ApiModel(description= "后台用户查询类")
-public class AccountSearchModel extends ManagerPagerModel {
-
-    /**
-     *后台用户表Id
-     */
+@ApiModel(description= "机构用户类")
+public class InputAccount extends ManagerPagerModel {
     @ApiModelProperty(value = "后台用户表Id")
     private String accountId;
-
-    /**
-     *统一用户表Id
-     */
-    @ApiModelProperty(value = "统一用户表Id")
+    @ApiModelProperty(value = "用户Id")
     private String userId;
-
-    /**
-     *账号
-     */
-    @ApiModelProperty(value = "账号")
+    @ApiModelProperty(value = "用户名")
     private String userName;
-
-    /**
-     *真实姓名
-     */
-    @ApiModelProperty(value = "真实姓名")
-    private String realName;
-
-    /**
-     *手机号
-     */
-    @ApiModelProperty(value = "手机号")
-    private String phone;
-
-    /**
-     *用户类型( 1本部人员；2.教师；3第三方机构，4租户)
-     */
     @ApiModelProperty(value = "用户类型( 1本部人员；2.教师；3第三方机构，4租户)")
     private Integer type;
-
-    /**
-     *所属组织编码
-     */
-    @Column(name = "org_code")
     @ApiModelProperty(value = "所属组织编码")
     private String orgCode;
-
-    /**
-     *用户状态（1. 正常 ，2 停用）
-     */
     @ApiModelProperty(value = "用户状态（1. 正常 ，2 停用）")
     private Integer status;
-
-    /**
-     *是否是管理者
-     */
-    @Column(name = "is_manager")
     @ApiModelProperty(value = "是否是管理者")
     private Boolean isManager;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date modifyTime;
+    @ApiModelProperty(value = "修改人")
+    private String modifyBy;
+
+    @ApiModelProperty(value = "后台用户Id列表")
+    private List<String> accountIdList;
 
     public String getAccountId() {
         return accountId;
@@ -90,22 +59,6 @@ public class AccountSearchModel extends ManagerPagerModel {
 
     public void setUserName(String userName) {
         this.userName = userName == null ? null : userName.trim();
-    }
-
-    public String getRealName() {
-        return realName;
-    }
-
-    public void setRealName(String realName) {
-        this.realName = realName == null ? null : realName.trim();
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone == null ? null : phone.trim();
     }
 
     public Integer getType() {
@@ -132,11 +85,35 @@ public class AccountSearchModel extends ManagerPagerModel {
         this.status = status;
     }
 
-    public Boolean getIsManager() {
+    public Boolean getManager() {
         return isManager;
     }
 
-    public void setIsManager(Boolean isManager) {
-        isManager = isManager;
+    public void setManager(Boolean manager) {
+        isManager = manager;
+    }
+
+    public Date getModifyTime() {
+        return modifyTime;
+    }
+
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
+    }
+
+    public String getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(String modifyBy) {
+        this.modifyBy = modifyBy == null ? null : modifyBy.trim();
+    }
+
+    public List<String> getAccountIdList() {
+        return accountIdList;
+    }
+
+    public void setAccountIdList(List<String> accountIdList) {
+        this.accountIdList = accountIdList;
     }
 }

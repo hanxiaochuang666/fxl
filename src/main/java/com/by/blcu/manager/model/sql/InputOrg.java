@@ -1,77 +1,41 @@
-package com.by.blcu.manager.umodel;
+package com.by.blcu.manager.model.sql;
 
+import com.by.blcu.manager.umodel.ManagerPagerModel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 import java.util.Date;
 
-/**
- *机构查询类
- */
-@ApiModel(description= "机构查询类")
-public class OrganizationSearchModel extends ManagerPagerModel{
-    /**
-     *机构表d
-     */
+@ApiModel(description= "机构类")
+public class InputOrg extends ManagerPagerModel {
     @ApiModelProperty(value = "机构表d")
     private String organizationId;
-
-    /**
-     *机构名称
-     */
+    @ApiModelProperty(value = "申请表Id")
+    private String applyId;
     @ApiModelProperty(value = "机构名称")
     private String organizationName;
-
-    /**
-     *入驻者组织编码
-     */
     @ApiModelProperty(value = "入驻者组织编码")
     private String orgCode;
-
-    /**
-     *用户类型( 1.本部；2.教师；3第三方机构；4租户)
-     */
     @ApiModelProperty(value = "用户类型( 1.本部；2.教师；3第三方机构；4租户)")
     private Integer type;
-
-    /**
-     *负责人账号
-     */
     @ApiModelProperty(value = "负责人账号")
     private String userName;
-
-    /**
-     *负责人真实姓名
-     */
     @ApiModelProperty(value = "负责人真实姓名")
     private String realName;
-
-    /**
-     *手机号
-     */
     @ApiModelProperty(value = "手机号")
     private String phone;
-
-    /**
-     *邮箱
-     */
     @ApiModelProperty(value = "邮箱")
     private String email;
-
-    /**
-     *状态（1. 正常 ，2 停用）
-     */
     @ApiModelProperty(value = "状态（1. 正常 ，2 停用）")
     private Integer status;
-
-    /**
-     * 审核状态（0 未审核，1 审核成功，2 审核失败）
-     */
     @ApiModelProperty(value = "审核状态（0 未审核，1 审核成功，2 审核失败）")
     private Integer verifyStatus;
+    @ApiModelProperty(value = "审核时间")
+    private Date verifyTime;
+    @ApiModelProperty(value = "主营类目")
+    private String ccId;
 
     public String getOrganizationId() {
         return organizationId;
@@ -79,6 +43,14 @@ public class OrganizationSearchModel extends ManagerPagerModel{
 
     public void setOrganizationId(String organizationId) {
         this.organizationId = organizationId == null ? null : organizationId.trim();
+    }
+
+    public String getApplyId() {
+        return applyId;
+    }
+
+    public void setApplyId(String applyId) {
+        this.applyId = applyId == null ? null : applyId.trim();
     }
 
     public String getOrganizationName() {
@@ -151,5 +123,21 @@ public class OrganizationSearchModel extends ManagerPagerModel{
 
     public void setVerifyStatus(Integer verifyStatus) {
         this.verifyStatus = verifyStatus;
+    }
+
+    public Date getVerifyTime() {
+        return verifyTime;
+    }
+
+    public void setVerifyTime(Date verifyTime) {
+        this.verifyTime = verifyTime;
+    }
+
+    public String getCcId() {
+        return ccId;
+    }
+
+    public void setCcId(String ccId) {
+        this.ccId = ccId == null ? null : ccId.trim();
     }
 }

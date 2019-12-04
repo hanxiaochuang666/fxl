@@ -33,6 +33,12 @@ public class MallOrderInfoExcel implements Serializable {
     private Date createTime;
 
     /**
+     * 支付日期
+     */
+    @Column(name = "payment_time")
+    private Date paymentTime;
+
+    /**
      * 机构
      */
     private String org;

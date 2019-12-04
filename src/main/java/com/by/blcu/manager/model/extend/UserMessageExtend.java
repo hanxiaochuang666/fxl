@@ -11,11 +11,26 @@ import javax.persistence.Column;
 import javax.persistence.Id;
 import java.util.Date;
 
-@Data
 @ApiModel(description= "用户消息列表")
 public class UserMessageExtend extends WebMessage {
     @ApiModelProperty(value = "消息阅读表Id")
     private String consumId;
     @ApiModelProperty(value = "是否已读")
     private Boolean isRead;
+
+    public String getConsumId() {
+        return consumId;
+    }
+
+    public void setConsumId(String consumId) {
+        this.consumId = consumId == null ? null : consumId.trim();
+    }
+
+    public Boolean getisRead() {
+        return isRead;
+    }
+
+    public void setisRead(Boolean isRead) {
+        isRead = isRead;
+    }
 }

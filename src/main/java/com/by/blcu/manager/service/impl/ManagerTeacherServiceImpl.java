@@ -90,7 +90,6 @@ public class ManagerTeacherServiceImpl
             managerTeacher.setSort(0);
         }
         Date datetime = new Date();
-        managerTeacher.setOrgCode(null);
         managerTeacher.setCreateTime(null);
         managerTeacher.setCreateBy(null);
         managerTeacher.setModifyTime(datetime);

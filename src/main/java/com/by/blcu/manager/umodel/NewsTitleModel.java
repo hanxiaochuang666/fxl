@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-@Data
 @ApiModel(description= "新闻内容")
 public class NewsTitleModel {
     @ApiModelProperty(value = "新闻Id")
@@ -29,4 +28,92 @@ public class NewsTitleModel {
     private Integer clicks;
     @ApiModelProperty(value = "类型（1 普通；2 推荐；）")
     private Integer type;
+
+    public String getNewsId() {
+        return newsId;
+    }
+
+    public void setNewsId(String newsId) {
+        this.newsId = newsId == null ? null : newsId.trim();
+    }
+
+    public String getCcId1() {
+        return ccId1;
+    }
+
+    public void setCcId1(String ccId1) {
+        this.ccId1 = ccId1 == null ? null : ccId1.trim();
+    }
+
+    public String getCcId2() {
+        return ccId2;
+    }
+
+    public void setCcId2(String ccId2) {
+        this.ccId2 = ccId2 == null ? null : ccId2.trim();
+    }
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId == null ? null : categoryId.trim();
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName == null ? null : categoryName.trim();
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title == null ? null : title.trim();
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getOrgCode() {
+        return orgCode;
+    }
+
+    public void setOrgCode(String orgCode) {
+        this.orgCode = orgCode == null ? null : orgCode.trim();
+    }
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
+
+    public Integer getClicks() {
+        return clicks;
+    }
+
+    public void setClicks(Integer clicks) {
+        this.clicks = clicks;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
 }

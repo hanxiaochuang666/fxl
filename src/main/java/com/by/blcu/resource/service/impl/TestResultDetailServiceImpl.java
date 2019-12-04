@@ -128,6 +128,7 @@ public class TestResultDetailServiceImpl extends BaseServiceImpl implements ITes
                     }
                     if(stringObjectMap.containsKey("modelList")){
                         List<Map<String,Object>> temp=(List<Map<String,Object>> )stringObjectMap.get("modelList");
+                        boolean isAnswer=false;
                         for (Map<String, Object> objectMap : temp) {
                             initMap.put("questionId",objectMap.get("questionId"));
                             List<TestResultDetail> objectList1 = testResultDetailDao.selectList(initMap);
@@ -135,9 +136,12 @@ public class TestResultDetailServiceImpl extends BaseServiceImpl implements ITes
                                 String giveAnswer = objectList1.get(0).getGiveAnswer();
                                 if(!StringUtils.isEmpty(giveAnswer)) {
                                     objectMap.put("giveAnswer",giveAnswer);
+                                    isAnswer=true;
                                 }
                             }
                         }
+                        if(isAnswer)
+                            numAnswer++;
                     }
 
                 }
@@ -202,6 +206,7 @@ public class TestResultDetailServiceImpl extends BaseServiceImpl implements ITes
                                 Integer score = testResultDetail.getScore();
 
                                 if(!StringUtils.isEmpty(giveAnswer)) {
+                                    isAnswer=true;
                                     objectMap.put("giveAnswer",giveAnswer);
                                     if(null==score){
                                         objectMap.put("isMark", false);
@@ -227,6 +232,8 @@ public class TestResultDetailServiceImpl extends BaseServiceImpl implements ITes
                             }
                         }
                         stringObjectMap.put("getScore", perTotalScore);
+                        if(isAnswer)
+                            numAnswer++;
                     }
 
                 }

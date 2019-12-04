@@ -176,6 +176,11 @@ public class VideoInfoController {
                 log.info("获取录播视频url:" + resUrl);
                 HttpResponse httpResponse = HttpReqUtil.getOpentReq(resUrl + "?orderType=ASC&delayMinute=" + videoOutTime, appkey, appsecret);
                 Map<String, Object> responsemap = HttpReqUtil.parseHttpResponse(httpResponse);
+                if(!responsemap.containsKey("payload")){
+                    log.info("获取播放地址失败，请求URL:"+resUrl + "?orderType=ASC&delayMinute=" + videoOutTime);
+                    return RetResponse.makeErrRsp("获取播放地址失败，请求URL:"+resUrl + "?orderType=ASC&delayMinute=" + videoOutTime);
+                }
+
                 Map<String, Object> payload = (Map<String, Object>) responsemap.get("payload");
                 url = payload.get("url").toString();
                 log.info("获取到的播放地址:" + url);

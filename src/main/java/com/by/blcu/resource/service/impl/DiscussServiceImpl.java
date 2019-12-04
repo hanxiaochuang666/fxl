@@ -460,6 +460,7 @@ public class DiscussServiceImpl extends BaseServiceImpl implements IDiscussServi
         Integer pageIndex = StringUtils.isEmpty(model.getPageIndex())?1:model.getPageIndex();
         Integer pageSize = StringUtils.isEmpty(model.getPageSize())?10:model.getPageSize();
         Integer userId = Integer.valueOf(httpServletRequest.getAttribute("userId").toString());
+        String userName = StringUtils.obj2Str(httpServletRequest.getAttribute("username"));
 
         Map<String,Object> paraMap = new HashMap<>();
         paraMap.put("courseId", model.getCourseId());
@@ -483,18 +484,41 @@ public class DiscussServiceImpl extends BaseServiceImpl implements IDiscussServi
         for (DiscussModel discussModel : modelList) {
             pMap.put("resourceId", discussModel.getResourceId());
             discussModel.setReplyCount(selectCount(pMap));
+            discussModel.setNowUserId(userId);
             SsoUser createUser = ssoUserService.getUserByIdInter(discussModel.getCreateUserId());
             if(null != createUser){
                 discussModel.setCreateUserName(createUser.getUserName());
                 discussModel.setUserHeadUrl(createUser.getHeaderUrl());
+                setDiscussEditAndDeletePower(userId, userName, discussModel);
             }
         }
 
         return RetResponse.makeRsp(modelList, subList.getTotal());
     }
 
+    private void setDiscussEditAndDeletePower(Integer userId, String userName, DiscussModel discussModel) {
+        if(userId.equals(discussModel.getCreateUserId())){
+            // 是自己创建的就可以编辑和删除
+            discussModel.setCanEdit(1);
+            discussModel.setCanDelete(1);
+        }else{
+            // 不是自己建的不能编辑
+            discussModel.setCanEdit(0);
+            if(ssoUserService.isTeacher(userName)){
+                // 是教师的话可以删除
+                discussModel.setCanDelete(1);
+            }else{
+                // 不是教师不能删除别人创建的讨论
+                discussModel.setCanDelete(0);
+            }
+        }
+    }
+
     @Override
     public RetResult getReplyList(Integer resourceId, HttpServletRequest httpServletRequest) throws ServiceException {
+
+        Integer userId = Integer.valueOf(httpServletRequest.getAttribute("userId").toString());
+        String userName = StringUtils.obj2Str(httpServletRequest.getAttribute("username"));
 
         Resources resources = resourcesDao.selectByPrimaryKey(resourceId);
         if(null == resources){
@@ -517,6 +541,8 @@ public class DiscussServiceImpl extends BaseServiceImpl implements IDiscussServi
         SsoUser user = ssoUserService.getUserByIdInter(resources.getCreateUser());
         discussModel.setCreateUserName(user.getUserName());
         discussModel.setUserHeadUrl(user.getHeaderUrl());
+        discussModel.setNowUserId(userId);
+        setDiscussEditAndDeletePower(userId, userName, discussModel);
         List<ReplyInfoModel> replyList = new ArrayList<>();
         Map<String,Object> map = new HashMap<>();
         map.put("parentId", "0");// 先查询第一层的回复
@@ -539,9 +565,11 @@ public class DiscussServiceImpl extends BaseServiceImpl implements IDiscussServi
                 model.setDiscussId(discuss.getDiscussId());
                 model.setParentDiscussId(discuss.getParentId());
                 model.setReplyUserId(discuss.getParentUserId());
+                model.setNowUserId(userId);
+                setEditAndDeletePower(userId, userName, model);
                 // 第二~第N层的回复
                 List<ReplyInfoModel> replyInfoModels = new ArrayList<>();
-                getChildReply(replyInfoModels, discuss);
+                getChildReply(replyInfoModels, discuss,userId,userName);
                 replyInfoModels.sort(Comparator.comparing(ReplyInfoModel::getCreateTime).reversed());
                 model.setChildList(replyInfoModels);
                 replyList.add(model);
@@ -555,7 +583,25 @@ public class DiscussServiceImpl extends BaseServiceImpl implements IDiscussServi
         }
     }
 
-    private List<ReplyInfoModel> getChildReply(List<ReplyInfoModel> replyInfoModels,Discuss dis){
+    private void setEditAndDeletePower(Integer userId, String userName, ReplyInfoModel model) {
+        if(userId.equals(model.getCreateUserId())){
+            // 是自己创建的就可以编辑和删除
+            model.setCanEdit(1);
+            model.setCanDelete(1);
+        }else{
+            // 不是自己建的不能编辑
+            model.setCanEdit(0);
+            if(ssoUserService.isTeacher(userName)){
+                // 是教师的话可以删除
+                model.setCanDelete(1);
+            }else{
+                // 不是教师不能删除别人创建的讨论
+                model.setCanDelete(0);
+            }
+        }
+    }
+
+    private List<ReplyInfoModel> getChildReply(List<ReplyInfoModel> replyInfoModels,Discuss dis,Integer nowUserId,String nowUserName){
 
         List<Discuss> discussList = selectList(MapUtils.initMap("parentId",dis.getDiscussId()));
         if(CommonUtils.listIsEmptyOrNull(discussList)){
@@ -577,8 +623,10 @@ public class DiscussServiceImpl extends BaseServiceImpl implements IDiscussServi
                 model.setDiscussId(discuss.getDiscussId());
                 model.setParentDiscussId(discuss.getParentId());
                 model.setReplyUserId(discuss.getParentUserId());
+                model.setNowUserId(nowUserId);
+                setEditAndDeletePower(nowUserId, nowUserName, model);
                 replyInfoModels.add(model);
-                getChildReply(replyInfoModels, discuss);
+                getChildReply(replyInfoModels, discuss,nowUserId,nowUserName);
             }
 
         }

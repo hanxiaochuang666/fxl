@@ -15,7 +15,6 @@ import java.util.List;
 /**
  * 用户查询类
  */
-@Data
 @ApiModel(description= "用户查询类")
 public class UserSearchModel extends ManagerPagerModel {
     /**
@@ -74,4 +73,76 @@ public class UserSearchModel extends ManagerPagerModel {
 
     @ApiModelProperty(value = "用户Id列表")
     private List<String> userIdList;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId == null ? null : userId.trim();
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName == null ? null : userName.trim();
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName == null ? null : realName.trim();
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone == null ? null : phone.trim();
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email == null ? null : email.trim();
+    }
+
+    public Date getCreateTimeBegin() {
+        return createTimeBegin;
+    }
+
+    public void setCreateTimeBegin(Date createTimeBegin) {
+        this.createTimeBegin = createTimeBegin;
+    }
+
+    public Date getCreateTimeEnd() {
+        return createTimeEnd;
+    }
+
+    public void setCreateTimeEnd(Date createTimeEnd) {
+        this.createTimeEnd = createTimeEnd;
+    }
+
+    public List<String> getUserIdList() {
+        return userIdList;
+    }
+
+    public void setUserIdList(List<String> userIdList) {
+        this.userIdList = userIdList;
+    }
 }

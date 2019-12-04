@@ -48,6 +48,13 @@ public class ManagerAccountExtend {
     private String teachCourse;
 
     /**
+     *所属组织编码
+     */
+    @Column(name = "org_code")
+    @ApiModelProperty(value = "所属组织编码")
+    private String orgCode;
+
+    /**
      *自定义属性(JSON)
      */
     @ApiModelProperty(value = "自定义属性(JSON)")
@@ -169,6 +176,24 @@ public class ManagerAccountExtend {
      */
     public void setTeachCourse(String teachCourse) {
         this.teachCourse = teachCourse == null ? null : teachCourse.trim();
+    }
+
+    /**
+     * 获取所属组织编码
+     *
+     * @return org_code - 所属组织编码
+     */
+    public String getOrgCode() {
+        return orgCode;
+    }
+
+    /**
+     * 设置所属组织编码
+     *
+     * @param orgCode 所属组织编码
+     */
+    public void setOrgCode(String orgCode) {
+        this.orgCode = orgCode == null ? null : orgCode.trim();
     }
 
     /**

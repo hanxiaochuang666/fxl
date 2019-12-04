@@ -131,6 +131,13 @@ public class CourseDetailServiceImpl extends BaseServiceImpl implements ICourseD
                 }
 
             } else {
+                //避免重复插入
+                Map param = MapUtils.initMap("catalogId", taskViewModel.getCatalogId());
+                param.put("resourcesId", resourceNew.getResourcesId());
+                long l = courseDetailDao.selectCount(param);
+                if (l > 0) {
+                    return resourceNew.getResourcesId();
+                }
                 //目录下 新建课程详情关联资源
                 CourseDetail courseDetail = new CourseDetail();
                 courseDetail.setCourseId(taskViewModel.getCourseId());
@@ -166,9 +173,9 @@ public class CourseDetailServiceImpl extends BaseServiceImpl implements ICourseD
                             Map<String, Object> initMap = MapUtils.initMap("name", taskViewModel.getTaskName());
                             initMap.put("createUser", userId);
                             List<TestPaper> testPaperList = testPaperDao.selectList(initMap);
-                            if(testPaperList != null && testPaperList.size() > 0){
-                                for(TestPaper paper : testPaperList){
-                                    if(paper.getName().equals(taskViewModel.getTaskName())){
+                            if (testPaperList != null && testPaperList.size() > 0) {
+                                for (TestPaper paper : testPaperList) {
+                                    if (paper.getName().equals(taskViewModel.getTaskName())) {
                                         log.info("试卷名称为:【" + taskViewModel.getTaskName() + "】的试卷已经存在！");
                                         throw new ServiceException("试卷名称为:【" + taskViewModel.getTaskName() + "】的试卷已经存在！");
                                     }
@@ -187,11 +194,11 @@ public class CourseDetailServiceImpl extends BaseServiceImpl implements ICourseD
                             //courseService.changeCourseStatus(courseId, userId);
                             return resourceNew.getResourcesId();
 
-                        }else{
+                        } else {
                             return resourceNew.getResourcesId();
                         }
 
-                    }else{
+                    } else {
                         throw new ServiceException("传入试卷信息不存在！试卷ID：" + resourceNew.getContent());
                     }
 
@@ -214,9 +221,9 @@ public class CourseDetailServiceImpl extends BaseServiceImpl implements ICourseD
         param.put("courseId", taskViewModel.getCourseId());
         List<CourseDetail> courseDetails = courseDetailDao.selectList(param);
 
-        if(courseDetails != null && courseDetails.size() > 0){
+        if (courseDetails != null && courseDetails.size() > 0) {
             courseService.changeCourseStatus(taskViewModel.getCourseId(), userId);
-        }else{
+        } else {
             return -1;
         }
 

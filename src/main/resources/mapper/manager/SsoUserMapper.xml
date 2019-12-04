@@ -352,9 +352,9 @@
       <otherwise>
         select * from manager_role r
         where r.is_deleted is not true
-        <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(orgCode)">
-          and r.org_code =#{orgCode}
-        </if>
+        <!--<if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(orgCode)">-->
+          <!--and r.org_code =#{orgCode}-->
+        <!--</if>-->
       </otherwise>
     </choose>
     </select>

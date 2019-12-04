@@ -16,7 +16,7 @@ public interface IStudentCourseService {
 
     RetResult selectStudentCourse(Integer type, HttpServletRequest request,Integer pageSize,Integer pageIndex) throws ServiceException;
 
-    Map<String,Object> selectStudySchedule(Integer courseId) throws ServiceException;
+    Map<String,Object> selectStudySchedule(Integer courseId,Integer studentId) throws ServiceException;
 
     ResourcesViewModel keepStudy(Integer courseId, HttpServletRequest request) throws Exception;
 

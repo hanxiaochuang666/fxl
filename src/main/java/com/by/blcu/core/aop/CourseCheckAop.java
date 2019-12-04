@@ -554,7 +554,7 @@ public class CourseCheckAop {
         Integer courseId = courseCheckModel.getCourseId();
         Set<String> userNameSet = orderInfoService.selectUserListByCourseId(courseId.toString());
         if(null!=userNameSet && !userNameSet.isEmpty()){
-            KnowledgePointNode knowledgePoints = catalogService.getKnowledgePoints(courseId);
+            KnowledgePointNode knowledgePoints = catalogService.getKnowledgePoints(courseId,null);
             Map<Integer, Integer> catalogSortMap = getCatalogSortMap(knowledgePoints);
             for (String s : userNameSet) {
                 Set<Integer> studentSet=new HashSet<>();
@@ -569,6 +569,9 @@ public class CourseCheckAop {
                 List<CourseDetail> selectList = courseDetailService.selectList(objectMap);
                 if(null!=selectList && selectList.size()>0){
                     for (CourseDetail courseDetail : selectList) {
+                        if(0 == courseDetail.getCatalogId()){
+                            continue;
+                        }
                         for (Integer integer : studentSet) {
                             LearnActive learnActive = new LearnActive();
                             learnActive.setCourseId(courseDetail.getCourseId());

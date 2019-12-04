@@ -251,7 +251,6 @@
     </if>
     <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(orgCode)">
       and a.org_code = #{orgCode,jdbcType=VARCHAR}
-      and r.org_code = #{orgCode,jdbcType=VARCHAR}
     </if>
     <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(accountId)">
       and a.account_id = #{accountId,jdbcType=VARCHAR}
@@ -297,9 +296,9 @@
     <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrZero(status)">
       and r.status = #{status,jdbcType=INTEGER}
     </if>
-    <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(orgCode)">
-      and (r.org_code is not null and  r.org_code = #{orgCode,jdbcType=VARCHAR})
-    </if>
+    <!--<if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(orgCode)">-->
+      <!--and (r.org_code is not null and  r.org_code = #{orgCode,jdbcType=VARCHAR})-->
+    <!--</if>-->
     <!-- 列表 -->
     <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrEmpty(roleIdList)">
       and r.role_id in
@@ -321,7 +320,6 @@
     </if>
     <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(orgCode)">
       and a.org_code = #{orgCode,jdbcType=VARCHAR}
-      and r.org_code = #{orgCode,jdbcType=VARCHAR}
     </if>
     <if test="!@com.by.blcu.manager.common.MapperHelper@IsNullOrWhiteSpace(accountId)">
       and a.account_id != #{accountId,jdbcType=VARCHAR}

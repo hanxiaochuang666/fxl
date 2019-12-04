@@ -17,7 +17,7 @@ public interface ICatalogService extends IBaseService {
 
     KnowledgePointNode importKnowledgePoints(MultipartFile file, Map<String, Object> paraMap) throws Exception;
 
-    KnowledgePointNode getKnowledgePoints(int courseId) throws ServiceException;
+    KnowledgePointNode getKnowledgePoints(int courseId,Integer status) throws ServiceException;
 
     RetResult addKnowledgePoints(CatalogModel catalogModel, HttpServletRequest request, CourseCheckModel courseCheckModel) throws ServiceException;
 

@@ -348,6 +348,9 @@
             catalog b
           WHERE a.catalog_id = b.parent_id)
           AND course_id = #{courseId,jdbcType=INTEGER}
+        <if test="!@org.springframework.util.StringUtils@isEmpty(status)">
+            and status=#{status,jdbcType=TINYINT}
+        </if>
     </select>
 
     <!--<select id="selectResourceAndCheckResult" parameterType="java.util.Map" resultType="java.util.Map">

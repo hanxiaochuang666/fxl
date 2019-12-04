@@ -8,6 +8,7 @@
     <id column="order_id" jdbcType="VARCHAR" property="orderId" />
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="payment_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="org" jdbcType="VARCHAR" property="org" />
     <result column="order_status" jdbcType="INTEGER" property="orderStatus" />
     <result column="is_bill" jdbcType="INTEGER" property="isBill" />
@@ -31,6 +32,7 @@
     <id column="order_id" jdbcType="VARCHAR" property="orderId" />
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="payment_time" jdbcType="TIMESTAMP" property="paymentTime" />
     <result column="org" jdbcType="VARCHAR" property="org" />
     <result column="cc_name" jdbcType="VARCHAR" property="ccName" />
     <result column="order_status" jdbcType="INTEGER" property="orderStatus" />
@@ -70,6 +72,7 @@
     <id column="order_id" jdbcType="VARCHAR" property="orderId" />
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="payment_time" jdbcType="TIMESTAMP" property="paymentTime" />
     <result column="org" jdbcType="VARCHAR" property="org" />
     <result column="order_status" jdbcType="INTEGER" property="orderStatus" />
     <result column="is_bill" jdbcType="INTEGER" property="isBill" />
@@ -110,15 +113,15 @@
   </resultMap>
 
   <sql id="Base_Column_List">
-  a.order_id,a.user_name,a.create_time,a.org,a.order_status,a.is_bill,a.isdraw_bill,a.order_no,a.payment_status,a.amount,a.receiver,a.tel_num,a.pay_type,a.cost_price,a.remittance,a.screenshot,b.co_id,b.commodity_id,b.order_id,c.pi_id,c.order_id,c.address,c.zip_code,c.invoice,c.company_name,c.taxpayer_number,c.type,c.registered_address,c.registered_phone,c.bank,c.company_account,c.bak
+  a.order_id,a.user_name,a.create_time,a.payment_time,a.org,a.order_status,a.is_bill,a.isdraw_bill,a.order_no,a.payment_status,a.amount,a.receiver,a.tel_num,a.pay_type,a.cost_price,a.remittance,a.screenshot,b.co_id,b.commodity_id,b.order_id,c.pi_id,c.order_id,c.address,c.zip_code,c.invoice,c.company_name,c.taxpayer_number,c.type,c.registered_address,c.registered_phone,c.bank,c.company_account,c.bak
 </sql>
 
   <sql id="Base_Column_List1">
-  a.order_id,a.user_name,a.create_time,a.org,a.order_status,a.is_bill,a.isdraw_bill,a.order_no,a.payment_status,a.amount,a.receiver,a.tel_num,a.pay_type,a.cost_price,a.remittance,a.screenshot,b.co_id,b.commodity_id,b.order_id
+  a.order_id,a.user_name,a.create_time,a.payment_time,a.org,a.order_status,a.is_bill,a.isdraw_bill,a.order_no,a.payment_status,a.amount,a.receiver,a.tel_num,a.pay_type,a.cost_price,a.remittance,a.screenshot,b.co_id,b.commodity_id,b.order_id
 </sql>
 
   <sql id="Base_Column_ListExcel">
-  a.order_id,a.user_name,a.create_time,a.org,a.order_status,a.is_bill,a.isdraw_bill,a.order_no,b.price,b.course_name,b.lesson_type,b.class_time,b.standard,b.preferential,a.payment_status,a.amount,a.receiver,a.tel_num,a.pay_type,a.cost_price,f.co_id,f.commodity_id,f.order_id,c.type,c.invoice,c.company_name,c.taxpayer_number,c.address,c.zip_code,a.remittance,e.cc_name,c.registered_address,c.registered_phone,c.bank,c.company_account
+  a.order_id,a.user_name,a.create_time,a.payment_time,a.org,a.order_status,a.is_bill,a.isdraw_bill,a.order_no,b.price,b.course_name,b.lesson_type,b.class_time,b.standard,b.preferential,a.payment_status,a.amount,a.receiver,a.tel_num,a.pay_type,a.cost_price,f.co_id,f.commodity_id,f.order_id,c.type,c.invoice,c.company_name,c.taxpayer_number,c.address,c.zip_code,a.remittance,e.cc_name,c.registered_address,c.registered_phone,c.bank,c.company_account
 </sql>
 
   <insert id="creatMallOrderInfo">
@@ -325,6 +328,7 @@
       <if test="isdrawBill!=null">isdraw_bill=#{isdrawBill},</if>
       <if test="paymentStatus!=null">payment_status=#{paymentStatus},</if>
       <if test="orderStatus!=null">order_status=#{orderStatus},</if>
+      <if test="paymentTime!=null">payment_time=#{paymentTime},</if>
       <if test="remittance!=null">remittance=#{remittance},</if>
       <if test="screenshot!=null">screenshot=#{screenshot},</if>
       <if test="receiver!=null and receiver!=''">receiver=#{receiver},</if>

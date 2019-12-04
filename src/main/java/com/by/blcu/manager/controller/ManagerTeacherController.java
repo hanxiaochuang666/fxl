@@ -285,8 +285,8 @@ public class ManagerTeacherController extends ManagerBase
     @RequiresPermissions("webset:rdteacher")
     @Transactional
     public RetResult<Integer> updateRecommendTeacher(@RequestBody ManagerTeacherModel managerTeacher) throws Exception {
-        if (managerTeacher == null || StringHelper.IsNullOrWhiteSpace(managerTeacher.getOrgCode())) {
-            return RetResponse.makeErrRsp("[入驻者组织编码]不能为空");
+        if (managerTeacher == null ) {
+            return RetResponse.makeErrRsp("参数不能为空");
         }
         List<String> insertIdList=new ArrayList<String>();
         List<String> deleteIdList=new ArrayList<String>();

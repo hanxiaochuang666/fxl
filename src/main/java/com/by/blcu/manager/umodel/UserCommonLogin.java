@@ -7,7 +7,6 @@ import lombok.Data;
 /**
  * 普通用户登录
  */
-@Data
 @ApiModel(description= "普通用户登录")
 public class UserCommonLogin {
     /**
@@ -31,4 +30,36 @@ public class UserCommonLogin {
      */
     @ApiModelProperty(value = "机构号")
     private String orgCode;
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account == null ? null : account.trim();
+    }
+
+    public String getVerifyCode() {
+        return verifyCode;
+    }
+
+    public void setVerifyCode(String verifyCode) {
+        this.verifyCode = verifyCode == null ? null : verifyCode.trim();
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password == null ? null : password.trim();
+    }
+
+    public String getOrgCode() {
+        return orgCode;
+    }
+
+    public void setOrgCode(String orgCode) {
+        this.orgCode = orgCode == null ? null : orgCode.trim();
+    }
 }

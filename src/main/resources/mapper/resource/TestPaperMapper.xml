@@ -49,6 +49,9 @@
 		<if test="!@org.springframework.util.StringUtils@isEmpty(name)">
 			and name like concat('%',#{name,jdbcType=VARCHAR},'%')
 		</if>
+      <if test="!@org.springframework.util.StringUtils@isEmpty(nameAll)">
+          and name =#{nameAll,jdbcType=VARCHAR}
+      </if>
       <if test="!@org.springframework.util.StringUtils@isEmpty(catalogs)">
           and catalogs=#{catalogs,jdbcType=VARCHAR}
       </if>

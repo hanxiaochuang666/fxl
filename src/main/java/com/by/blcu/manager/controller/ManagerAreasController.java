@@ -3,7 +3,9 @@ package com.by.blcu.manager.controller;
 import com.by.blcu.core.ret.RetResponse;
 import com.by.blcu.core.ret.RetResult;
 import com.by.blcu.manager.common.StringHelper;
+import com.by.blcu.manager.common.UserSessionHelper;
 import com.by.blcu.manager.model.ManagerAreas;
+import com.by.blcu.manager.model.extend.AreaTree;
 import com.by.blcu.manager.service.ManagerAreasService;
 import com.by.blcu.manager.umodel.AreaModel;
 import io.swagger.annotations.Api;
@@ -25,7 +27,8 @@ import java.util.List;
 @Api(tags = "Manager省市区", description = "包含接口：\n" +
         "1、省市区-获取省【getProvince】\n" +
         "2、省市区-获取市【getCity】\n" +
-        "3、省市区-获取区【getArea】")
+        "3、省市区-获取区【getArea】\n"+
+        "4、省市区-获取Tree型树数据【getAreaTree】\n")
 public class ManagerAreasController {
 
     @Resource
@@ -83,6 +86,13 @@ public class ManagerAreasController {
             model.setPingyin(t.getPingyin());
             resultData.add(model);
         });
+        return RetResponse.makeOKRsp(resultData);
+    }
+
+    @ApiOperation(value = "省市区-获取Tree型树数据", notes = "获取全部数据，Tree结构")
+    @GetMapping("/getAreaTree")
+    public RetResult<List<AreaTree>> getAreaTree(UserSessionHelper helper){
+        List<AreaTree> resultData = managerAreasService.selectAreaTree(helper);
         return RetResponse.makeOKRsp(resultData);
     }
 
