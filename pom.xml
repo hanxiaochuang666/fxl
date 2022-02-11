@@ -285,7 +285,7 @@
 		<dependency>
 			<groupId>net.minidev</groupId>
 			<artifactId>json-smart</artifactId>
-			<version>RELEASE</version>
+			<version>1.3.3</version>
 		</dependency>
 
 		<!--阿里内容安全依赖-->
